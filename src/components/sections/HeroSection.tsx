@@ -94,7 +94,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExplore3D, onNavigat
                 className="flex items-center gap-2 px-5 sm:px-6 py-3 text-xs sm:text-sm font-bold uppercase tracking-wider text-white bg-red-600 hover:bg-red-700 rounded-xl transition-all shadow-md shadow-red-600/25 border border-red-700 whitespace-nowrap cursor-pointer hover:scale-105 active:scale-95"
               >
                 <Compass className="w-4 h-4 shrink-0" />
-                <span>Explore Station in 3D</span>
+                <span>Explore Digital Twin</span>
               </button>
 
               <button
