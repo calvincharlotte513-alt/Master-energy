@@ -118,65 +118,55 @@ export const ThreeDExplorerSection: React.FC<ThreeDExplorerSectionProps> = ({
       deptId: 'garden',
       xPercent: 46,
       yPercent: 68,
-      title: 'Open-Air Garden Social Seating',
-      tag: 'OUTDOOR HOSPITALITY',
-      description: 'Wooden cabana tables under illuminated palm trees where friends gather for ice-cold drinks and relaxation.',
-      stat: 'Chilled Chapman & Drinks'
+      title: 'Open-Air Lawn & Big Screen Sports',
+      tag: 'COMMUNITY & ENTERTAINMENT',
+      description: 'Family tables and sports fans gathering under ambient evening festoon lighting for live Premier League matches.',
+      stat: 'Matchday Screening 4K'
     },
     {
-      id: 'hs-match',
-      deptId: 'garden',
-      xPercent: 55,
-      yPercent: 40,
-      title: 'Outdoor Matchday Big Screen',
-      tag: 'LIVE SPORTS BROADCAST',
-      description: 'High-definition stadium screens broadcasting live Premier League and Champions League football games.',
-      stat: 'Matchday Atmosphere'
-    },
-    {
-      id: 'hs-rooftop',
-      deptId: 'lounge',
-      xPercent: 68,
-      yPercent: 18,
-      title: 'VIP Lounge Upper Terrace',
-      tag: 'EXECUTIVE RETREAT',
-      description: 'Elevated open-air rooftop deck overlooking the entire compound and Aba-Owerri Expressway.',
-      stat: 'Panoramic Night View'
+      id: 'hs-carwash',
+      deptId: 'carwash',
+      xPercent: 12,
+      yPercent: 52,
+      title: 'Automated Car Wash & Valet Bay',
+      tag: 'HIGH-PRESSURE VEHICLE CARE',
+      description: 'Dedicated high-clearance wash bays for full undercarriage spray, snow foam rinse, and interior leather detailing.',
+      stat: '15-Min Express Wash'
     }
   ];
 
   const currentHotspots = activeLivingScene === 'forecourt' ? forecourtHotspots : gardenHotspots;
 
   return (
-    <section id="3d-tour" className="py-12 sm:py-16 lg:py-20 border-t border-slate-200 bg-white relative overflow-hidden font-opensans w-full max-w-full">
-      <div className="absolute inset-0 bg-radial from-amber-500/5 via-transparent to-transparent pointer-events-none" />
+    <section id="3d-tour" className="py-12 sm:py-16 lg:py-20 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-[#080d1a] relative overflow-hidden font-opensans w-full max-w-full transition-colors duration-300">
+      <div className="absolute inset-0 bg-radial from-blue-600/5 via-transparent to-transparent pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full min-w-0">
         {/* Section Header with Mode Toggles */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8 sm:mb-10 pb-6 border-b border-slate-200">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8 sm:mb-10 pb-6 border-b border-slate-200 dark:border-slate-800">
           <div>
-            <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-amber-600 mb-2 font-bold">
-              <Compass className="w-4 h-4 text-amber-500" />
+            <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-red-600 dark:text-red-400 mb-2 font-bold">
+              <Compass className="w-4 h-4 text-red-600 dark:text-red-400" />
               <span>3D FUELING STATION DIGITAL TWIN · NAZE MEGA HUB</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 tracking-tight font-poppins">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-950 dark:text-white tracking-tight font-poppins">
               Interactive 3D Digital Twin Forecourt
             </h2>
-            <p className="text-sm text-slate-600 max-w-xl font-normal leading-relaxed mt-2">
+            <p className="text-sm text-slate-600 dark:text-slate-300 max-w-xl font-normal leading-relaxed mt-2">
               Rotate around the canopy, inspect the DPR digital pumps and roadside LED price totem, or explore our attendants and customer vehicles in real-time.
             </p>
           </div>
 
           {/* Native In-Website View Mode Switcher */}
           <div className="flex items-center gap-2 shrink-0">
-            <div className="p-1.5 bg-slate-100 border border-slate-200 rounded-2xl flex items-center gap-1.5 shadow-sm">
+            <div className="p-1.5 bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-2xl flex items-center gap-1.5 shadow-xs">
               <button
                 type="button"
                 onClick={() => setViewMode('webgl-model')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-inter font-bold transition-all cursor-pointer ${
                   viewMode === 'webgl-model'
-                    ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-500/20'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-white'
+                    ? 'bg-[#1e3a8a] text-white shadow-md shadow-blue-900/20'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-slate-700'
                 }`}
               >
                 <Box className="w-3.5 h-3.5" />
@@ -188,8 +178,8 @@ export const ThreeDExplorerSection: React.FC<ThreeDExplorerSectionProps> = ({
                 onClick={() => setViewMode('living-photo')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-inter font-bold transition-all cursor-pointer ${
                   viewMode === 'living-photo'
-                    ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-500/20'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-white'
+                    ? 'bg-[#1e3a8a] text-white shadow-md shadow-blue-900/20'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-slate-700'
                 }`}
               >
                 <Users className="w-3.5 h-3.5" />
@@ -215,9 +205,9 @@ export const ThreeDExplorerSection: React.FC<ThreeDExplorerSectionProps> = ({
           /* ==================================================== */
           <div className="space-y-4">
             {/* Living Scene Switcher Tabs */}
-            <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-slate-50 border border-slate-200 rounded-2xl">
+            <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-slate-50 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-800 rounded-2xl">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="font-mono text-xs uppercase tracking-wider text-slate-500 font-bold px-2">
+                <span className="font-mono text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold px-2">
                   SCENE:
                 </span>
                 <button
@@ -228,11 +218,11 @@ export const ThreeDExplorerSection: React.FC<ThreeDExplorerSectionProps> = ({
                   }}
                   className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-inter font-bold transition-all cursor-pointer ${
                     activeLivingScene === 'forecourt'
-                      ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-500/20'
-                      : 'bg-white text-slate-700 hover:text-slate-900 border border-slate-200'
+                      ? 'bg-[#1e3a8a] text-white shadow-md shadow-blue-900/20'
+                      : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-700'
                   }`}
                 >
-                  <Fuel className="w-3.5 h-3.5 text-amber-600" />
+                  <Fuel className="w-3.5 h-3.5 text-red-500" />
                   <span>Scene 1: Forecourt &amp; Attendants at Work</span>
                 </button>
 
@@ -244,23 +234,23 @@ export const ThreeDExplorerSection: React.FC<ThreeDExplorerSectionProps> = ({
                   }}
                   className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-inter font-bold transition-all cursor-pointer ${
                     activeLivingScene === 'garden'
-                      ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-500/20'
-                      : 'bg-white text-slate-700 hover:text-slate-900 border border-slate-200'
+                      ? 'bg-[#1e3a8a] text-white shadow-md shadow-blue-900/20'
+                      : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-700'
                   }`}
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                  <Sparkles className="w-3.5 h-3.5 text-red-500" />
                   <span>Scene 2: Masters Garden &amp; Lounge Terrace</span>
                 </button>
               </div>
 
-              <div className="flex items-center gap-2 text-xs font-mono text-emerald-700 font-bold bg-emerald-50 px-3 py-1 rounded-lg border border-emerald-200">
+              <div className="flex items-center gap-2 text-xs font-mono text-emerald-700 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/40 px-3 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 <span>Tap pulsing pins to inspect</span>
               </div>
             </div>
 
             {/* Interactive Image Viewport with Hotspots */}
-            <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-xl bg-slate-900 aspect-[16/9] max-h-[640px] group">
+            <div className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl bg-slate-900 aspect-[16/9] max-h-[640px] group">
               <img
                 src={
                   activeLivingScene === 'forecourt'
@@ -297,17 +287,17 @@ export const ThreeDExplorerSection: React.FC<ThreeDExplorerSectionProps> = ({
                   >
                     <span className="relative flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center">
                       <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                        isSelected ? 'bg-emerald-400' : 'bg-amber-400'
+                        isSelected ? 'bg-emerald-400' : 'bg-red-500'
                       }`} />
-                      <span className={`relative inline-flex items-center justify-center rounded-full h-7 w-7 sm:h-8 sm:w-8 border-2 border-white shadow-xl text-slate-950 font-mono font-extrabold text-xs transition-transform group-hover/pin:scale-110 ${
-                        isSelected ? 'bg-emerald-400 scale-110' : 'bg-amber-400'
+                      <span className={`relative inline-flex items-center justify-center rounded-full h-7 w-7 sm:h-8 sm:w-8 border-2 border-white shadow-xl text-white font-mono font-extrabold text-xs transition-transform group-hover/pin:scale-110 ${
+                        isSelected ? 'bg-emerald-500 scale-110' : 'bg-red-600'
                       }`}>
                         {index + 1}
                       </span>
                     </span>
 
                     {/* Tooltip on Hover */}
-                    <div className="opacity-0 group-hover/pin:opacity-100 transition-opacity absolute bottom-full left-1/2 -translate-x-1/2 mb-2 pointer-events-none whitespace-nowrap bg-slate-950/95 backdrop-blur-md text-white text-[11px] font-mono font-bold px-3 py-1.5 rounded-lg border border-amber-400/50 shadow-2xl">
+                    <div className="opacity-0 group-hover/pin:opacity-100 transition-opacity absolute bottom-full left-1/2 -translate-x-1/2 mb-2 pointer-events-none whitespace-nowrap bg-slate-950/95 backdrop-blur-md text-white text-[11px] font-mono font-bold px-3 py-1.5 rounded-lg border border-red-500/50 shadow-2xl">
                       {hs.title}
                     </div>
                   </button>
@@ -316,37 +306,37 @@ export const ThreeDExplorerSection: React.FC<ThreeDExplorerSectionProps> = ({
 
               {/* Floating Hotspot Dossier Card (When Clicked) */}
               {selectedHotspot && (
-                <div className="absolute bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-md z-30 bg-white/95 backdrop-blur-xl border border-amber-400/60 rounded-2xl p-5 shadow-2xl text-left animate-in slide-in-from-bottom-2 duration-200">
-                  <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-100">
-                    <div className="flex items-center gap-1.5 font-mono text-[11px] font-bold text-amber-700 uppercase tracking-wider">
-                      <Info className="w-3.5 h-3.5 shrink-0 text-amber-500" />
+                <div className="absolute bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-md z-30 bg-white/95 dark:bg-[#0f1d3d]/95 backdrop-blur-xl border border-red-500/40 rounded-2xl p-5 shadow-2xl text-left animate-in slide-in-from-bottom-2 duration-200">
+                  <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-100 dark:border-blue-900/40">
+                    <div className="flex items-center gap-1.5 font-mono text-[11px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider">
+                      <Info className="w-3.5 h-3.5 shrink-0 text-red-600 dark:text-red-400" />
                       <span>{selectedHotspot.tag}</span>
                     </div>
                     <button
                       type="button"
                       onClick={() => setSelectedHotspot(null)}
-                      className="text-slate-500 hover:text-slate-900 text-xs font-mono cursor-pointer px-1.5 py-0.5 rounded bg-slate-100"
+                      className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white text-xs font-mono cursor-pointer px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800"
                     >
                       ✕ Close
                     </button>
                   </div>
 
-                  <h4 className="text-base sm:text-lg font-bold text-slate-950 font-poppins mt-2">
+                  <h4 className="text-base sm:text-lg font-bold text-slate-950 dark:text-white font-poppins mt-2">
                     {selectedHotspot.title}
                   </h4>
-                  <p className="text-xs sm:text-sm text-slate-600 font-opensans leading-relaxed mt-1">
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-opensans leading-relaxed mt-1">
                     {selectedHotspot.description}
                   </p>
 
-                  <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
-                    <div className="font-mono text-xs text-emerald-700 font-bold flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                  <div className="mt-3 pt-3 border-t border-slate-100 dark:border-blue-900/40 flex items-center justify-between gap-3">
+                    <div className="font-mono text-xs text-emerald-700 dark:text-emerald-400 font-bold flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                       <span>{selectedHotspot.stat}</span>
                     </div>
                     <button
                       type="button"
                       onClick={() => onOpenDeptDetail(selectedHotspot.deptId)}
-                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-inter font-bold text-xs uppercase tracking-wider transition-all cursor-pointer"
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-inter font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-xs"
                     >
                       <span>Explore</span>
                       <ChevronRight className="w-3.5 h-3.5" />
@@ -356,11 +346,11 @@ export const ThreeDExplorerSection: React.FC<ThreeDExplorerSectionProps> = ({
               )}
 
               {/* Scene Description Overlay Badge */}
-              <div className="absolute top-4 left-4 z-10 bg-white/90 backdrop-blur-md border border-slate-200 px-3.5 py-2 rounded-xl text-left pointer-events-none shadow-md">
-                <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-amber-600">
+              <div className="absolute top-4 left-4 z-10 bg-white/90 dark:bg-[#0a1226]/90 backdrop-blur-md border border-slate-200 dark:border-slate-800 px-3.5 py-2 rounded-xl text-left pointer-events-none shadow-md">
+                <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-red-600 dark:text-red-400">
                   MASTER ENERGY NAZE
                 </div>
-                <div className="text-xs font-poppins font-bold text-slate-900">
+                <div className="text-xs font-poppins font-bold text-slate-900 dark:text-white">
                   {activeLivingScene === 'forecourt'
                     ? 'Living Forecourt · Real Attendants & Customer Vehicles'
                     : 'Masters Garden & Lounge Terrace · Evening Dining & Suya'}
@@ -371,9 +361,9 @@ export const ThreeDExplorerSection: React.FC<ThreeDExplorerSectionProps> = ({
         )}
 
         {/* Dynamic Focus Dossier Strip */}
-        <div className="mt-6 p-6 sm:p-8 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-6 shadow-sm">
+        <div className="mt-6 p-6 sm:p-8 bg-slate-50 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-6 shadow-xs">
           <div className="flex flex-col sm:flex-row sm:items-center gap-5 min-w-0">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shrink-0 border border-slate-200 bg-white shadow-md">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-md">
               <img
                 src={currentDept.image}
                 alt={currentDept.name}
@@ -388,32 +378,32 @@ export const ThreeDExplorerSection: React.FC<ThreeDExplorerSectionProps> = ({
               />
             </div>
             <div className="min-w-0 space-y-1">
-              <div className="flex items-center gap-2 font-mono text-xs text-slate-500">
-                <span className="font-bold text-amber-700 uppercase tracking-wider">{currentDept.badge}</span>
+              <div className="flex items-center gap-2 font-mono text-xs text-slate-500 dark:text-slate-400">
+                <span className="font-bold text-red-600 dark:text-red-400 uppercase tracking-wider">{currentDept.badge}</span>
                 <span>·</span>
                 <span className="flex items-center gap-1">
                   <Clock className="w-3 h-3 text-slate-400" />
                   {currentDept.hours}
                 </span>
               </div>
-              <h3 className="text-xl sm:text-2xl font-bold text-slate-950 font-poppins truncate">{currentDept.name}</h3>
-              <p className="text-xs sm:text-sm text-slate-600 max-w-xl font-opensans font-normal truncate">{currentDept.headline}</p>
+              <h3 className="text-xl sm:text-2xl font-bold text-slate-950 dark:text-white font-poppins truncate">{currentDept.name}</h3>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-xl font-opensans font-normal truncate">{currentDept.headline}</p>
             </div>
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
             <a
               href={`tel:${currentDept.phone.replace(/\s+/g, '')}`}
-              className="flex items-center gap-2 px-4 py-2.5 text-xs font-mono font-medium text-slate-700 hover:text-slate-950 bg-white hover:bg-slate-100 rounded-xl border border-slate-200 transition-colors shadow-sm"
+              className="flex items-center gap-2 px-4 py-2.5 text-xs font-mono font-medium text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl border border-slate-200 dark:border-slate-700 transition-colors shadow-xs"
             >
-              <Phone className="w-3.5 h-3.5 text-amber-600" />
+              <Phone className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />
               <span>Call Desk</span>
             </a>
 
             <button
               type="button"
               onClick={() => onOpenDeptDetail(activeDept)}
-              className="flex items-center gap-2 px-5 py-2.5 text-xs font-inter font-bold uppercase tracking-wider text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all shadow-md shadow-amber-500/20 cursor-pointer"
+              className="flex items-center gap-2 px-5 py-2.5 text-xs font-inter font-bold uppercase tracking-wider text-white bg-red-600 hover:bg-red-700 rounded-xl transition-all shadow-md shadow-red-600/20 cursor-pointer"
             >
               <span>Explore Details</span>
               <ArrowRight className="w-3.5 h-3.5" />

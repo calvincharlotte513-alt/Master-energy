@@ -40,32 +40,32 @@ function createCanopySignTexture(title: string, subtitle: string) {
   const ctx = canvas.getContext('2d');
   if (!ctx) return new THREE.Texture();
 
-  // Vibrant orange background with gradient matching logo flame
+  // Masters Navy Blue brand background
   const grad = ctx.createLinearGradient(0, 0, 1024, 0);
-  grad.addColorStop(0, '#ea580c');
-  grad.addColorStop(0.2, '#ff6a00');
-  grad.addColorStop(0.8, '#ff6a00');
-  grad.addColorStop(1, '#ea580c');
+  grad.addColorStop(0, '#0a1226');
+  grad.addColorStop(0.2, '#1e3a8a');
+  grad.addColorStop(0.8, '#1e3a8a');
+  grad.addColorStop(1, '#0a1226');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, 1024, 128);
 
-  // Black luxury borders
-  ctx.fillStyle = '#090d16';
-  ctx.fillRect(0, 0, 1024, 12);
-  ctx.fillRect(0, 116, 1024, 12);
+  // Champagne Gold borders
+  ctx.fillStyle = '#dfca95';
+  ctx.fillRect(0, 0, 1024, 8);
+  ctx.fillRect(0, 120, 1024, 8);
 
-  // White accent pinstripes
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 12, 1024, 2);
-  ctx.fillRect(0, 114, 1024, 2);
+  // Energy Crimson Red accent pinstripes
+  ctx.fillStyle = '#dc2626';
+  ctx.fillRect(0, 8, 1024, 3);
+  ctx.fillRect(0, 117, 1024, 3);
 
   // Left & right "ME" crest badges
   [45, 930].forEach((x) => {
-    ctx.fillStyle = '#090d16';
+    ctx.fillStyle = '#dc2626';
     ctx.beginPath();
     ctx.roundRect(x, 22, 50, 84, 8);
     ctx.fill();
-    ctx.fillStyle = '#ff6a00';
+    ctx.fillStyle = '#ffffff';
     ctx.font = '900 24px "Poppins", sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -73,14 +73,14 @@ function createCanopySignTexture(title: string, subtitle: string) {
   });
 
   // Main Title: "MASTER ENERGY"
-  ctx.fillStyle = '#090d16';
+  ctx.fillStyle = '#ffffff';
   ctx.font = '900 50px "Poppins", sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText(title, 512, 54);
 
   // Subtitle
-  ctx.fillStyle = '#1e293b';
+  ctx.fillStyle = '#dfca95';
   ctx.font = 'bold 15px "Inter", sans-serif';
   ctx.letterSpacing = '3px';
   ctx.fillText(subtitle, 512, 92);
@@ -102,15 +102,15 @@ function createPriceTotemTexture() {
   ctx.fillStyle = '#060910';
   ctx.fillRect(0, 0, 512, 1024);
 
-  // Outer orange frame
-  ctx.strokeStyle = '#f97316';
+  // Outer champagne frame
+  ctx.strokeStyle = '#dfca95';
   ctx.lineWidth = 10;
   ctx.strokeRect(10, 10, 492, 1004);
 
   // Top Master Energy Brand Banner
   const headerGrad = ctx.createLinearGradient(0, 20, 0, 180);
-  headerGrad.addColorStop(0, '#ff7700');
-  headerGrad.addColorStop(1, '#ea580c');
+  headerGrad.addColorStop(0, '#1e3a8a');
+  headerGrad.addColorStop(1, '#0f1d3d');
   ctx.fillStyle = headerGrad;
   ctx.fillRect(20, 20, 472, 160);
 
@@ -120,7 +120,7 @@ function createPriceTotemTexture() {
   ctx.textBaseline = 'middle';
   ctx.fillText('MASTER ENERGY', 256, 75);
 
-  ctx.fillStyle = '#1e293b';
+  ctx.fillStyle = '#dfca95';
   ctx.font = 'bold 18px "Inter", sans-serif';
   ctx.fillText('NAZE MEGA FORECOURT', 256, 118);
 
@@ -130,9 +130,9 @@ function createPriceTotemTexture() {
 
   // 4 Calibrated Fuel Price Rows
   const fuelList = [
-    { name: 'PMS', desc: 'PETROL', price: '₦710', color: '#ff6a00', bar: '#ea580c' },
+    { name: 'PMS', desc: 'PETROL', price: '₦710', color: '#ef4444', bar: '#dc2626' },
     { name: 'AGO', desc: 'DIESEL', price: '₦1050', color: '#34d399', bar: '#059669' },
-    { name: 'DPK', desc: 'KEROSENE', price: '₦1150', color: '#38bdf8', bar: '#0284c7' },
+    { name: 'DPK', desc: 'KEROSENE', price: '₦1150', color: '#dfca95', bar: '#b49b5c' },
     { name: 'LPG', desc: 'GAS / KG', price: '₦1400', color: '#fb923c', bar: '#ea580c' }
   ];
 
@@ -187,7 +187,7 @@ function createPriceTotemTexture() {
   });
 
   // Bottom Guarantee
-  ctx.fillStyle = '#ff6a00';
+  ctx.fillStyle = '#dfca95';
   ctx.font = 'bold 16px "Inter", sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('10 LITERS IS 10 LITERS · ACCURATE METERS', 256, 940);
@@ -509,7 +509,7 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
     scene.add(curb);
 
     // Road Markings: Orange pump bay divider lanes & White pedestrian crossing
-    const orangeLaneMat = new THREE.MeshBasicMaterial({ color: 0xf97316 });
+    const orangeLaneMat = new THREE.MeshBasicMaterial({ color: 0xef4444 });
     const whiteCrossingMat = new THREE.MeshBasicMaterial({ color: 0xf8fafc });
 
     [-6.2, -1.0, 1.0, 6.2].forEach(lx => {
@@ -550,8 +550,8 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
     // Glowing Neon Brand Fascia Trim (Master Energy Deep Logo Orange)
     const fasciaGeo = new THREE.BoxGeometry(16.7, 0.45, 12.7);
     const fasciaMat = new THREE.MeshStandardMaterial({
-      color: 0xf97316,
-      emissive: 0xea580c,
+      color: 0x1e3a8a,
+      emissive: 0x172554,
       emissiveIntensity: 0.88,
       roughness: 0.2,
       metalness: 0.5
@@ -582,7 +582,7 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
     // ROOFTOP ENTRANCE ARCH SIGNBOARD (Prominently displays MASTER ENERGY above roof)
     const roofArchGeo = new THREE.BoxGeometry(11.0, 1.4, 0.3);
     const roofArchMat = new THREE.MeshStandardMaterial({
-      color: 0xf97316,
+      color: 0x1e3a8a,
       roughness: 0.2,
       metalness: 0.6
     });
@@ -618,7 +618,7 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
       roughness: 0.22
     });
     const orangeBollardMat = new THREE.MeshStandardMaterial({
-      color: 0xf97316,
+      color: 0xdc2626,
       roughness: 0.4
     });
 
@@ -776,8 +776,8 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
     const totemCrown = new THREE.Mesh(
       new THREE.BoxGeometry(2.1, 0.85, 0.85),
       new THREE.MeshStandardMaterial({
-        color: 0xf97316,
-        emissive: 0xea580c,
+        color: 0x1e3a8a,
+        emissive: 0x172554,
         emissiveIntensity: 0.95
       })
     );
@@ -842,8 +842,8 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
     const kitchenSign = new THREE.Mesh(
       new THREE.BoxGeometry(5.2, 0.4, 0.15),
       new THREE.MeshStandardMaterial({
-        color: 0xf97316,
-        emissive: 0xea580c,
+        color: 0xdc2626,
+        emissive: 0xb91c1c,
         emissiveIntensity: 0.9
       })
     );
@@ -1307,7 +1307,7 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
             hoveredMeshRef.current = hit;
             if ((hit.material as THREE.MeshStandardMaterial).emissive) {
               const m = hit.material as THREE.MeshStandardMaterial;
-              m.emissive.setHex(0xf97316);
+              m.emissive.setHex(0xdc2626);
               m.emissiveIntensity = 0.95;
             }
           }
@@ -1400,15 +1400,15 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
       {/* TOP MINIMAL STATUS BAR */}
       <div className="absolute top-4 left-4 sm:top-5 sm:left-6 right-4 sm:right-6 z-20 pointer-events-none flex items-center justify-between gap-3 max-w-[calc(100vw-2rem)]">
         {/* Status Badge */}
-        <div className="flex items-center gap-2 bg-white/95 backdrop-blur-md border border-slate-200 px-3 sm:px-3.5 py-1.5 rounded-full shadow-md">
+        <div className="flex items-center gap-2 bg-white/95 dark:bg-[#0a1226]/95 backdrop-blur-md border border-slate-200 dark:border-slate-800 px-3 sm:px-3.5 py-1.5 rounded-full shadow-md">
           <span className="w-2 h-2 rounded-full bg-emerald-500" />
-          <span className="text-[10px] sm:text-[11px] font-roboto font-bold tracking-wider text-slate-900 uppercase">
+          <span className="text-[10px] sm:text-[11px] font-roboto font-bold tracking-wider text-slate-900 dark:text-white uppercase">
             3D DIGITAL TWIN · MASTER ENERGY FORECOURT
           </span>
         </div>
 
         {/* Minimalist Top-Right Quick Controls (Lighting & Auto Orbit) */}
-        <div className="pointer-events-auto flex items-center gap-1.5 p-1 bg-white/95 backdrop-blur-md border border-slate-200 rounded-full shadow-md">
+        <div className="pointer-events-auto flex items-center gap-1.5 p-1 bg-white/95 dark:bg-[#0a1226]/95 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-full shadow-md">
           {/* Cycle Lighting Button */}
           <button
             type="button"
@@ -1417,11 +1417,11 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
               setTimeOfDay(nextTime);
               updateEnvironmentLighting(nextTime);
             }}
-            className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-roboto font-bold text-slate-800 hover:text-black rounded-full hover:bg-slate-100 transition-all cursor-pointer capitalize"
+            className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-roboto font-bold text-slate-800 dark:text-slate-200 hover:text-black dark:hover:text-white rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer capitalize"
             title="Switch Day / Dusk / Night Lighting"
           >
-            {timeOfDay === 'sunset' && <Sunset className="w-3.5 h-3.5 text-orange-500" />}
-            {timeOfDay === 'day' && <Sun className="w-3.5 h-3.5 text-orange-500" />}
+            {timeOfDay === 'sunset' && <Sunset className="w-3.5 h-3.5 text-red-500" />}
+            {timeOfDay === 'day' && <Sun className="w-3.5 h-3.5 text-amber-500" />}
             {timeOfDay === 'night' && <Moon className="w-3.5 h-3.5 text-slate-700" />}
             <span className="hidden sm:inline">{timeOfDay}</span>
           </button>
@@ -1431,7 +1431,7 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
             type="button"
             onClick={() => setAutoRotate(prev => !prev)}
             className={`p-1.5 rounded-full text-xs transition-all cursor-pointer ${
-              autoRotate ? 'text-slate-950 bg-orange-500 font-bold' : 'text-slate-600 hover:text-black hover:bg-slate-100'
+              autoRotate ? 'text-white bg-red-600 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-300 hover:text-black dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
             title={autoRotate ? 'Pause Orbit' : 'Resume Auto Orbit'}
           >
@@ -1443,7 +1443,7 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
       {/* MINIMAL BOTTOM FLOATING DOCK (Clean, Uncluttered, White & Orange) */}
       <div className="absolute bottom-5 left-0 right-0 z-30 pointer-events-none flex flex-col items-center gap-2 px-3 w-full max-w-full">
         {/* Minimal View Selector */}
-        <div className="pointer-events-auto flex items-center gap-1 p-1 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-full shadow-xl max-w-[calc(100vw-2rem)] overflow-x-auto no-scrollbar">
+        <div className="pointer-events-auto flex items-center gap-1 p-1 bg-white/95 dark:bg-[#0a1226]/95 backdrop-blur-xl border border-slate-200 dark:border-slate-800 rounded-full shadow-xl max-w-[calc(100vw-2rem)] overflow-x-auto no-scrollbar">
           {[
             { id: 'forecourt', label: 'Fuel Forecourt' },
             { id: 'overview', label: 'Full Campus' },
@@ -1455,8 +1455,8 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
               onClick={() => focusCamera(sec.id)}
               className={`px-3 py-1 text-xs font-inter font-semibold rounded-full transition-all cursor-pointer whitespace-nowrap ${
                 activeSector === sec.id
-                  ? 'bg-orange-500 text-slate-950 font-bold shadow-xs border border-orange-600'
-                  : 'text-slate-700 hover:text-slate-950 hover:bg-slate-100'
+                  ? 'bg-[#1e3a8a] text-white font-bold shadow-xs border border-blue-600'
+                  : 'text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
               }`}
             >
               {sec.label}
@@ -1475,7 +1475,7 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
               el?.scrollIntoView({ behavior: 'smooth' });
             }
           }}
-          className="pointer-events-auto flex items-center justify-center gap-2 px-4 sm:px-5 py-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-slate-950 rounded-full text-xs font-inter font-bold transition-all shadow-md shadow-orange-500/25 hover:scale-105 cursor-pointer active:scale-95 border border-orange-400 max-w-[calc(100vw-2rem)]"
+          className="pointer-events-auto flex items-center justify-center gap-2 px-4 sm:px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full text-xs font-inter font-bold transition-all shadow-md shadow-red-600/25 hover:scale-105 cursor-pointer active:scale-95 border border-red-500 max-w-[calc(100vw-2rem)]"
         >
           <span className="truncate">Scroll down for station details &amp; prices</span>
           <ChevronDown className="w-4 h-4 animate-bounce text-slate-950 shrink-0" />
@@ -1489,15 +1489,15 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
             left: `${tooltipData.x}px`,
             top: `${tooltipData.y}px`
           }}
-          className="absolute z-50 pointer-events-none -translate-x-1/2 -translate-y-full mb-3 bg-white/95 backdrop-blur-xl border border-orange-400 rounded-2xl px-4 py-3 shadow-2xl transition-all duration-150 text-left min-w-[240px] max-w-xs text-slate-900"
+          className="absolute z-50 pointer-events-none -translate-x-1/2 -translate-y-full mb-3 bg-white/95 backdrop-blur-xl border border-red-500/40 rounded-2xl px-4 py-3 shadow-2xl transition-all duration-150 text-left min-w-[240px] max-w-xs text-slate-900 dark:text-white bg-white/95 dark:bg-[#0a1226]/95"
         >
-          <div className="flex items-center gap-1.5 font-roboto text-[10px] font-bold text-orange-600 uppercase tracking-wider mb-1">
-            <Sparkles className="w-3 h-3 text-orange-600" />
+          <div className="flex items-center gap-1.5 font-roboto text-[10px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider mb-1">
+            <Sparkles className="w-3 h-3 text-red-600 dark:text-red-400" />
             <span>INTERACTIVE ASSET · CLICK TO OPEN</span>
           </div>
           <div className="text-sm font-bold text-slate-950 font-poppins">{tooltipData.title}</div>
           <div className="text-xs text-slate-600 font-opensans leading-snug mt-1">{tooltipData.desc}</div>
-          <div className="mt-2 pt-2 border-t border-slate-200 text-[11px] font-roboto font-extrabold text-orange-700">
+          <div className="mt-2 pt-2 border-t border-slate-200 text-[11px] font-roboto font-extrabold text-red-600 dark:text-red-400">
             {tooltipData.tag}
           </div>
         </div>

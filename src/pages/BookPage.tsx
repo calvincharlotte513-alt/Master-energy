@@ -62,28 +62,27 @@ export const BookPage: React.FC = () => {
   };
 
   return (
-    <div className="py-10 sm:py-16 bg-white w-full max-w-full overflow-hidden font-opensans">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        {/* Header */}
-        <div className="border-b border-slate-200 pb-8 space-y-3 text-center">
-          <div className="inline-flex items-center gap-2 font-mono text-xs text-amber-600 font-bold uppercase tracking-wider">
-            <CalendarCheck className="w-4 h-4 text-amber-500" />
+    <div className="py-12 sm:py-16 lg:py-20 bg-white dark:bg-[#080d1a] border-t border-slate-200 dark:border-slate-800 min-h-screen text-slate-900 dark:text-white font-opensans transition-colors duration-250">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        {/* Header Title */}
+        <div className="text-center max-w-2xl mx-auto space-y-3">
+          <div className="inline-flex items-center gap-2 font-mono text-xs text-blue-900 dark:text-blue-400 font-bold uppercase tracking-wider">
+            <CalendarCheck className="w-4 h-4 text-red-600" />
             <span>CENTRAL BOOKING DESK · MASTER ENERGY NAZE</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-950 font-display">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-950 dark:text-white font-display">
             Book Your Service in Advance
           </h1>
-          <p className="text-sm sm:text-base text-slate-600 max-w-xl mx-auto font-normal leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-xl mx-auto font-normal leading-relaxed">
             Choose what you want to reserve ahead of your arrival so you don&apos;t wait in line. Tap any card below to select your service.
           </p>
         </div>
 
-        {/* 4 Interactive Service Cards - Alternating Black & Yellow with Snappy Slide-In */}
+        {/* 4 Interactive Service Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 overflow-hidden">
           {services.map((svc, idx) => {
             const Icon = svc.icon;
             const isSelected = activeTab === svc.id;
-            const isBlackBox = idx % 2 === 0;
 
             return (
               <motion.button
@@ -96,40 +95,42 @@ export const BookPage: React.FC = () => {
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: idx * 0.04 }}
                 style={{ willChange: 'transform, opacity' }}
                 className={`p-6 rounded-3xl text-left cursor-pointer transition-all duration-300 relative flex flex-col justify-between space-y-4 ${
-                  isBlackBox
-                    ? 'bg-slate-950 text-white border-2 border-amber-400/40 shadow-xl hover:border-amber-400 hover:shadow-2xl'
-                    : 'bg-amber-400 text-slate-950 border-2 border-amber-500 shadow-xl hover:border-slate-950 hover:shadow-2xl'
-                } ${isSelected ? 'ring-4 ring-offset-2 ring-amber-400 scale-[1.02]' : 'opacity-90 hover:opacity-100'}`}
+                  isSelected
+                    ? 'bg-blue-900 text-white border-2 border-blue-950 shadow-xl ring-4 ring-offset-2 ring-blue-900/30 scale-[1.02]'
+                    : 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white border-2 border-slate-200 dark:border-slate-800 shadow-md hover:border-blue-300'
+                }`}
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div
                       className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold ${
-                        isBlackBox ? 'bg-amber-400 text-slate-950' : 'bg-slate-950 text-amber-400'
+                        isSelected ? 'bg-white text-blue-900' : 'bg-blue-50 dark:bg-blue-950 text-blue-900 dark:text-blue-400'
                       }`}
                     >
                       <Icon className="w-5 h-5" />
                     </div>
                     <span
                       className={`text-[10px] font-mono font-bold px-2.5 py-1 rounded-md uppercase tracking-wider ${
-                        isBlackBox ? 'bg-slate-900 text-amber-400 border border-amber-400/30' : 'bg-white/90 text-slate-950'
+                        isSelected
+                          ? 'bg-blue-950 text-amber-300'
+                          : 'bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-200'
                       }`}
                     >
                       {svc.badge}
                     </span>
                   </div>
                   <div>
-                    <h3 className={`text-lg font-bold font-display ${isBlackBox ? 'text-white' : 'text-slate-950'}`}>
+                    <h3 className="text-lg font-bold font-display">
                       {svc.name}
                     </h3>
-                    <p className={`text-xs mt-1.5 leading-relaxed ${isBlackBox ? 'text-slate-300' : 'text-slate-900'}`}>
+                    <p className={`text-xs mt-1.5 leading-relaxed ${isSelected ? 'text-blue-100' : 'text-slate-600 dark:text-slate-400'}`}>
                       {svc.desc}
                     </p>
                   </div>
                 </div>
 
                 <div className="pt-3 border-t border-current/10 flex items-center justify-between">
-                  <span className={`text-[11px] font-mono font-bold uppercase tracking-wider ${isBlackBox ? 'text-amber-400' : 'text-slate-950'}`}>
+                  <span className={`text-[11px] font-mono font-bold uppercase tracking-wider ${isSelected ? 'text-amber-300' : 'text-blue-900 dark:text-blue-400'}`}>
                     {isSelected ? '✓ Selected' : 'Tap to Reserve'}
                   </span>
                   <span className="text-xs font-bold">&rarr;</span>
@@ -139,38 +140,38 @@ export const BookPage: React.FC = () => {
           })}
         </div>
 
-        {/* Dynamic Reservation Form - Luxury Black Box with Smooth Fast Slide-In */}
+        {/* Dynamic Reservation Form */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.36, ease: [0.16, 1, 0.3, 1] }}
           style={{ willChange: 'transform, opacity' }}
-          className="p-8 sm:p-12 rounded-3xl bg-slate-950 text-white border-2 border-amber-400/40 shadow-2xl max-w-4xl mx-auto"
+          className="p-8 sm:p-12 rounded-3xl bg-[#091224] text-white border-2 border-blue-900/60 shadow-2xl max-w-4xl mx-auto"
         >
           {confirmed ? (
             <div className="text-center py-8 space-y-4">
-              <div className="w-14 h-14 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center mx-auto shadow-lg shadow-amber-500/30">
+              <div className="w-14 h-14 rounded-full bg-emerald-500 text-white flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/30">
                 <Check className="w-7 h-7 stroke-[3]" />
               </div>
               <h3 className="text-2xl font-bold text-white font-display">
                 {confirmed} Reserved!
               </h3>
               <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto font-normal leading-relaxed">
-                Thank you <strong className="text-amber-400">{name || 'Guest'}</strong>. Your appointment for <strong className="text-amber-400">{date} at {time}</strong> is saved. Our desk will send an SMS or call <strong className="text-amber-400">{phone}</strong>.
+                Thank you <strong className="text-amber-300">{name || 'Guest'}</strong>. Your appointment for <strong className="text-amber-300">{date} at {time}</strong> is saved. Our desk will send an SMS or call <strong className="text-amber-300">{phone}</strong>.
               </p>
               <button
                 type="button"
                 onClick={() => setConfirmed(null)}
-                className="px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-colors cursor-pointer mt-4 shadow-md shadow-amber-500/20"
+                className="px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white bg-blue-900 hover:bg-blue-800 rounded-xl transition-colors cursor-pointer mt-4 shadow-md shadow-blue-900/20"
               >
                 Make Another Booking
               </button>
             </div>
           ) : (
             <form onSubmit={handleBook(activeTab === 'wash' ? 'Car Wash Bay' : activeTab === 'lounge' ? 'VIP Lounge Table' : activeTab === 'garden' ? 'Garden Cabana' : 'Kitchen Meal')} className="space-y-6">
-              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-4">
-                <div className="font-mono text-xs uppercase tracking-wider text-amber-400 font-bold">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-4">
+                <div className="font-mono text-xs uppercase tracking-wider text-amber-300 font-bold">
                   {activeTab === 'wash' && 'BOOKING FOR: MASTERS AUTOMATED CAR WASH'}
                   {activeTab === 'lounge' && 'BOOKING FOR: MASTERS UPSTAIRS VIP LOUNGE'}
                   {activeTab === 'garden' && 'BOOKING FOR: MASTERS BAR & OPEN-AIR GARDEN'}
@@ -188,7 +189,7 @@ export const BookPage: React.FC = () => {
                     placeholder="e.g. Chief Emeka"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-amber-400 shadow-sm placeholder:text-slate-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-blue-400 shadow-sm placeholder:text-slate-500"
                   />
                 </div>
 
@@ -200,7 +201,7 @@ export const BookPage: React.FC = () => {
                     placeholder="0803 000 0000"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-amber-400 shadow-sm placeholder:text-slate-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-blue-400 shadow-sm placeholder:text-slate-500"
                   />
                 </div>
 
@@ -210,7 +211,7 @@ export const BookPage: React.FC = () => {
                     type="date"
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-amber-400 shadow-sm"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-blue-400 shadow-sm"
                   />
                 </div>
 
@@ -219,7 +220,7 @@ export const BookPage: React.FC = () => {
                   <select
                     value={time}
                     onChange={(e) => setTime(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-amber-400 shadow-sm"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-blue-400 shadow-sm"
                   >
                     <option value="09:00">09:00 AM (Morning)</option>
                     <option value="12:00">12:00 PM (Afternoon Lunch)</option>
@@ -251,14 +252,14 @@ export const BookPage: React.FC = () => {
                   }
                   value={detail}
                   onChange={(e) => setDetail(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-amber-400 shadow-sm placeholder:text-slate-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-blue-400 shadow-sm placeholder:text-slate-500"
                 />
               </div>
 
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full py-4 text-xs font-bold uppercase tracking-wider text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all cursor-pointer shadow-md shadow-amber-500/20 active:scale-[0.99]"
+                  className="w-full py-4 text-xs font-bold uppercase tracking-wider text-white bg-red-600 hover:bg-red-700 rounded-xl transition-all cursor-pointer shadow-md shadow-red-600/25 active:scale-[0.99]"
                 >
                   Confirm Reservation Now
                 </button>

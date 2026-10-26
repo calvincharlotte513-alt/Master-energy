@@ -9,19 +9,19 @@ interface LeasedPromenadeSectionProps {
 
 export const LeasedPromenadeSection: React.FC<LeasedPromenadeSectionProps> = ({ onOpenLeasingModal }) => {
   return (
-    <section id="promenade" className="py-16 lg:py-24 bg-white border-t border-slate-200 relative w-full max-w-full overflow-hidden font-opensans">
+    <section id="promenade" className="py-16 lg:py-24 bg-white dark:bg-[#080d1a] border-t border-slate-200 dark:border-slate-800 relative w-full max-w-full overflow-hidden font-opensans transition-colors duration-250">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Micro-Section Luxury Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 pb-8 border-b border-slate-200">
+        {/* Micro-Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 pb-8 border-b border-slate-200 dark:border-slate-800">
           <div>
-            <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.25em] text-orange-600 mb-3 font-bold">
-              <Store className="w-3.5 h-3.5 text-orange-500" />
+            <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.25em] text-blue-900 dark:text-blue-400 mb-3 font-bold">
+              <Store className="w-3.5 h-3.5 text-red-600" />
               <span>THE CONCESSIONAIRE ARCADE · MICRO-SECTION</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-950 tracking-tight font-display">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-950 dark:text-white tracking-tight font-display">
               Commercial Promenade &amp; Leased Spaces
             </h2>
-            <p className="mt-3 text-sm text-slate-600 max-w-xl font-normal leading-relaxed">
+            <p className="mt-3 text-sm text-slate-600 dark:text-slate-300 max-w-xl font-normal leading-relaxed">
               In addition to our five original flagship divisions, Master Energy provides prime commercial real estate for artisanal culinary and specialty brands.
             </p>
           </div>
@@ -30,22 +30,21 @@ export const LeasedPromenadeSection: React.FC<LeasedPromenadeSectionProps> = ({ 
             <button
               type="button"
               onClick={onOpenLeasingModal}
-              className="flex items-center gap-2.5 px-6 py-3.5 text-xs font-mono font-bold uppercase tracking-wider text-slate-950 bg-orange-500 hover:bg-orange-400 rounded-xl transition-all cursor-pointer shadow-md shadow-orange-500/20 hover:scale-105"
+              className="flex items-center gap-2.5 px-6 py-3.5 text-xs font-mono font-bold uppercase tracking-wider text-white bg-red-600 hover:bg-red-700 rounded-xl transition-all cursor-pointer shadow-md shadow-red-600/25 hover:scale-105"
             >
-              <Building2 className="w-4 h-4 text-slate-950" />
+              <Building2 className="w-4 h-4 text-white" />
               <span>Apply for Retail Lease</span>
             </button>
           </div>
         </div>
 
-        {/* 2 Concession Cards Grid - One Orange Box sliding in from Left, One Black Box sliding in from Right */}
+        {/* 2 Concession Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 overflow-hidden">
           {LEASED_BUSINESSES.map((business, idx) => {
             const isZena = business.id === 'zena-foodies';
             const Icon = isZena ? Utensils : Coffee;
-            // First is Orange Box, Second is Black Box
-            const isOrangeBox = idx === 0;
-            const slideX = isOrangeBox ? -28 : 28;
+            const isFirst = idx === 0;
+            const slideX = isFirst ? -28 : 28;
 
             return (
               <motion.div
@@ -56,62 +55,60 @@ export const LeasedPromenadeSection: React.FC<LeasedPromenadeSectionProps> = ({ 
                 transition={{ duration: 0.38, delay: idx * 0.05, ease: [0.16, 1, 0.3, 1] }}
                 style={{ willChange: 'transform, opacity' }}
                 className={`p-8 sm:p-10 rounded-3xl transition-all duration-300 flex flex-col justify-between relative overflow-hidden group ${
-                  isOrangeBox
-                    ? 'bg-orange-500 text-slate-950 border-2 border-orange-600 shadow-xl hover:border-slate-950 hover:shadow-2xl'
-                    : 'bg-slate-950 text-white border-2 border-orange-500/40 shadow-xl hover:border-orange-500 hover:shadow-2xl'
+                  isFirst
+                    ? 'bg-[#091224] text-white border-2 border-blue-900/60 shadow-xl hover:border-blue-600'
+                    : 'bg-white dark:bg-slate-900 text-slate-950 dark:text-white border-2 border-slate-200 dark:border-slate-800 shadow-xl hover:border-blue-900/60'
                 }`}
               >
                 <div className="space-y-6">
                   {/* Concessionaire Micro Badge */}
                   <div className="flex items-center justify-between gap-2">
                     <span className={`font-mono text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-md shadow-xs ${
-                      isOrangeBox
-                        ? 'bg-slate-950 text-orange-400'
-                        : 'bg-orange-500 text-slate-950'
+                      isFirst
+                        ? 'bg-blue-900 text-white'
+                        : 'bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-200'
                     }`}>
                       {business.leaseBadge} · {business.unitNumber}
                     </span>
-                    <Icon className={`w-5 h-5 ${isOrangeBox ? 'text-slate-950' : 'text-orange-400'}`} />
+                    <Icon className={`w-5 h-5 ${isFirst ? 'text-amber-300' : 'text-blue-900 dark:text-blue-400'}`} />
                   </div>
 
                   <div>
-                    <h3 className={`text-2xl sm:text-3xl font-extrabold font-display ${
-                      isOrangeBox ? 'text-slate-950' : 'text-white'
-                    }`}>
+                    <h3 className="text-2xl sm:text-3xl font-extrabold font-display">
                       {business.name}
                     </h3>
                     <div className={`mt-1 text-xs font-mono uppercase tracking-wider font-bold ${
-                      isOrangeBox ? 'text-slate-900' : 'text-orange-400'
+                      isFirst ? 'text-amber-300' : 'text-red-600 dark:text-red-400'
                     }`}>
                       {business.category}
                     </div>
                   </div>
 
                   <p className={`text-sm leading-relaxed ${
-                    isOrangeBox ? 'text-slate-950 font-medium' : 'text-slate-300 font-normal'
+                    isFirst ? 'text-slate-300 font-normal' : 'text-slate-600 dark:text-slate-300 font-normal'
                   }`}>
                     {business.description}
                   </p>
 
                   <div className={`flex flex-wrap items-center gap-6 font-mono text-xs font-medium ${
-                    isOrangeBox ? 'text-slate-900' : 'text-orange-400/90'
+                    isFirst ? 'text-slate-300' : 'text-slate-600 dark:text-slate-400'
                   }`}>
                     <div className="flex items-center gap-2">
-                      <Clock className={`w-3.5 h-3.5 ${isOrangeBox ? 'text-slate-950' : 'text-orange-400'}`} />
+                      <Clock className="w-3.5 h-3.5 text-blue-900 dark:text-blue-400" />
                       <span>{business.hours}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Phone className={`w-3.5 h-3.5 ${isOrangeBox ? 'text-slate-950' : 'text-orange-400'}`} />
+                      <Phone className="w-3.5 h-3.5 text-blue-900 dark:text-blue-400" />
                       <span>{business.phone}</span>
                     </div>
                   </div>
 
                   {/* Offerings Menu */}
                   <div className={`pt-6 border-t space-y-3 ${
-                    isOrangeBox ? 'border-slate-950/20' : 'border-white/10'
+                    isFirst ? 'border-white/10' : 'border-slate-200 dark:border-slate-800'
                   }`}>
                     <div className={`font-mono text-[11px] uppercase tracking-widest font-bold ${
-                      isOrangeBox ? 'text-slate-900' : 'text-slate-400'
+                      isFirst ? 'text-slate-400' : 'text-slate-500 dark:text-slate-400'
                     }`}>
                       Signature Specialties
                     </div>
@@ -120,21 +117,21 @@ export const LeasedPromenadeSection: React.FC<LeasedPromenadeSectionProps> = ({ 
                         <div
                           key={oIdx}
                           className={`flex items-start justify-between gap-4 p-3 rounded-xl shadow-xs transition-colors ${
-                            isOrangeBox
-                              ? 'bg-white/80 hover:bg-white text-slate-950 border border-orange-600/30'
-                              : 'bg-white/5 hover:bg-white/10 text-white border border-white/10'
+                            isFirst
+                              ? 'bg-white/5 hover:bg-white/10 text-white border border-white/10'
+                              : 'bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700/80 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700'
                           }`}
                         >
                           <div>
-                            <div className={`font-bold text-xs ${isOrangeBox ? 'text-slate-950' : 'text-white'}`}>
+                            <div className="font-bold text-xs">
                               {item.name}
                             </div>
-                            <div className={`text-[11px] mt-0.5 ${isOrangeBox ? 'text-slate-800' : 'text-slate-400'}`}>
+                            <div className={`text-[11px] mt-0.5 ${isFirst ? 'text-slate-400' : 'text-slate-500 dark:text-slate-400'}`}>
                               {item.description}
                             </div>
                           </div>
                           <span className={`font-mono font-bold text-xs shrink-0 ${
-                            isOrangeBox ? 'text-slate-950' : 'text-orange-400'
+                            isFirst ? 'text-amber-300' : 'text-blue-900 dark:text-blue-400'
                           }`}>
                             {item.price}
                           </span>
@@ -145,10 +142,10 @@ export const LeasedPromenadeSection: React.FC<LeasedPromenadeSectionProps> = ({ 
                 </div>
 
                 <div className={`mt-8 pt-6 border-t flex flex-wrap gap-2 font-mono text-[11px] font-medium ${
-                  isOrangeBox ? 'border-slate-950/20 text-slate-900' : 'border-white/10 text-slate-400'
+                  isFirst ? 'border-white/10 text-slate-400' : 'border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400'
                 }`}>
                   {business.specialties.map((spec, sIdx) => (
-                    <span key={sIdx} className={isOrangeBox ? 'text-slate-950 font-semibold' : 'text-slate-300'}>
+                    <span key={sIdx}>
                       {spec} {sIdx < business.specialties.length - 1 ? '·' : ''}
                     </span>
                   ))}
@@ -158,17 +155,17 @@ export const LeasedPromenadeSection: React.FC<LeasedPromenadeSectionProps> = ({ 
           })}
         </div>
 
-        {/* Commercial Space Callout: Luxury Black Box sliding in from bottom */}
+        {/* Commercial Space Callout */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-12 p-8 rounded-3xl bg-slate-950 text-white border-2 border-orange-500/50 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl hover:border-orange-500 transition-all"
+          className="mt-12 p-8 rounded-3xl bg-[#091224] text-white border-2 border-blue-900/60 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl hover:border-blue-700 transition-all"
         >
           <div className="flex items-center gap-5">
-            <div className="w-14 h-14 rounded-2xl bg-orange-500 text-slate-950 flex items-center justify-center shrink-0 shadow-lg font-bold">
-              <Building2 className="w-7 h-7 text-slate-950" />
+            <div className="w-14 h-14 rounded-2xl bg-blue-900 text-white flex items-center justify-center shrink-0 shadow-lg font-bold border border-blue-700">
+              <Building2 className="w-7 h-7 text-white" />
             </div>
             <div>
               <h4 className="text-lg font-bold text-white font-display">
@@ -182,7 +179,7 @@ export const LeasedPromenadeSection: React.FC<LeasedPromenadeSectionProps> = ({ 
           <button
             type="button"
             onClick={onOpenLeasingModal}
-            className="px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-slate-950 bg-orange-500 hover:bg-orange-400 rounded-xl transition-all whitespace-nowrap cursor-pointer shadow-lg shadow-orange-500/20 hover:scale-105"
+            className="px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-white bg-red-600 hover:bg-red-700 rounded-xl transition-all whitespace-nowrap cursor-pointer shadow-lg shadow-red-600/25 hover:scale-105"
           >
             Lease Kiosk or Retail Unit
           </button>

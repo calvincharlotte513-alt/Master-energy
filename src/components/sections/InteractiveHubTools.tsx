@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { FUEL_PRODUCTS, WASH_SERVICES, LOUNGE_PACKAGES } from '../../data/hubData';
-import { Fuel, Sparkles, Wine, Calculator, Check, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Fuel, Sparkles, Wine, Check, ShieldCheck } from 'lucide-react';
 
 export const InteractiveHubTools: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'fuel' | 'wash' | 'lounge'>('fuel');
@@ -47,28 +47,28 @@ export const InteractiveHubTools: React.FC = () => {
   };
 
   return (
-    <section id="calculator" className="py-16 lg:py-24 bg-slate-50 border-t border-slate-200 relative w-full max-w-full overflow-hidden font-opensans">
+    <section id="calculator" className="py-16 lg:py-24 bg-slate-50 dark:bg-[#080d1a] border-t border-slate-200 dark:border-slate-800 relative w-full max-w-full overflow-hidden font-opensans transition-colors duration-250">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="font-mono text-xs uppercase tracking-[0.25em] text-orange-600 mb-3 font-bold">
+          <div className="font-mono text-xs uppercase tracking-[0.25em] text-blue-900 dark:text-blue-400 mb-3 font-bold">
             THE DIGITAL CONCIERGE &amp; PRICING TERMINAL
           </div>
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-950 tracking-tight font-display">
+          <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-950 dark:text-white tracking-tight font-display">
             Live Pricing &amp; Reservations
           </h2>
-          <p className="mt-4 text-sm sm:text-base text-slate-600 font-normal">
+          <p className="mt-4 text-sm sm:text-base text-slate-600 dark:text-slate-300 font-normal">
             Instant volumetric fuel calculators, auto-detailing bay bookings, and VIP lounge concierge tables.
           </p>
 
           {/* Luxury Tab Selector */}
-          <div className="mt-10 inline-flex p-1.5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+          <div className="mt-10 inline-flex p-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm">
             <button
               type="button"
               onClick={() => setActiveTab('fuel')}
               className={`flex items-center gap-2.5 px-6 py-3 text-xs font-mono uppercase tracking-wider font-bold rounded-xl transition-all cursor-pointer ${
                 activeTab === 'fuel' 
-                  ? 'bg-orange-500 text-white shadow-md shadow-orange-500/20' 
-                  : 'text-slate-600 hover:text-slate-950'
+                  ? 'bg-blue-900 dark:bg-blue-600 text-white shadow-md shadow-blue-900/20' 
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white'
               }`}
             >
               <Fuel className="w-4 h-4 text-current" />
@@ -79,8 +79,8 @@ export const InteractiveHubTools: React.FC = () => {
               onClick={() => setActiveTab('wash')}
               className={`flex items-center gap-2.5 px-6 py-3 text-xs font-mono uppercase tracking-wider font-bold rounded-xl transition-all cursor-pointer ${
                 activeTab === 'wash' 
-                  ? 'bg-orange-500 text-white shadow-md shadow-orange-500/20' 
-                  : 'text-slate-600 hover:text-slate-950'
+                  ? 'bg-blue-900 dark:bg-blue-600 text-white shadow-md shadow-blue-900/20' 
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white'
               }`}
             >
               <Sparkles className="w-4 h-4 text-current" />
@@ -91,8 +91,8 @@ export const InteractiveHubTools: React.FC = () => {
               onClick={() => setActiveTab('lounge')}
               className={`flex items-center gap-2.5 px-6 py-3 text-xs font-mono uppercase tracking-wider font-bold rounded-xl transition-all cursor-pointer ${
                 activeTab === 'lounge' 
-                  ? 'bg-orange-500 text-white shadow-md shadow-orange-500/20' 
-                  : 'text-slate-600 hover:text-slate-950'
+                  ? 'bg-blue-900 dark:bg-blue-600 text-white shadow-md shadow-blue-900/20' 
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white'
               }`}
             >
               <Wine className="w-4 h-4 text-current" />
@@ -103,9 +103,9 @@ export const InteractiveHubTools: React.FC = () => {
 
         {/* TAB 1: FUEL & GAS CALCULATOR */}
         {activeTab === 'fuel' && (
-          <div className="max-w-4xl mx-auto p-6 sm:p-10 rounded-3xl bg-white border border-slate-200 shadow-xl overflow-hidden">
+          <div className="max-w-4xl mx-auto p-6 sm:p-10 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden transition-colors">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10 items-center">
-              {/* Left Selector: Sliding from Left */}
+              {/* Left Selector */}
               <motion.div
                 initial={{ opacity: 0, x: -40 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -113,7 +113,7 @@ export const InteractiveHubTools: React.FC = () => {
                 className="md:col-span-7 space-y-6"
               >
                 <div>
-                  <div className="font-mono text-xs uppercase tracking-wider text-slate-500 font-bold mb-3">
+                  <div className="font-mono text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold mb-3">
                     01. Select Calibrated Fuel Product
                   </div>
                   <div className="grid grid-cols-2 gap-3">
@@ -124,13 +124,13 @@ export const InteractiveHubTools: React.FC = () => {
                         onClick={() => setSelectedProduct(prod.id)}
                         className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
                           selectedProduct === prod.id
-                            ? 'bg-orange-500 text-white border-2 border-orange-600 shadow-md font-bold'
-                            : 'bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300'
+                            ? 'bg-blue-900 dark:bg-blue-600 text-white border-2 border-blue-950 dark:border-blue-500 shadow-md font-bold'
+                            : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-blue-300'
                         }`}
                       >
                         <div className="font-bold text-sm font-display">{prod.shortCode}</div>
                         <div className={`text-xs font-mono font-bold mt-1 ${
-                          selectedProduct === prod.id ? 'text-white' : 'text-orange-600'
+                          selectedProduct === prod.id ? 'text-amber-300' : 'text-blue-900 dark:text-blue-400'
                         }`}>
                           ₦{prod.pricePerUnit.toLocaleString()} / {prod.unit}
                         </div>
@@ -141,15 +141,15 @@ export const InteractiveHubTools: React.FC = () => {
 
                 {/* Calculation Mode */}
                 <div className="flex items-center gap-4 text-xs font-mono">
-                  <span className="text-slate-500 font-bold">Mode:</span>
+                  <span className="text-slate-500 dark:text-slate-400 font-bold">Mode:</span>
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
                       onClick={() => setCalcMode('volume')}
                       className={`px-3 py-1.5 rounded-lg border text-xs cursor-pointer font-bold ${
                         calcMode === 'volume'
-                          ? 'bg-orange-500 text-white border-orange-600 shadow-xs'
-                          : 'bg-slate-100 text-slate-600 border-slate-200 hover:text-slate-950'
+                          ? 'bg-blue-900 dark:bg-blue-600 text-white border-blue-950 dark:border-blue-500 shadow-xs'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:text-slate-950'
                       }`}
                     >
                       Volume ({currentProduct.unit})
@@ -162,8 +162,8 @@ export const InteractiveHubTools: React.FC = () => {
                       }}
                       className={`px-3 py-1.5 rounded-lg border text-xs cursor-pointer font-bold ${
                         calcMode === 'budget'
-                          ? 'bg-orange-500 text-white border-orange-600 shadow-xs'
-                          : 'bg-slate-100 text-slate-600 border-slate-200 hover:text-slate-950'
+                          ? 'bg-blue-900 dark:bg-blue-600 text-white border-blue-950 dark:border-blue-500 shadow-xs'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:text-slate-950'
                       }`}
                     >
                       Naira Budget (₦)
@@ -175,8 +175,8 @@ export const InteractiveHubTools: React.FC = () => {
                 {calcMode === 'volume' ? (
                   <div className="space-y-2">
                     <div className="flex justify-between items-center text-xs font-mono">
-                      <span className="text-slate-600 font-medium">Volumetric Amount:</span>
-                      <span className="font-extrabold text-orange-600 text-lg">
+                      <span className="text-slate-600 dark:text-slate-400 font-medium">Volumetric Amount:</span>
+                      <span className="font-extrabold text-blue-900 dark:text-blue-400 text-lg">
                         {liters} {currentProduct.unit}s
                       </span>
                     </div>
@@ -187,39 +187,39 @@ export const InteractiveHubTools: React.FC = () => {
                       step={currentProduct.id === 'lpg' ? 1 : 5}
                       value={liters}
                       onChange={(e) => setLiters(Number(e.target.value))}
-                      className="w-full accent-orange-500 cursor-pointer h-2 bg-slate-200 rounded-lg"
+                      className="w-full accent-red-600 cursor-pointer h-2 bg-slate-200 dark:bg-slate-700 rounded-lg"
                     />
                   </div>
                 ) : (
                   <div>
-                    <label className="text-xs font-mono text-slate-600 block mb-2 font-medium">Budget Target (₦):</label>
+                    <label className="text-xs font-mono text-slate-600 dark:text-slate-400 block mb-2 font-medium">Budget Target (₦):</label>
                     <input
                       type="number"
                       step={1000}
                       min={1000}
                       value={budgetNaira}
                       onChange={(e) => setBudgetNaira(Number(e.target.value))}
-                      className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-950 font-mono text-base focus:border-orange-500 outline-none shadow-sm"
+                      className="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-950 dark:text-white font-mono text-base focus:border-blue-900 dark:focus:border-blue-400 outline-none shadow-sm"
                     />
                   </div>
                 )}
               </motion.div>
 
-              {/* Terminal Result Card: Premium Black Box sliding in from Right */}
+              {/* Terminal Result Card */}
               <motion.div
                 initial={{ opacity: 0, x: 40 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="md:col-span-5 p-7 rounded-3xl bg-slate-950 text-white border-2 border-orange-500/40 shadow-2xl flex flex-col justify-between space-y-6"
+                className="md:col-span-5 p-7 rounded-3xl bg-[#091224] text-white border-2 border-blue-900/60 shadow-2xl flex flex-col justify-between space-y-6"
               >
                 <div>
-                  <div className="font-mono text-[10px] uppercase tracking-widest text-orange-400 font-bold">
+                  <div className="font-mono text-[10px] uppercase tracking-widest text-amber-300 font-bold">
                     ESTIMATED SETTLEMENT
                   </div>
                   <div className="mt-2 text-4xl font-extrabold text-white font-display tabular-nums tracking-tight">
                     ₦{totalFuelCost.toLocaleString()}
                   </div>
-                  <div className="mt-2 font-mono text-xs font-bold text-orange-400">
+                  <div className="mt-2 font-mono text-xs font-bold text-amber-300">
                     ≈ {calculatedVolume} {currentProduct.unit}s Guaranteed Volume
                   </div>
                   <p className="mt-4 text-xs text-slate-300 leading-relaxed font-normal">
@@ -233,7 +233,7 @@ export const InteractiveHubTools: React.FC = () => {
                     <span>Calibrated zero-loss meters</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-orange-400 shrink-0" />
+                    <Check className="w-4 h-4 text-red-400 shrink-0" />
                     <span>POS, Bank Transfer &amp; USSD Accepted</span>
                   </div>
                 </div>
@@ -241,7 +241,7 @@ export const InteractiveHubTools: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => alert(`Forecourt ticket generated for ${calculatedVolume} ${currentProduct.unit}s of ${currentProduct.name} at ₦${totalFuelCost.toLocaleString()}. Head to Master Energy Naze Forecourt for priority dispensing!`)}
-                  className="w-full py-3.5 text-xs font-bold uppercase tracking-wider text-white bg-orange-500 hover:bg-orange-600 rounded-xl transition-all cursor-pointer text-center shadow-lg shadow-orange-500/20 hover:scale-102"
+                  className="w-full py-3.5 text-xs font-bold uppercase tracking-wider text-white bg-red-600 hover:bg-red-700 rounded-xl transition-all cursor-pointer text-center shadow-lg shadow-red-600/25 hover:scale-102"
                 >
                   Generate Pump Priority Pass
                 </button>
@@ -252,7 +252,7 @@ export const InteractiveHubTools: React.FC = () => {
 
         {/* TAB 2: CAR WASH BOOKING */}
         {activeTab === 'wash' && (
-          <div className="max-w-4xl mx-auto p-6 sm:p-10 rounded-3xl bg-white border border-slate-200 shadow-xl overflow-hidden">
+          <div className="max-w-4xl mx-auto p-6 sm:p-10 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden transition-colors">
             {washBooked ? (
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -262,24 +262,24 @@ export const InteractiveHubTools: React.FC = () => {
                 <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 flex items-center justify-center mx-auto">
                   <Check className="w-8 h-8" />
                 </div>
-                <h3 className="text-2xl font-bold text-slate-950 font-display">Car Wash Bay Reserved!</h3>
-                <p className="text-sm text-slate-600 max-w-md mx-auto font-normal">
-                  Your reservation for <strong className="text-slate-950">{currentWash.name}</strong> on <strong className="text-slate-950">{washDate} at {washTime}</strong> is active. Drive into Bay 2 at Naze Hub upon arrival.
+                <h3 className="text-2xl font-bold text-slate-950 dark:text-white font-display">Car Wash Bay Reserved!</h3>
+                <p className="text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto font-normal">
+                  Your reservation for <strong className="text-slate-950 dark:text-white">{currentWash.name}</strong> on <strong className="text-slate-950 dark:text-white">{washDate} at {washTime}</strong> is active. Drive into Bay 2 at Naze Hub upon arrival.
                 </p>
-                <div className="font-mono text-sm text-orange-600 font-bold">
+                <div className="font-mono text-sm text-red-600 dark:text-red-400 font-bold">
                   Total Due at Bay: ₦{totalWashPrice.toLocaleString()}
                 </div>
                 <button
                   type="button"
                   onClick={() => setWashBooked(false)}
-                  className="px-6 py-3 text-xs font-bold uppercase tracking-wider text-white bg-orange-500 hover:bg-orange-600 rounded-xl transition-colors cursor-pointer mt-4 shadow-md"
+                  className="px-6 py-3 text-xs font-bold uppercase tracking-wider text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors cursor-pointer mt-4 shadow-md shadow-red-600/20"
                 >
                   Modify or Book Another Bay
                 </button>
               </motion.div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-                {/* Left Side: Vehicle & Detailing Options sliding from left */}
+                {/* Left Side: Options */}
                 <motion.div
                   initial={{ opacity: 0, x: -40 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -287,7 +287,7 @@ export const InteractiveHubTools: React.FC = () => {
                   className="md:col-span-7 space-y-6"
                 >
                   <div>
-                    <label className="font-mono text-xs font-bold uppercase tracking-wider text-slate-600 block mb-3">
+                    <label className="font-mono text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block mb-3">
                       01. Vehicle Category
                     </label>
                     <div className="grid grid-cols-2 gap-3">
@@ -296,8 +296,8 @@ export const InteractiveHubTools: React.FC = () => {
                         onClick={() => setVehicleType('sedan')}
                         className={`p-3.5 rounded-xl border text-center transition-all cursor-pointer font-bold text-xs ${
                           vehicleType === 'sedan'
-                            ? 'bg-orange-500 text-white border-2 border-orange-600 shadow-md'
-                            : 'bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300'
+                            ? 'bg-blue-900 dark:bg-blue-600 text-white border-2 border-blue-950 dark:border-blue-500 shadow-md'
+                            : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-slate-300'
                         }`}
                       >
                         Sedan / Saloon
@@ -307,8 +307,8 @@ export const InteractiveHubTools: React.FC = () => {
                         onClick={() => setVehicleType('suv')}
                         className={`p-3.5 rounded-xl border text-center transition-all cursor-pointer font-bold text-xs ${
                           vehicleType === 'suv'
-                            ? 'bg-orange-500 text-white border-2 border-orange-600 shadow-md'
-                            : 'bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300'
+                            ? 'bg-blue-900 dark:bg-blue-600 text-white border-2 border-blue-950 dark:border-blue-500 shadow-md'
+                            : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-slate-300'
                         }`}
                       >
                         SUV / Truck / Pickup
@@ -317,7 +317,7 @@ export const InteractiveHubTools: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="font-mono text-xs font-bold uppercase tracking-wider text-slate-600 block mb-3">
+                    <label className="font-mono text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block mb-3">
                       02. Detailing Package
                     </label>
                     <div className="space-y-2.5">
@@ -330,28 +330,28 @@ export const InteractiveHubTools: React.FC = () => {
                             onClick={() => setSelectedWashId(pkg.id)}
                             className={`p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-4 ${
                               isSelected
-                                ? 'bg-orange-500 text-white border-2 border-orange-600 shadow-md font-semibold'
-                                : 'bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300'
+                                ? 'bg-blue-900 dark:bg-blue-600 text-white border-2 border-blue-950 dark:border-blue-500 shadow-md font-semibold'
+                                : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-slate-300'
                             }`}
                           >
                             <div>
                               <div className="flex items-center gap-2">
-                                <span className={`font-bold text-sm font-display ${isSelected ? 'text-white' : 'text-slate-900'}`}>{pkg.name}</span>
+                                <span className={`font-bold text-sm font-display ${isSelected ? 'text-white' : 'text-slate-900 dark:text-white'}`}>{pkg.name}</span>
                                 {pkg.isPopular && (
                                   <span className={`text-[10px] px-2 py-0.5 rounded font-mono font-bold ${
-                                    isSelected ? 'bg-slate-950 text-orange-400' : 'bg-orange-100 text-orange-800'
+                                    isSelected ? 'bg-amber-400 text-slate-950' : 'bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-200'
                                   }`}>
                                     Popular
                                   </span>
                                 )}
                               </div>
-                              <p className={`text-xs mt-1 ${isSelected ? 'text-orange-50 font-medium' : 'text-slate-500 font-normal'}`}>{pkg.description}</p>
+                              <p className={`text-xs mt-1 ${isSelected ? 'text-blue-100' : 'text-slate-500 dark:text-slate-400 font-normal'}`}>{pkg.description}</p>
                             </div>
                             <div className="text-right shrink-0">
-                              <div className={`font-mono font-bold text-sm ${isSelected ? 'text-white' : 'text-orange-600'}`}>
+                              <div className={`font-mono font-bold text-sm ${isSelected ? 'text-amber-300' : 'text-blue-900 dark:text-blue-400'}`}>
                                 ₦{price.toLocaleString()}
                               </div>
-                              <div className={`text-[11px] font-mono ${isSelected ? 'text-orange-100' : 'text-slate-400'}`}>{pkg.durationMin} mins</div>
+                              <div className={`text-[11px] font-mono ${isSelected ? 'text-blue-100' : 'text-slate-400'}`}>{pkg.durationMin} mins</div>
                             </div>
                           </div>
                         );
@@ -360,7 +360,7 @@ export const InteractiveHubTools: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="font-mono text-xs font-bold uppercase tracking-wider text-slate-600 block mb-2">
+                    <label className="font-mono text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block mb-2">
                       03. Add-ons (+₦2,000 each)
                     </label>
                     <div className="grid grid-cols-2 gap-2">
@@ -378,12 +378,12 @@ export const InteractiveHubTools: React.FC = () => {
                             onClick={() => toggleAddon(addon.id)}
                             className={`p-2.5 text-xs rounded-xl border text-left transition-colors flex items-center gap-2 cursor-pointer ${
                               isChecked
-                                ? 'bg-orange-50 border-orange-400 text-slate-950 font-bold'
-                                : 'bg-slate-50 border-slate-200 text-slate-600'
+                                ? 'bg-blue-50 dark:bg-blue-950/50 border-blue-400 text-blue-950 dark:text-blue-200 font-bold'
+                                : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'
                             }`}
                           >
                             <div className={`w-4 h-4 rounded flex items-center justify-center border text-[10px] ${
-                              isChecked ? 'bg-orange-500 border-orange-500 text-white font-bold' : 'border-slate-300'
+                              isChecked ? 'bg-blue-900 text-white font-bold' : 'border-slate-300 dark:border-slate-600'
                             }`}>
                               {isChecked && '✓'}
                             </div>
@@ -395,14 +395,14 @@ export const InteractiveHubTools: React.FC = () => {
                   </div>
                 </motion.div>
 
-                {/* Right Side: Black Box Appointment & Summary sliding from right */}
+                {/* Right Side: Appointment & Summary */}
                 <motion.div
                   initial={{ opacity: 0, x: 40 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="md:col-span-5 p-7 rounded-3xl bg-slate-950 text-white border-2 border-orange-500/40 shadow-2xl space-y-5"
+                  className="md:col-span-5 p-7 rounded-3xl bg-[#091224] text-white border-2 border-blue-900/60 shadow-2xl space-y-5"
                 >
-                  <div className="font-mono text-[10px] uppercase tracking-widest text-orange-400 font-bold">
+                  <div className="font-mono text-[10px] uppercase tracking-widest text-amber-300 font-bold">
                     APPOINTMENT TIME &amp; BAY
                   </div>
 
@@ -413,7 +413,7 @@ export const InteractiveHubTools: React.FC = () => {
                         type="date"
                         value={washDate}
                         onChange={(e) => setWashDate(e.target.value)}
-                        className="w-full px-3 py-2 text-xs rounded-lg bg-slate-900 border border-white/20 text-white outline-none focus:border-orange-500"
+                        className="w-full px-3 py-2 text-xs rounded-lg bg-slate-900 border border-white/20 text-white outline-none focus:border-blue-400"
                       />
                     </div>
                     <div>
@@ -421,7 +421,7 @@ export const InteractiveHubTools: React.FC = () => {
                       <select
                         value={washTime}
                         onChange={(e) => setWashTime(e.target.value)}
-                        className="w-full px-3 py-2 text-xs rounded-lg bg-slate-900 border border-white/20 text-white outline-none focus:border-orange-500"
+                        className="w-full px-3 py-2 text-xs rounded-lg bg-slate-900 border border-white/20 text-white outline-none focus:border-blue-400"
                       >
                         <option value="08:00">08:00 AM (Early Priority)</option>
                         <option value="10:30">10:30 AM</option>
@@ -446,14 +446,14 @@ export const InteractiveHubTools: React.FC = () => {
                     )}
                     <div className="flex justify-between text-sm font-bold text-white pt-2 border-t border-white/10">
                       <span>Total:</span>
-                      <span className="text-orange-400 font-extrabold font-mono">₦{totalWashPrice.toLocaleString()}</span>
+                      <span className="text-amber-300 font-extrabold font-mono">₦{totalWashPrice.toLocaleString()}</span>
                     </div>
                   </div>
 
                   <button
                     type="button"
                     onClick={() => setWashBooked(true)}
-                    className="w-full py-3.5 text-xs font-bold uppercase tracking-wider text-white bg-orange-500 hover:bg-orange-600 rounded-xl transition-all cursor-pointer text-center shadow-lg shadow-orange-500/20 hover:scale-102"
+                    className="w-full py-3.5 text-xs font-bold uppercase tracking-wider text-white bg-red-600 hover:bg-red-700 rounded-xl transition-all cursor-pointer text-center shadow-lg shadow-red-600/20 hover:scale-102"
                   >
                     Confirm Detailing Bay Slot
                   </button>
@@ -465,7 +465,7 @@ export const InteractiveHubTools: React.FC = () => {
 
         {/* TAB 3: LOUNGE RESERVATION */}
         {activeTab === 'lounge' && (
-          <div className="max-w-4xl mx-auto p-6 sm:p-10 rounded-3xl bg-white border border-slate-200 shadow-xl overflow-hidden">
+          <div className="max-w-4xl mx-auto p-6 sm:p-10 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden transition-colors">
             {loungeBooked ? (
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -475,14 +475,14 @@ export const InteractiveHubTools: React.FC = () => {
                 <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 flex items-center justify-center mx-auto">
                   <Check className="w-8 h-8" />
                 </div>
-                <h3 className="text-2xl font-bold text-slate-950 font-display">VIP Booth Reserved at Masters Lounge</h3>
-                <p className="text-sm text-slate-600 max-w-md mx-auto font-normal">
+                <h3 className="text-2xl font-bold text-slate-950 dark:text-white font-display">VIP Booth Reserved at Masters Lounge</h3>
+                <p className="text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto font-normal">
                   Your VIP reservation has been received. Our concierge will contact you to curate your custom bottle selection and arrange valet arrival passes.
                 </p>
                 <button
                   type="button"
                   onClick={() => setLoungeBooked(false)}
-                  className="px-6 py-3 text-xs font-bold uppercase tracking-wider text-white bg-orange-500 hover:bg-orange-600 rounded-xl transition-colors cursor-pointer mt-4 shadow-md"
+                  className="px-6 py-3 text-xs font-bold uppercase tracking-wider text-white bg-blue-900 hover:bg-blue-800 rounded-xl transition-colors cursor-pointer mt-4 shadow-md shadow-blue-900/20"
                 >
                   Make Another Reservation
                 </button>
@@ -490,14 +490,12 @@ export const InteractiveHubTools: React.FC = () => {
             ) : (
               <div className="space-y-8">
                 <div>
-                  <div className="font-mono text-xs uppercase tracking-wider text-slate-500 font-bold mb-4">
+                  <div className="font-mono text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold mb-4">
                     Select Lounge Experience Tier
                   </div>
-                  {/* Alternating Orange and Black boxes for Lounge Tiers with slide-in animation */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                     {LOUNGE_PACKAGES.map((pkg, pIdx) => {
                       const isSelected = selectedLoungePkg === pkg.id;
-                      // Middle box is Black Box, outer boxes are Orange Boxes
                       const isBlackTier = pIdx === 1;
                       const slideX = pIdx === 0 ? -40 : pIdx === 2 ? 40 : 0;
                       const slideY = pIdx === 1 ? 30 : 0;
@@ -512,43 +510,43 @@ export const InteractiveHubTools: React.FC = () => {
                           className={`p-6 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
                             isBlackTier
                               ? isSelected
-                                ? 'bg-slate-950 text-white border-orange-500 shadow-2xl scale-102 ring-2 ring-orange-500'
-                                : 'bg-slate-950 text-white border-orange-500/40 shadow-xl hover:border-orange-500'
+                                ? 'bg-[#091224] text-white border-blue-500 shadow-2xl scale-102 ring-2 ring-blue-500'
+                                : 'bg-[#091224] text-white border-blue-900/40 shadow-xl hover:border-blue-600'
                               : isSelected
-                                ? 'bg-orange-500 text-white border-orange-600 shadow-2xl scale-102 ring-2 ring-white'
-                                : 'bg-orange-500 text-white border-orange-600 shadow-lg hover:border-slate-950'
+                                ? 'bg-blue-900 text-white border-blue-950 shadow-2xl scale-102 ring-2 ring-amber-400'
+                                : 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white border-slate-200 dark:border-slate-700 shadow-md hover:border-blue-900'
                           }`}
                         >
                           <div>
                             <div className={`text-xs font-mono font-bold uppercase ${
-                              isBlackTier ? 'text-orange-400' : 'text-orange-100'
+                              isBlackTier ? 'text-amber-300' : isSelected ? 'text-amber-200' : 'text-blue-900 dark:text-blue-400'
                             }`}>
                               {pkg.category}
                             </div>
-                            <h4 className="text-lg font-bold font-display mt-1 text-white">
+                            <h4 className="text-lg font-bold font-display mt-1">
                               {pkg.name}
                             </h4>
                             <div className={`text-xs mt-1 font-mono ${
-                              isBlackTier ? 'text-slate-300' : 'text-orange-100 font-semibold'
+                              isBlackTier || isSelected ? 'text-slate-300' : 'text-slate-500 dark:text-slate-400'
                             }`}>
                               {pkg.capacity}
                             </div>
                             <p className={`text-xs mt-3 leading-relaxed ${
-                              isBlackTier ? 'text-slate-300 font-normal' : 'text-white/95 font-medium'
+                              isBlackTier || isSelected ? 'text-slate-300 font-normal' : 'text-slate-600 dark:text-slate-300'
                             }`}>
                               {pkg.description}
                             </p>
                           </div>
                           <div className={`mt-6 pt-4 border-t ${
-                            isBlackTier ? 'border-white/10' : 'border-white/20'
+                            isBlackTier || isSelected ? 'border-white/10' : 'border-slate-200 dark:border-slate-700'
                           }`}>
                             <div className={`text-[10px] font-mono uppercase ${
-                              isBlackTier ? 'text-slate-400' : 'text-orange-100 font-bold'
+                              isBlackTier || isSelected ? 'text-slate-400' : 'text-slate-500'
                             }`}>
                               Minimum Spend
                             </div>
                             <div className={`text-base font-bold font-mono ${
-                              isBlackTier ? 'text-orange-400' : 'text-white'
+                              isBlackTier ? 'text-amber-300' : isSelected ? 'text-white' : 'text-blue-900 dark:text-blue-400'
                             }`}>
                               ₦{pkg.minSpend.toLocaleString()}
                             </div>
@@ -559,14 +557,14 @@ export const InteractiveHubTools: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Bottom Reservation Form: Black Box sliding in from bottom */}
+                {/* Bottom Reservation Form */}
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                  className="p-6 sm:p-8 rounded-3xl bg-slate-950 text-white border-2 border-orange-500/40 shadow-xl space-y-6"
+                  className="p-6 sm:p-8 rounded-3xl bg-[#091224] text-white border-2 border-blue-900/60 shadow-xl space-y-6"
                 >
-                  <div className="font-mono text-xs uppercase tracking-wider text-orange-400 font-bold">
+                  <div className="font-mono text-xs uppercase tracking-wider text-amber-300 font-bold">
                     RESERVATION DETAILS
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -578,7 +576,7 @@ export const InteractiveHubTools: React.FC = () => {
                         max={20}
                         value={guestCount}
                         onChange={(e) => setGuestCount(Number(e.target.value))}
-                        className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-900 border border-white/20 text-white outline-none focus:border-orange-500"
+                        className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-900 border border-white/20 text-white outline-none focus:border-blue-400"
                       />
                     </div>
                     <div>
@@ -586,14 +584,14 @@ export const InteractiveHubTools: React.FC = () => {
                       <input
                         type="date"
                         defaultValue="2026-10-30"
-                        className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-900 border border-white/20 text-white outline-none focus:border-orange-500"
+                        className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-900 border border-white/20 text-white outline-none focus:border-blue-400"
                       />
                     </div>
                     <div>
                       <label className="text-xs font-mono text-slate-300 block mb-1">Arrival Time</label>
                       <select
                         defaultValue="21:00"
-                        className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-900 border border-white/20 text-white outline-none focus:border-orange-500"
+                        className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-900 border border-white/20 text-white outline-none focus:border-blue-400"
                       >
                         <option value="18:00">06:00 PM (Sunset)</option>
                         <option value="20:00">08:00 PM (Executive Dinner)</option>
@@ -606,7 +604,7 @@ export const InteractiveHubTools: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setLoungeBooked(true)}
-                    className="w-full py-4 text-xs font-bold uppercase tracking-wider text-white bg-orange-500 hover:bg-orange-600 rounded-xl transition-all cursor-pointer text-center shadow-lg shadow-orange-500/20 hover:scale-102"
+                    className="w-full py-4 text-xs font-bold uppercase tracking-wider text-white bg-red-600 hover:bg-red-700 rounded-xl transition-all cursor-pointer text-center shadow-lg shadow-red-600/25 hover:scale-102"
                   >
                     Request VIP Lounge Concierge Reservation
                   </button>
@@ -619,4 +617,3 @@ export const InteractiveHubTools: React.FC = () => {
     </section>
   );
 };
-

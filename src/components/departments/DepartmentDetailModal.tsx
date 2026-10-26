@@ -42,16 +42,16 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-xl overflow-y-auto">
-      <div className="relative w-full max-w-4xl bg-[#090d16] border border-white/10 rounded-3xl shadow-2xl overflow-hidden my-auto max-h-[90vh] flex flex-col">
+      <div className="relative w-full max-w-4xl bg-[#091224] border border-blue-900/60 rounded-3xl shadow-2xl overflow-hidden my-auto max-h-[90vh] flex flex-col">
         {/* Modal Top Bar */}
         <div className="p-6 border-b border-white/10 flex items-center justify-between gap-4 bg-black/60 shrink-0">
           <div className="flex items-center gap-3">
-            <span className="text-xs font-mono font-bold uppercase tracking-widest text-orange-400">
+            <span className="text-xs font-mono font-bold uppercase tracking-widest text-amber-300">
               {dept.badge}
             </span>
             <span className="text-slate-600">·</span>
             <span className="text-xs font-mono text-slate-400 flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5 text-orange-400" />
+              <Clock className="w-3.5 h-3.5 text-blue-400" />
               {dept.hours}
             </span>
           </div>
@@ -67,7 +67,7 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
 
         {/* Modal Content Scrollable Area */}
         <div className="p-6 sm:p-8 overflow-y-auto space-y-8 flex-grow">
-          {/* Hero Banner with World-Class Photo */}
+          {/* Hero Banner */}
           <div className="relative h-64 sm:h-72 rounded-2xl overflow-hidden border border-slate-800 bg-slate-950">
             <img
               src={dept.image}
@@ -86,7 +86,7 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
               <h2 className="text-2xl sm:text-3xl font-extrabold text-white font-display">
                 {dept.name}
               </h2>
-              <p className="text-sm font-medium text-orange-400 mt-1">{dept.subtitle}</p>
+              <p className="text-sm font-medium text-amber-300 mt-1">{dept.subtitle}</p>
             </div>
           </div>
 
@@ -95,7 +95,7 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
             <div className="md:col-span-7 space-y-4">
               <h3 className="text-lg font-bold text-white font-display">About This Division</h3>
               <p className="text-sm text-slate-300 leading-relaxed">{dept.description}</p>
-              <p className="text-sm text-slate-400 leading-relaxed italic border-l-2 border-orange-500/40 pl-3">
+              <p className="text-sm text-slate-400 leading-relaxed italic border-l-2 border-blue-500/40 pl-3">
                 “{dept.storytelling}”
               </p>
 
@@ -120,7 +120,7 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
                 Direct Division Desk
               </div>
               <div className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-orange-400" />
+                <Phone className="w-4 h-4 text-blue-400" />
                 <span className="font-mono text-white text-sm font-bold">{dept.phone}</span>
               </div>
               <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-800">
@@ -134,8 +134,6 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
             </div>
           </div>
 
-          {/* INTERACTIVE CUSTOM WORKFLOWS PER DEPARTMENT */}
-
           {/* 1. MASTERS KITCHEN MENU & ORDERING */}
           {deptId === 'kitchen' && (
             <div className="pt-6 border-t border-slate-800 space-y-6">
@@ -145,7 +143,7 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
                   <p className="text-xs text-slate-400">Add dishes to your express traveler pickup order or dine-in</p>
                 </div>
                 {cartItems.length > 0 && (
-                  <div className="text-xs text-orange-400 font-mono font-bold bg-orange-500/10 px-3 py-1 rounded-md border border-orange-500/20">
+                  <div className="text-xs text-amber-300 font-mono font-bold bg-amber-500/10 px-3 py-1 rounded-md border border-amber-500/20">
                     {cartItems.reduce((a, b) => a + b.qty, 0)} Items · ₦{cartTotal.toLocaleString()}
                   </div>
                 )}
@@ -182,7 +180,7 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
                         <div className="flex items-center justify-between gap-2">
                           <span className="font-bold text-sm text-white">{dish.name}</span>
                           {dish.badge && (
-                            <span className="text-[10px] bg-orange-500/10 text-orange-400 px-2 py-0.5 rounded border border-orange-500/20 shrink-0">
+                            <span className="text-[10px] bg-amber-500/10 text-amber-300 px-2 py-0.5 rounded border border-amber-500/20 shrink-0">
                               {dish.badge}
                             </span>
                           )}
@@ -191,13 +189,13 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
                       </div>
 
                       <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between">
-                        <span className="font-mono font-bold text-sm text-orange-400">
+                        <span className="font-mono font-bold text-sm text-amber-300">
                           ₦{dish.price.toLocaleString()}
                         </span>
                         <button
                           type="button"
                           onClick={() => addToCart(dish)}
-                          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-orange-500 hover:bg-orange-600 rounded-lg transition-colors cursor-pointer"
+                          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors cursor-pointer shadow-sm shadow-red-600/20"
                         >
                           <Plus className="w-3.5 h-3.5" />
                           <span>Add to Order</span>
@@ -210,16 +208,16 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
 
               {/* Order Checkout Bar */}
               {cartItems.length > 0 && !orderPlaced && (
-                <div className="p-4 rounded-xl bg-slate-950 border border-orange-500/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="p-4 rounded-xl bg-slate-950 border border-blue-900/40 flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div className="text-xs text-slate-300">
                     <span className="font-bold text-white">{cartItems.length} dish types selected</span>
                     <span className="mx-2">·</span>
-                    <span>Total: <strong className="font-mono text-orange-400 text-sm">₦{cartTotal.toLocaleString()}</strong></span>
+                    <span>Total: <strong className="font-mono text-amber-300 text-sm">₦{cartTotal.toLocaleString()}</strong></span>
                   </div>
                   <button
                     type="button"
                     onClick={() => setOrderPlaced(true)}
-                    className="px-6 py-2.5 text-xs font-bold text-white bg-orange-500 hover:bg-orange-600 rounded-xl transition-colors cursor-pointer"
+                    className="px-6 py-2.5 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors cursor-pointer shadow-md shadow-red-600/25"
                   >
                     Confirm Express Pickup Order
                   </button>
@@ -266,7 +264,7 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setGardenReserved(true)}
-                    className="px-5 py-2.5 text-xs font-bold text-slate-950 bg-rose-400 hover:bg-rose-300 rounded-xl transition-colors cursor-pointer"
+                    className="px-5 py-2.5 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors cursor-pointer shadow-md shadow-red-600/25"
                   >
                     Reserve Garden Spot Now
                   </button>
@@ -284,7 +282,7 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
                   <div key={fp.id} className="p-4 rounded-xl bg-slate-950 border border-slate-800">
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-sm text-white">{fp.name}</span>
-                      <span className="font-mono font-bold text-orange-400 text-xs">
+                      <span className="font-mono font-bold text-amber-300 text-xs">
                         ₦{fp.pricePerUnit.toLocaleString()} / {fp.unit}
                       </span>
                     </div>

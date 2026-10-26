@@ -19,27 +19,27 @@ export const PromenadePage: React.FC = () => {
   };
 
   return (
-    <div className="py-10 sm:py-16 bg-white w-full max-w-full overflow-hidden font-opensans">
+    <div className="py-10 sm:py-16 bg-white dark:bg-[#080d1a] text-slate-900 dark:text-white w-full max-w-full overflow-hidden font-opensans transition-colors duration-250">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Header */}
-        <div className="border-b border-slate-200 pb-8 space-y-3">
-          <div className="flex items-center gap-2 font-mono text-xs text-amber-600 font-bold uppercase tracking-wider">
+        <div className="border-b border-slate-200 dark:border-slate-800 pb-8 space-y-3">
+          <div className="flex items-center gap-2 font-mono text-xs text-blue-900 dark:text-blue-400 font-bold uppercase tracking-wider">
             <span>MICRO-SECTION · LEASED COMMERCIAL SHOPS</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-950 font-display">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-950 dark:text-white font-display">
             The Promenade (Leased Shops)
           </h1>
-          <p className="text-sm sm:text-base text-slate-600 max-w-2xl font-normal leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-2xl font-normal leading-relaxed">
             Alongside our five original Master Energy divisions, we lease spaces to independent specialty brands to give travelers and local residents more variety.
           </p>
         </div>
 
-        {/* 2 Concession Cards Grid - Alternating Black & Yellow Boxes */}
+        {/* 2 Concession Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 overflow-hidden">
           {LEASED_BUSINESSES.map((business, idx) => {
             const isZena = business.id === 'zena-foodies';
             const Icon = isZena ? Utensils : Coffee;
-            const isBlackBox = idx % 2 === 0;
+            const isFirst = idx === 0;
 
             return (
               <motion.div
@@ -50,66 +50,66 @@ export const PromenadePage: React.FC = () => {
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: idx * 0.05 }}
                 style={{ willChange: 'transform, opacity' }}
                 className={`p-8 sm:p-10 rounded-3xl flex flex-col justify-between space-y-6 transition-all duration-300 ${
-                  isBlackBox
-                    ? 'bg-slate-950 text-white border-2 border-amber-400/40 shadow-xl hover:border-amber-400 hover:shadow-2xl'
-                    : 'bg-amber-400 text-slate-950 border-2 border-amber-500 shadow-xl hover:border-slate-950 hover:shadow-2xl'
+                  isFirst
+                    ? 'bg-[#091224] text-white border-2 border-blue-900/60 shadow-xl hover:border-blue-700'
+                    : 'bg-white dark:bg-slate-900 text-slate-950 dark:text-white border-2 border-slate-200 dark:border-slate-800 shadow-md hover:border-blue-900/60'
                 }`}
               >
                 <div className="space-y-5">
                   <div className="flex items-center justify-between">
                     <span
                       className={`font-mono text-xs font-bold px-3 py-1 rounded-md shadow-xs ${
-                        isBlackBox ? 'bg-amber-400 text-slate-950' : 'bg-slate-950 text-amber-400'
+                        isFirst ? 'bg-blue-900 text-white' : 'bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-200'
                       }`}
                     >
                       {business.leaseBadge} · {business.unitNumber}
                     </span>
-                    <Icon className={`w-5 h-5 ${isBlackBox ? 'text-amber-400' : 'text-slate-950'}`} />
+                    <Icon className={`w-5 h-5 ${isFirst ? 'text-amber-300' : 'text-blue-900 dark:text-blue-400'}`} />
                   </div>
 
                   <div>
-                    <h3 className={`text-2xl sm:text-3xl font-extrabold font-display ${isBlackBox ? 'text-white' : 'text-slate-950'}`}>
+                    <h3 className="text-2xl sm:text-3xl font-extrabold font-display">
                       {business.name}
                     </h3>
-                    <div className={`text-xs font-mono uppercase mt-1 font-bold ${isBlackBox ? 'text-amber-400' : 'text-slate-900'}`}>
+                    <div className={`text-xs font-mono uppercase mt-1 font-bold ${isFirst ? 'text-amber-300' : 'text-blue-900 dark:text-blue-400'}`}>
                       {business.category}
                     </div>
                   </div>
 
-                  <p className={`text-sm leading-relaxed font-normal ${isBlackBox ? 'text-slate-300' : 'text-slate-900'}`}>
+                  <p className={`text-sm leading-relaxed font-normal ${isFirst ? 'text-slate-300' : 'text-slate-600 dark:text-slate-300'}`}>
                     {business.description}
                   </p>
 
-                  <div className={`flex flex-wrap items-center gap-6 font-mono text-xs font-medium ${isBlackBox ? 'text-slate-400' : 'text-slate-900'}`}>
+                  <div className={`flex flex-wrap items-center gap-6 font-mono text-xs font-medium ${isFirst ? 'text-slate-300' : 'text-slate-600 dark:text-slate-400'}`}>
                     <div className="flex items-center gap-2">
-                      <Clock className={`w-3.5 h-3.5 ${isBlackBox ? 'text-amber-400' : 'text-slate-950'}`} />
+                      <Clock className="w-3.5 h-3.5 text-blue-900 dark:text-blue-400" />
                       <span>{business.hours}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Phone className={`w-3.5 h-3.5 ${isBlackBox ? 'text-amber-400' : 'text-slate-950'}`} />
+                      <Phone className="w-3.5 h-3.5 text-blue-900 dark:text-blue-400" />
                       <span>{business.phone}</span>
                     </div>
                   </div>
 
                   {/* Offerings Menu */}
-                  <div className={`pt-5 border-t space-y-2.5 ${isBlackBox ? 'border-slate-800' : 'border-amber-500/40'}`}>
-                    <div className={`font-mono text-xs uppercase tracking-wider font-bold ${isBlackBox ? 'text-amber-400' : 'text-slate-950'}`}>
+                  <div className={`pt-5 border-t space-y-2.5 ${isFirst ? 'border-white/10' : 'border-slate-200 dark:border-slate-800'}`}>
+                    <div className={`font-mono text-xs uppercase tracking-wider font-bold ${isFirst ? 'text-amber-300' : 'text-blue-900 dark:text-blue-400'}`}>
                       Popular Items on Menu
                     </div>
                     {business.offerings.map((item, itemIdx) => (
                       <div
                         key={itemIdx}
                         className={`flex items-start justify-between gap-3 p-3 rounded-xl border shadow-xs ${
-                          isBlackBox
+                          isFirst
                             ? 'bg-slate-900/90 border-slate-800 text-white'
-                            : 'bg-white/95 border-amber-300 text-slate-950'
+                            : 'bg-slate-50 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 text-slate-950 dark:text-white'
                         }`}
                       >
                         <div>
-                          <div className={`font-bold text-xs ${isBlackBox ? 'text-white' : 'text-slate-950'}`}>{item.name}</div>
-                          <div className={`text-[11px] font-normal mt-0.5 ${isBlackBox ? 'text-slate-400' : 'text-slate-600'}`}>{item.description}</div>
+                          <div className="font-bold text-xs">{item.name}</div>
+                          <div className={`text-[11px] font-normal mt-0.5 ${isFirst ? 'text-slate-400' : 'text-slate-500 dark:text-slate-400'}`}>{item.description}</div>
                         </div>
-                        <span className={`font-mono font-bold text-xs shrink-0 ${isBlackBox ? 'text-amber-400' : 'text-slate-950'}`}>
+                        <span className={`font-mono font-bold text-xs shrink-0 ${isFirst ? 'text-amber-300' : 'text-blue-900 dark:text-blue-400'}`}>
                           {item.price}
                         </span>
                       </div>
@@ -117,9 +117,9 @@ export const PromenadePage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className={`pt-4 border-t flex flex-wrap gap-2 font-mono text-[11px] font-medium ${isBlackBox ? 'border-slate-800 text-slate-400' : 'border-amber-500/40 text-slate-900'}`}>
+                <div className={`pt-4 border-t flex flex-wrap gap-2 font-mono text-[11px] font-medium ${isFirst ? 'border-white/10 text-slate-400' : 'border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400'}`}>
                   {business.specialties.map((spec, sIdx) => (
-                    <span key={sIdx} className={isBlackBox ? 'text-slate-300' : 'text-slate-950 font-semibold'}>
+                    <span key={sIdx}>
                       {spec} {sIdx < business.specialties.length - 1 ? '·' : ''}
                     </span>
                   ))}
@@ -129,18 +129,18 @@ export const PromenadePage: React.FC = () => {
           })}
         </div>
 
-        {/* Commercial Space Rental Application - Luxury Black Box */}
+        {/* Commercial Space Rental Application */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.36, ease: [0.16, 1, 0.3, 1] }}
           style={{ willChange: 'transform, opacity' }}
-          className="p-8 sm:p-10 rounded-3xl bg-slate-950 text-white border-2 border-amber-400/40 shadow-2xl space-y-6"
+          className="p-8 sm:p-10 rounded-3xl bg-[#091224] text-white border-2 border-blue-900/60 shadow-2xl space-y-6"
         >
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center shrink-0 shadow-md shadow-amber-500/20">
-              <Building2 className="w-6 h-6" />
+            <div className="w-12 h-12 rounded-2xl bg-blue-900 text-white flex items-center justify-center shrink-0 shadow-md border border-blue-700">
+              <Building2 className="w-6 h-6 text-white" />
             </div>
             <div>
               <h3 className="text-xl sm:text-2xl font-bold text-white font-display">
@@ -172,7 +172,7 @@ export const PromenadePage: React.FC = () => {
                   placeholder="e.g. Royal Pharmacy & Supermart"
                   value={leaseForm.businessName}
                   onChange={(e) => setLeaseForm({ ...leaseForm, businessName: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-amber-400 shadow-sm placeholder:text-slate-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-blue-400 shadow-sm placeholder:text-slate-500"
                 />
               </div>
 
@@ -184,7 +184,7 @@ export const PromenadePage: React.FC = () => {
                   placeholder="0803 000 0000"
                   value={leaseForm.phone}
                   onChange={(e) => setLeaseForm({ ...leaseForm, phone: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-amber-400 shadow-sm placeholder:text-slate-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-blue-400 shadow-sm placeholder:text-slate-500"
                 />
               </div>
 
@@ -193,7 +193,7 @@ export const PromenadePage: React.FC = () => {
                 <select
                   value={leaseForm.category}
                   onChange={(e) => setLeaseForm({ ...leaseForm, category: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-amber-400 shadow-sm"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-blue-400 shadow-sm"
                 >
                   <option value="Specialty Food & Snacks">Specialty Food, Bakery & Snacks</option>
                   <option value="Pharmacy / Chemist">Pharmacy / Chemist</option>
@@ -208,7 +208,7 @@ export const PromenadePage: React.FC = () => {
                 <select
                   value={leaseForm.shopSize}
                   onChange={(e) => setLeaseForm({ ...leaseForm, shopSize: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-amber-400 shadow-sm"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-blue-400 shadow-sm"
                 >
                   <option value="Outdoor Kiosk (15 - 20 sqm)">Outdoor Kiosk (15 - 20 sqm)</option>
                   <option value="Standard Retail Shop (35 - 50 sqm)">Standard Retail Shop (35 - 50 sqm)</option>
@@ -219,7 +219,7 @@ export const PromenadePage: React.FC = () => {
               <div className="sm:col-span-2 pt-2">
                 <button
                   type="submit"
-                  className="w-full py-3.5 text-xs font-bold uppercase tracking-wider text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all cursor-pointer shadow-md shadow-amber-500/20 active:scale-[0.99]"
+                  className="w-full py-3.5 text-xs font-bold uppercase tracking-wider text-white bg-red-600 hover:bg-red-700 rounded-xl transition-all cursor-pointer shadow-md shadow-red-600/25 active:scale-[0.99]"
                 >
                   Submit Lease Application
                 </button>

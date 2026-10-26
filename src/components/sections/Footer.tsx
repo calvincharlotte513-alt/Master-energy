@@ -1,6 +1,7 @@
 import React from 'react';
-import { Fuel, MapPin, Phone, ArrowUp } from 'lucide-react';
+import { MapPin, Phone, ArrowUp } from 'lucide-react';
 import { DepartmentId } from '../../types/hub';
+import { MasterEnergyLogo } from '../common/MasterEnergyLogo';
 
 interface FooterProps {
   onSelectDept: (deptId: DepartmentId) => void;
@@ -13,20 +14,16 @@ export const Footer: React.FC<FooterProps> = ({ onSelectDept, onNavigateSection 
   };
 
   return (
-    <footer className="bg-[#030407] border-t border-white/5 text-slate-400 text-xs">
+    <footer className="bg-[#060a14] border-t border-white/5 text-slate-400 text-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12">
           {/* Brand Col */}
           <div className="lg:col-span-4 space-y-5">
             <div className="flex items-center gap-3">
-              <img
-                src="/assets/aistudio/3e61da62-81a9-4684-9a39-054c4145e902_1bfc0ae0.png"
-                alt="Master Energy Logo"
-                className="h-12 w-auto object-contain"
-              />
+              <MasterEnergyLogo size="md" showText={false} />
               <div className="border-l border-white/10 pl-3">
-                <span className="block text-xs font-mono font-bold text-orange-500 uppercase tracking-wider">
-                  Naze. Imo State
+                <span className="block text-xs font-mono font-bold text-red-500 uppercase tracking-wider">
+                  Naze · Imo State
                 </span>
                 <span className="text-[10px] text-slate-400 font-mono">Mega Forecourt Hub</span>
               </div>
@@ -36,11 +33,11 @@ export const Footer: React.FC<FooterProps> = ({ onSelectDept, onNavigateSection 
             </p>
             <div className="pt-2 text-slate-400 space-y-2 font-mono text-[11px]">
               <div className="flex items-center gap-2.5 text-slate-300">
-                <MapPin className="w-3.5 h-3.5 text-orange-500 shrink-0" />
+                <MapPin className="w-3.5 h-3.5 text-red-500 shrink-0" />
                 <span>KM 3 Aba-Owerri Expressway, Naze, Imo State</span>
               </div>
               <div className="flex items-center gap-2.5 text-slate-300">
-                <Phone className="w-3.5 h-3.5 text-orange-500 shrink-0" />
+                <Phone className="w-3.5 h-3.5 text-blue-400 shrink-0" />
                 <span>+234 803 456 7890</span>
               </div>
             </div>
@@ -66,7 +63,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectDept, onNavigateSection 
                       onSelectDept(d.id);
                       document.getElementById('departments')?.scrollIntoView({ behavior: 'smooth' });
                     }}
-                    className="hover:text-orange-400 transition-colors text-left cursor-pointer"
+                    className="hover:text-blue-400 transition-colors text-left cursor-pointer"
                   >
                     {d.name}
                   </button>
@@ -85,7 +82,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectDept, onNavigateSection 
                 <button
                   type="button"
                   onClick={() => onNavigateSection('promenade')}
-                  className="hover:text-orange-400 transition-colors text-left cursor-pointer"
+                  className="hover:text-blue-400 transition-colors text-left cursor-pointer"
                 >
                   Zena Foodies (Pastries &amp; Waffles)
                 </button>
@@ -94,7 +91,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectDept, onNavigateSection 
                 <button
                   type="button"
                   onClick={() => onNavigateSection('promenade')}
-                  className="hover:text-orange-400 transition-colors text-left cursor-pointer"
+                  className="hover:text-blue-400 transition-colors text-left cursor-pointer"
                 >
                   Presh Arabian Premium Tea (Karak Chai &amp; Majlis)
                 </button>
@@ -103,7 +100,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectDept, onNavigateSection 
                 <button
                   type="button"
                   onClick={() => onNavigateSection('calculator')}
-                  className="hover:text-orange-400 transition-colors text-left cursor-pointer"
+                  className="hover:text-blue-400 transition-colors text-left cursor-pointer"
                 >
                   Live Fuel &amp; Gas Price Terminal
                 </button>
@@ -112,7 +109,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectDept, onNavigateSection 
                 <button
                   type="button"
                   onClick={() => onNavigateSection('location')}
-                  className="hover:text-orange-400 transition-colors text-left cursor-pointer"
+                  className="hover:text-blue-400 transition-colors text-left cursor-pointer"
                 >
                   Transit Times &amp; Directions
                 </button>
@@ -136,13 +133,13 @@ export const Footer: React.FC<FooterProps> = ({ onSelectDept, onNavigateSection 
               onClick={scrollToTop}
               className="flex items-center gap-2 px-4 py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-colors w-fit cursor-pointer"
             >
-              <ArrowUp className="w-3.5 h-3.5 text-orange-400" />
+              <ArrowUp className="w-3.5 h-3.5 text-red-400" />
               <span>Top</span>
             </button>
           </div>
         </div>
 
-        {/* Quiet Sub-footer */}
+        {/* Sub-footer */}
         <div className="mt-14 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-slate-500">
           <div>
             &copy; {new Date().getFullYear()} Master Energy Ltd. Naze Mega Complex, Imo State.

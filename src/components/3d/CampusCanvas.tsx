@@ -904,7 +904,7 @@ export const CampusCanvas: React.FC<CampusCanvasProps> = ({
           <div className="flex items-center gap-2.5 px-3.5 py-2 bg-[#090d16]/90 backdrop-blur-xl rounded-xl border border-white/10 text-xs font-mono">
             <span className="text-slate-400">DIGITAL TWIN</span>
             <span className="text-slate-600">·</span>
-            <span className="text-orange-500 font-bold uppercase tracking-wider">{cameraModeLabel}</span>
+            <span className="text-red-600 dark:text-red-400 font-bold uppercase tracking-wider">{cameraModeLabel}</span>
           </div>
 
           <div className="flex items-center gap-2.5">
@@ -914,7 +914,7 @@ export const CampusCanvas: React.FC<CampusCanvasProps> = ({
                 type="button"
                 onClick={() => setTimeOfDay('day')}
                 className={`p-2 rounded-lg text-xs transition-all cursor-pointer ${
-                  timeOfDay === 'day' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 font-bold shadow-md shadow-orange-500/20' : 'text-slate-400 hover:text-white'
+                  timeOfDay === 'day' ? 'bg-red-600 text-white font-bold shadow-md shadow-red-600/20' : 'text-slate-400 hover:text-white'
                 }`}
                 title="Bright Daylight"
               >
@@ -924,7 +924,7 @@ export const CampusCanvas: React.FC<CampusCanvasProps> = ({
                 type="button"
                 onClick={() => setTimeOfDay('sunset')}
                 className={`p-2 rounded-lg text-xs transition-all cursor-pointer ${
-                  timeOfDay === 'sunset' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 font-bold shadow-md shadow-orange-500/20' : 'text-slate-400 hover:text-white'
+                  timeOfDay === 'sunset' ? 'bg-red-600 text-white font-bold shadow-md shadow-red-600/20' : 'text-slate-400 hover:text-white'
                 }`}
                 title="Sunset / Golden Hour"
               >
@@ -934,7 +934,7 @@ export const CampusCanvas: React.FC<CampusCanvasProps> = ({
                 type="button"
                 onClick={() => setTimeOfDay('night')}
                 className={`p-2 rounded-lg text-xs transition-all cursor-pointer ${
-                  timeOfDay === 'night' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 font-bold shadow-md shadow-orange-500/20' : 'text-slate-400 hover:text-white'
+                  timeOfDay === 'night' ? 'bg-red-600 text-white font-bold shadow-md shadow-red-600/20' : 'text-slate-400 hover:text-white'
                 }`}
                 title="Midnight Illumination"
               >
@@ -948,8 +948,8 @@ export const CampusCanvas: React.FC<CampusCanvasProps> = ({
               onClick={() => setIsCinematicTour(prev => !prev)}
               className={`flex items-center gap-2 px-4 py-2 text-xs font-mono font-bold uppercase tracking-wider rounded-xl transition-all border cursor-pointer ${
                 isCinematicTour
-                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 border-orange-500 shadow-lg shadow-orange-500/25'
-                  : 'bg-[#090d16]/90 backdrop-blur-xl text-slate-300 border-white/10 hover:text-white hover:border-orange-500/40'
+                  ? 'bg-red-600 text-white border-red-500 shadow-lg shadow-red-600/25'
+                  : 'bg-[#090d16]/90 backdrop-blur-xl text-slate-300 border-white/10 hover:text-white hover:border-red-500/40'
               }`}
             >
               <Video className="w-3.5 h-3.5" />
@@ -979,7 +979,7 @@ export const CampusCanvas: React.FC<CampusCanvasProps> = ({
                 onMouseLeave={() => setHoveredDept(null)}
                 className={`px-3 py-1.5 text-xs font-mono rounded-lg border transition-all whitespace-nowrap cursor-pointer ${
                   activeDepartment === sec.id
-                    ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 border-orange-500 font-bold shadow-md shadow-orange-500/20'
+                    ? 'bg-[#1e3a8a] text-white border-blue-500 font-bold shadow-md shadow-blue-900/30'
                     : 'bg-[#090d16]/90 backdrop-blur-md text-slate-300 border-white/10 ' + sec.color
                 }`}
               >

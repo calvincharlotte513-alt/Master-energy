@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DepartmentId, PageId } from './types/hub';
+import { ThemeProvider } from './context/ThemeContext';
 import { Header } from './components/navigation/Header';
 import { DepartmentCommandBar } from './components/navigation/DepartmentCommandBar';
 import { Footer } from './components/sections/Footer';
@@ -15,7 +16,7 @@ import { LocationPage } from './pages/LocationPage';
 import { DepartmentDetailModal } from './components/departments/DepartmentDetailModal';
 import { RetailLeaseModal } from './components/departments/RetailLeaseModal';
 
-export default function App() {
+function AppContent() {
   const [currentPage, setCurrentPage] = useState<PageId>('home');
   const [activeDept, setActiveDept] = useState<DepartmentId>('oil-gas');
   const [detailModalDept, setDetailModalDept] = useState<DepartmentId | null>(null);
@@ -56,8 +57,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-orange-500 selection:text-white w-full max-w-full overflow-x-hidden">
-      {/* 1. Global Header: Strictly says "Book" at the top as requested */}
+    <div className="min-h-screen bg-white dark:bg-[#080d1a] text-slate-900 dark:text-slate-100 flex flex-col font-sans selection:bg-red-600 selection:text-white w-full max-w-full overflow-x-hidden transition-colors duration-250">
+      {/* 1. Global Header: Includes Brand Logo, Nav, and Dark/Light Mode Switch */}
       <Header
         currentPage={currentPage}
         onNavigatePage={navigateToPage}
@@ -118,5 +119,13 @@ export default function App() {
         onClose={() => setIsLeaseModalOpen(false)}
       />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }

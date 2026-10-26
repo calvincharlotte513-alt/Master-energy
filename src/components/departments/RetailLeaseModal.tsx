@@ -27,10 +27,10 @@ export const RetailLeaseModal: React.FC<RetailLeaseModalProps> = ({ isOpen, onCl
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-xl overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-[#090d16] border border-white/10 rounded-3xl shadow-2xl overflow-hidden my-auto p-7 sm:p-10">
+      <div className="relative w-full max-w-2xl bg-[#091224] border border-blue-900/60 rounded-3xl shadow-2xl overflow-hidden my-auto p-7 sm:p-10">
         <div className="flex items-center justify-between pb-5 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/30 text-orange-400 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-blue-900/40 border border-blue-500/40 text-blue-400 flex items-center justify-center">
               <Building2 className="w-5 h-5" />
             </div>
             <div>
@@ -62,7 +62,7 @@ export const RetailLeaseModal: React.FC<RetailLeaseModalProps> = ({ isOpen, onCl
                 setSubmitted(false);
                 onClose();
               }}
-              className="px-6 py-2.5 text-xs font-semibold text-white bg-orange-500 hover:bg-orange-600 rounded-xl transition-colors cursor-pointer mt-4"
+              className="px-6 py-2.5 text-xs font-semibold text-white bg-blue-900 hover:bg-blue-800 rounded-xl transition-colors cursor-pointer mt-4"
             >
               Done
             </button>
@@ -78,7 +78,7 @@ export const RetailLeaseModal: React.FC<RetailLeaseModalProps> = ({ isOpen, onCl
                   placeholder="e.g. Blossom Patisserie"
                   value={formData.businessName}
                   onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-orange-500 outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-blue-400 outline-none"
                 />
               </div>
               <div>
@@ -86,7 +86,7 @@ export const RetailLeaseModal: React.FC<RetailLeaseModalProps> = ({ isOpen, onCl
                 <select
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-orange-500 outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-blue-400 outline-none"
                 >
                   <option value="Specialty Food & Beverage">Specialty Food & Beverage</option>
                   <option value="Pharmacy & Health Store">Pharmacy & Health Store</option>
@@ -104,7 +104,7 @@ export const RetailLeaseModal: React.FC<RetailLeaseModalProps> = ({ isOpen, onCl
                 <select
                   value={formData.spaceSize}
                   onChange={(e) => setFormData({ ...formData, spaceSize: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-orange-500 outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-blue-400 outline-none"
                 >
                   <option value="Outdoor Kiosk (12 - 20 sqm)">Outdoor Kiosk (12 - 20 sqm)</option>
                   <option value="Standard Retail Suite (35 - 60 sqm)">Standard Retail Suite (35 - 60 sqm)</option>
@@ -120,7 +120,7 @@ export const RetailLeaseModal: React.FC<RetailLeaseModalProps> = ({ isOpen, onCl
                   placeholder="Your full name"
                   value={formData.contactPerson}
                   onChange={(e) => setFormData({ ...formData, contactPerson: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-orange-500 outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-blue-400 outline-none"
                 />
               </div>
             </div>
@@ -134,7 +134,7 @@ export const RetailLeaseModal: React.FC<RetailLeaseModalProps> = ({ isOpen, onCl
                   placeholder="+234 800 000 0000"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-orange-500 outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-blue-400 outline-none"
                 />
               </div>
               <div>
@@ -145,7 +145,7 @@ export const RetailLeaseModal: React.FC<RetailLeaseModalProps> = ({ isOpen, onCl
                   placeholder="contact@brand.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-orange-500 outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-blue-400 outline-none"
                 />
               </div>
             </div>
@@ -157,14 +157,14 @@ export const RetailLeaseModal: React.FC<RetailLeaseModalProps> = ({ isOpen, onCl
                 placeholder="Briefly describe what your business will offer to travelers and residents at Naze Hub..."
                 value={formData.proposalNotes}
                 onChange={(e) => setFormData({ ...formData, proposalNotes: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-orange-500 outline-none resize-none"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:border-blue-400 outline-none resize-none"
               />
             </div>
 
             <div className="pt-2">
               <button
                 type="submit"
-                className="w-full py-3 text-xs font-bold text-white bg-orange-500 hover:bg-orange-600 rounded-xl transition-colors cursor-pointer flex items-center justify-center gap-2"
+                className="w-full py-3 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors cursor-pointer flex items-center justify-center gap-2 shadow-md shadow-red-600/25"
               >
                 <Send className="w-4 h-4" />
                 <span>Submit Retail Lease Expression of Interest</span>
