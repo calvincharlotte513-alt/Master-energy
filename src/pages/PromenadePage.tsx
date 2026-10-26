@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { motion } from 'motion/react';
 import { LEASED_BUSINESSES } from '../data/hubData';
-import { Store, Coffee, Utensils, Clock, Phone, Building2, Check, ArrowRight } from 'lucide-react';
+import { Coffee, Utensils, Clock, Phone, Building2, Check } from 'lucide-react';
 
 export const PromenadePage: React.FC = () => {
   const [formSent, setFormSent] = useState<boolean>(false);
@@ -18,163 +19,196 @@ export const PromenadePage: React.FC = () => {
   };
 
   return (
-    <div className="py-10 sm:py-16 bg-[#04060a]">
+    <div className="py-10 sm:py-16 bg-white w-full max-w-full overflow-hidden font-opensans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Header */}
-        <div className="border-b border-white/10 pb-8 space-y-3">
-          <div className="flex items-center gap-2 font-mono text-xs text-amber-400 font-bold uppercase tracking-wider">
+        <div className="border-b border-slate-200 pb-8 space-y-3">
+          <div className="flex items-center gap-2 font-mono text-xs text-amber-600 font-bold uppercase tracking-wider">
             <span>MICRO-SECTION · LEASED COMMERCIAL SHOPS</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white font-display">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-950 font-display">
             The Promenade (Leased Shops)
           </h1>
-          <p className="text-sm sm:text-base text-slate-300 max-w-2xl font-normal leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-600 max-w-2xl font-normal leading-relaxed">
             Alongside our five original Master Energy divisions, we lease spaces to independent specialty brands to give travelers and local residents more variety.
           </p>
         </div>
 
-        {/* 2 Concession Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {LEASED_BUSINESSES.map((business) => {
+        {/* 2 Concession Cards Grid - Alternating Black & Yellow Boxes */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 overflow-hidden">
+          {LEASED_BUSINESSES.map((business, idx) => {
             const isZena = business.id === 'zena-foodies';
             const Icon = isZena ? Utensils : Coffee;
+            const isBlackBox = idx % 2 === 0;
 
             return (
-              <div
+              <motion.div
                 key={business.id}
-                className="p-8 sm:p-10 rounded-3xl bg-[#090d16] border border-white/10 hover:border-amber-400/20 transition-all flex flex-col justify-between space-y-6 shadow-2xl"
+                initial={{ opacity: 0, x: idx % 2 === 0 ? -24 : 24 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: idx * 0.05 }}
+                style={{ willChange: 'transform, opacity' }}
+                className={`p-8 sm:p-10 rounded-3xl flex flex-col justify-between space-y-6 transition-all duration-300 ${
+                  isBlackBox
+                    ? 'bg-slate-950 text-white border-2 border-amber-400/40 shadow-xl hover:border-amber-400 hover:shadow-2xl'
+                    : 'bg-amber-400 text-slate-950 border-2 border-amber-500 shadow-xl hover:border-slate-950 hover:shadow-2xl'
+                }`}
               >
                 <div className="space-y-5">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-amber-400 bg-amber-400/10 px-3 py-1 rounded-md border border-amber-400/20">
+                    <span
+                      className={`font-mono text-xs font-bold px-3 py-1 rounded-md shadow-xs ${
+                        isBlackBox ? 'bg-amber-400 text-slate-950' : 'bg-slate-950 text-amber-400'
+                      }`}
+                    >
                       {business.leaseBadge} · {business.unitNumber}
                     </span>
-                    <Icon className="w-5 h-5 text-amber-400" />
+                    <Icon className={`w-5 h-5 ${isBlackBox ? 'text-amber-400' : 'text-slate-950'}`} />
                   </div>
 
                   <div>
-                    <h3 className="text-2xl sm:text-3xl font-extrabold text-white font-display">{business.name}</h3>
-                    <div className="text-xs font-mono text-amber-400 uppercase mt-1 font-bold">{business.category}</div>
+                    <h3 className={`text-2xl sm:text-3xl font-extrabold font-display ${isBlackBox ? 'text-white' : 'text-slate-950'}`}>
+                      {business.name}
+                    </h3>
+                    <div className={`text-xs font-mono uppercase mt-1 font-bold ${isBlackBox ? 'text-amber-400' : 'text-slate-900'}`}>
+                      {business.category}
+                    </div>
                   </div>
 
-                  <p className="text-sm text-slate-300 leading-relaxed font-light">{business.description}</p>
+                  <p className={`text-sm leading-relaxed font-normal ${isBlackBox ? 'text-slate-300' : 'text-slate-900'}`}>
+                    {business.description}
+                  </p>
 
-                  <div className="flex flex-wrap items-center gap-6 font-mono text-xs text-slate-400">
+                  <div className={`flex flex-wrap items-center gap-6 font-mono text-xs font-medium ${isBlackBox ? 'text-slate-400' : 'text-slate-900'}`}>
                     <div className="flex items-center gap-2">
-                      <Clock className="w-3.5 h-3.5 text-amber-400" />
+                      <Clock className={`w-3.5 h-3.5 ${isBlackBox ? 'text-amber-400' : 'text-slate-950'}`} />
                       <span>{business.hours}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Phone className="w-3.5 h-3.5 text-amber-400" />
+                      <Phone className={`w-3.5 h-3.5 ${isBlackBox ? 'text-amber-400' : 'text-slate-950'}`} />
                       <span>{business.phone}</span>
                     </div>
                   </div>
 
                   {/* Offerings Menu */}
-                  <div className="pt-5 border-t border-white/10 space-y-2.5">
-                    <div className="font-mono text-xs uppercase tracking-wider text-slate-400 font-bold">
+                  <div className={`pt-5 border-t space-y-2.5 ${isBlackBox ? 'border-slate-800' : 'border-amber-500/40'}`}>
+                    <div className={`font-mono text-xs uppercase tracking-wider font-bold ${isBlackBox ? 'text-amber-400' : 'text-slate-950'}`}>
                       Popular Items on Menu
                     </div>
-                    {business.offerings.map((item, idx) => (
+                    {business.offerings.map((item, itemIdx) => (
                       <div
-                        key={idx}
-                        className="flex items-start justify-between gap-3 p-3 rounded-xl bg-black/40 border border-white/5"
+                        key={itemIdx}
+                        className={`flex items-start justify-between gap-3 p-3 rounded-xl border shadow-xs ${
+                          isBlackBox
+                            ? 'bg-slate-900/90 border-slate-800 text-white'
+                            : 'bg-white/95 border-amber-300 text-slate-950'
+                        }`}
                       >
                         <div>
-                          <div className="font-bold text-xs text-white">{item.name}</div>
-                          <div className="text-[11px] text-slate-400 font-light mt-0.5">{item.description}</div>
+                          <div className={`font-bold text-xs ${isBlackBox ? 'text-white' : 'text-slate-950'}`}>{item.name}</div>
+                          <div className={`text-[11px] font-normal mt-0.5 ${isBlackBox ? 'text-slate-400' : 'text-slate-600'}`}>{item.description}</div>
                         </div>
-                        <span className="font-mono font-bold text-xs text-amber-400 shrink-0">{item.price}</span>
+                        <span className={`font-mono font-bold text-xs shrink-0 ${isBlackBox ? 'text-amber-400' : 'text-slate-950'}`}>
+                          {item.price}
+                        </span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-white/10 flex flex-wrap gap-2 font-mono text-[11px] text-slate-400">
+                <div className={`pt-4 border-t flex flex-wrap gap-2 font-mono text-[11px] font-medium ${isBlackBox ? 'border-slate-800 text-slate-400' : 'border-amber-500/40 text-slate-900'}`}>
                   {business.specialties.map((spec, sIdx) => (
-                    <span key={sIdx} className="text-slate-300">
+                    <span key={sIdx} className={isBlackBox ? 'text-slate-300' : 'text-slate-950 font-semibold'}>
                       {spec} {sIdx < business.specialties.length - 1 ? '·' : ''}
                     </span>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>
 
-        {/* Commercial Space Rental Application */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-[#090d16] border border-amber-400/20 space-y-6 shadow-2xl">
+        {/* Commercial Space Rental Application - Luxury Black Box */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.36, ease: [0.16, 1, 0.3, 1] }}
+          style={{ willChange: 'transform, opacity' }}
+          className="p-8 sm:p-10 rounded-3xl bg-slate-950 text-white border-2 border-amber-400/40 shadow-2xl space-y-6"
+        >
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-amber-400/10 border border-amber-400/30 text-amber-400 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center shrink-0 shadow-md shadow-amber-500/20">
               <Building2 className="w-6 h-6" />
             </div>
             <div>
               <h3 className="text-xl sm:text-2xl font-bold text-white font-display">
                 Rent a Commercial Shop or Kiosk Space in Naze
               </h3>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-400 mt-0.5 font-normal">
                 Put your business right where thousands of travelers, private cars, and interstate buses stop every day.
               </p>
             </div>
           </div>
 
           {formSent ? (
-            <div className="p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-center space-y-2">
-              <div className="w-10 h-10 rounded-full bg-emerald-400 text-slate-950 flex items-center justify-center mx-auto">
+            <div className="p-6 rounded-2xl bg-emerald-950/80 border border-emerald-500/50 text-center space-y-2">
+              <div className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center mx-auto">
                 <Check className="w-5 h-5" />
               </div>
               <h4 className="text-lg font-bold text-white">Lease Application Submitted!</h4>
-              <p className="text-xs text-slate-300 font-light">
+              <p className="text-xs text-emerald-200 font-normal">
                 Our property management team at Master Energy Naze will contact your phone with available shop sizes and rental terms.
               </p>
             </div>
           ) : (
             <form onSubmit={handleLeaseSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs text-slate-400 block mb-1">Business Name *</label>
+                <label className="text-xs text-slate-300 block mb-1 font-medium">Business Name *</label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Royal Pharmacy &amp; Supermart"
+                  placeholder="e.g. Royal Pharmacy & Supermart"
                   value={leaseForm.businessName}
                   onChange={(e) => setLeaseForm({ ...leaseForm, businessName: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/10 text-white text-xs outline-none focus:border-amber-400"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-amber-400 shadow-sm placeholder:text-slate-500"
                 />
               </div>
 
               <div>
-                <label className="text-xs text-slate-400 block mb-1">Your Phone Number *</label>
+                <label className="text-xs text-slate-300 block mb-1 font-medium">Your Phone Number *</label>
                 <input
                   type="tel"
                   required
                   placeholder="0803 000 0000"
                   value={leaseForm.phone}
                   onChange={(e) => setLeaseForm({ ...leaseForm, phone: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/10 text-white text-xs outline-none focus:border-amber-400"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-amber-400 shadow-sm placeholder:text-slate-500"
                 />
               </div>
 
               <div>
-                <label className="text-xs text-slate-400 block mb-1">Shop Category</label>
+                <label className="text-xs text-slate-300 block mb-1 font-medium">Shop Category</label>
                 <select
                   value={leaseForm.category}
                   onChange={(e) => setLeaseForm({ ...leaseForm, category: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/10 text-white text-xs outline-none focus:border-amber-400"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-amber-400 shadow-sm"
                 >
-                  <option value="Specialty Food &amp; Snacks">Specialty Food, Bakery &amp; Snacks</option>
+                  <option value="Specialty Food & Snacks">Specialty Food, Bakery & Snacks</option>
                   <option value="Pharmacy / Chemist">Pharmacy / Chemist</option>
                   <option value="POS / ATM Gallery">POS / ATM Financial Pod</option>
-                  <option value="Phone Accessories &amp; Gadgets">Phone Accessories &amp; Gadgets</option>
+                  <option value="Phone Accessories & Gadgets">Phone Accessories & Gadgets</option>
                   <option value="Dry Cleaning / Logistics">Dry Cleaning / Logistics Drop-off</option>
                 </select>
               </div>
 
               <div>
-                <label className="text-xs text-slate-400 block mb-1">Desired Space Size</label>
+                <label className="text-xs text-slate-300 block mb-1 font-medium">Desired Space Size</label>
                 <select
                   value={leaseForm.shopSize}
                   onChange={(e) => setLeaseForm({ ...leaseForm, shopSize: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/10 text-white text-xs outline-none focus:border-amber-400"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs outline-none focus:border-amber-400 shadow-sm"
                 >
                   <option value="Outdoor Kiosk (15 - 20 sqm)">Outdoor Kiosk (15 - 20 sqm)</option>
                   <option value="Standard Retail Shop (35 - 50 sqm)">Standard Retail Shop (35 - 50 sqm)</option>
@@ -185,14 +219,14 @@ export const PromenadePage: React.FC = () => {
               <div className="sm:col-span-2 pt-2">
                 <button
                   type="submit"
-                  className="w-full py-3 text-xs font-bold uppercase tracking-wider text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all cursor-pointer shadow-lg shadow-amber-500/20"
+                  className="w-full py-3.5 text-xs font-bold uppercase tracking-wider text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all cursor-pointer shadow-md shadow-amber-500/20 active:scale-[0.99]"
                 >
                   Submit Lease Application
                 </button>
               </div>
             </form>
           )}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

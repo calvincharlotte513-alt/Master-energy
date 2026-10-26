@@ -32,22 +32,24 @@ export const Header: React.FC<HeaderProps> = ({ currentPage, onNavigatePage }) =
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-xl border-b border-slate-200 transition-all shadow-sm w-full max-w-full overflow-hidden">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 h-18 sm:h-20 w-full min-w-0">
-        {/* Brand logo & name */}
+        {/* Brand logo & location tag */}
         <button
           type="button"
           onClick={() => handleSelectPage('home')}
-          className="flex items-center gap-2.5 text-left group cursor-pointer shrink-0 min-w-0"
+          className="flex items-center gap-3 text-left group cursor-pointer shrink-0 min-w-0 py-1"
         >
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center text-slate-950 font-display font-black text-sm shadow-md shadow-amber-500/20 shrink-0 border border-amber-300">
-            ME
-          </div>
-          <div className="min-w-0">
-            <div className="font-display font-extrabold text-sm sm:text-base text-slate-950 tracking-wide group-hover:text-amber-600 transition-colors whitespace-nowrap truncate">
-              MASTER ENERGY
-            </div>
-            <div className="text-[10px] text-amber-600 font-mono font-bold tracking-wider -mt-0.5 whitespace-nowrap truncate">
-              NAZE · IMO STATE
-            </div>
+          <img
+            src="/assets/aistudio/3e61da62-81a9-4684-9a39-054c4145e902_1bfc0ae0.png"
+            alt="Master Energy Logo"
+            className="h-10 sm:h-12 w-auto object-contain transition-transform group-hover:scale-105"
+          />
+          <div className="min-w-0 flex flex-col justify-center border-l border-slate-200 pl-2.5">
+            <span className="text-xs sm:text-sm text-orange-600 font-mono font-extrabold tracking-wider whitespace-nowrap">
+              Naze. Imo state
+            </span>
+            <span className="text-[10px] text-slate-500 font-mono font-medium whitespace-nowrap">
+              Mega Complex · KM 3
+            </span>
           </div>
         </button>
 
@@ -63,9 +65,9 @@ export const Header: React.FC<HeaderProps> = ({ currentPage, onNavigatePage }) =
                 onClick={() => handleSelectPage(item.id)}
                 className={`px-3 py-2 text-xs rounded-lg transition-all whitespace-nowrap cursor-pointer font-semibold ${
                   isActive
-                    ? 'bg-amber-400 text-slate-950 font-bold shadow-sm shadow-amber-400/30'
+                    ? 'bg-orange-500 text-slate-950 font-bold shadow-sm shadow-orange-500/30'
                     : isBook
-                    ? 'text-amber-800 bg-amber-400/20 hover:bg-amber-400/30 font-bold border border-amber-400/40'
+                    ? 'text-orange-900 bg-orange-500/20 hover:bg-orange-500/30 font-bold border border-orange-500/40'
                     : 'text-slate-700 hover:text-slate-950 hover:bg-slate-100'
                 }`}
               >
@@ -86,7 +88,7 @@ export const Header: React.FC<HeaderProps> = ({ currentPage, onNavigatePage }) =
           <button
             type="button"
             onClick={() => setMobileMenuOpen((prev) => !prev)}
-            className="lg:hidden w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-800 hover:text-slate-950 hover:bg-amber-100 transition-colors cursor-pointer shrink-0"
+            className="lg:hidden w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-800 hover:text-slate-950 hover:bg-orange-100 transition-colors cursor-pointer shrink-0"
             aria-label="Toggle Menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5 text-slate-900" /> : <Menu className="w-5 h-5 text-slate-900" />}
@@ -112,10 +114,10 @@ export const Header: React.FC<HeaderProps> = ({ currentPage, onNavigatePage }) =
                   onClick={() => handleSelectPage(item.id)}
                   className={`flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold text-left transition-all cursor-pointer ${
                     isActive
-                      ? 'bg-amber-400 text-slate-950 font-bold shadow-sm shadow-amber-400/20'
+                      ? 'bg-orange-500 text-slate-950 font-bold shadow-sm shadow-orange-500/20'
                       : isBook
-                      ? 'bg-amber-100 text-amber-900 border border-amber-300 font-bold'
-                      : 'bg-slate-50 text-slate-800 hover:bg-amber-50 border border-slate-100'
+                      ? 'bg-orange-100 text-orange-950 border border-orange-300 font-bold'
+                      : 'bg-slate-50 text-slate-800 hover:bg-orange-50 border border-slate-100'
                   }`}
                 >
                   <Icon className="w-4 h-4 shrink-0 text-slate-700" />

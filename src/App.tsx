@@ -56,7 +56,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-amber-400 selection:text-slate-950 w-full max-w-full overflow-x-hidden">
+    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-orange-500 selection:text-white w-full max-w-full overflow-x-hidden">
       {/* 1. Global Header: Strictly says "Book" at the top as requested */}
       <Header
         currentPage={currentPage}

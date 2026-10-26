@@ -46,12 +46,12 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
         {/* Modal Top Bar */}
         <div className="p-6 border-b border-white/10 flex items-center justify-between gap-4 bg-black/60 shrink-0">
           <div className="flex items-center gap-3">
-            <span className="text-xs font-mono font-bold uppercase tracking-widest text-amber-400">
+            <span className="text-xs font-mono font-bold uppercase tracking-widest text-orange-400">
               {dept.badge}
             </span>
             <span className="text-slate-600">·</span>
             <span className="text-xs font-mono text-slate-400 flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5 text-amber-400" />
+              <Clock className="w-3.5 h-3.5 text-orange-400" />
               {dept.hours}
             </span>
           </div>
@@ -71,6 +71,12 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
           <div className="relative h-64 sm:h-72 rounded-2xl overflow-hidden border border-slate-800 bg-slate-950">
             <img
               src={dept.image}
+              onError={(e) => {
+                const current = e.currentTarget.getAttribute('src');
+                if (current?.startsWith('/images/')) {
+                  e.currentTarget.src = current.replace('/images/', '/assets/images/');
+                }
+              }}
               alt={dept.name}
               referrerPolicy="no-referrer"
               className="w-full h-full object-cover"
@@ -80,7 +86,7 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
               <h2 className="text-2xl sm:text-3xl font-extrabold text-white font-display">
                 {dept.name}
               </h2>
-              <p className="text-sm font-medium text-amber-300 mt-1">{dept.subtitle}</p>
+              <p className="text-sm font-medium text-orange-400 mt-1">{dept.subtitle}</p>
             </div>
           </div>
 
@@ -89,7 +95,7 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
             <div className="md:col-span-7 space-y-4">
               <h3 className="text-lg font-bold text-white font-display">About This Division</h3>
               <p className="text-sm text-slate-300 leading-relaxed">{dept.description}</p>
-              <p className="text-sm text-slate-400 leading-relaxed italic border-l-2 border-amber-400/40 pl-3">
+              <p className="text-sm text-slate-400 leading-relaxed italic border-l-2 border-orange-500/40 pl-3">
                 “{dept.storytelling}”
               </p>
 
@@ -114,7 +120,7 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
                 Direct Division Desk
               </div>
               <div className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-amber-400" />
+                <Phone className="w-4 h-4 text-orange-400" />
                 <span className="font-mono text-white text-sm font-bold">{dept.phone}</span>
               </div>
               <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-800">
@@ -139,7 +145,7 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
                   <p className="text-xs text-slate-400">Add dishes to your express traveler pickup order or dine-in</p>
                 </div>
                 {cartItems.length > 0 && (
-                  <div className="text-xs text-amber-400 font-mono font-bold bg-amber-400/10 px-3 py-1 rounded-md border border-amber-400/20">
+                  <div className="text-xs text-orange-400 font-mono font-bold bg-orange-500/10 px-3 py-1 rounded-md border border-orange-500/20">
                     {cartItems.reduce((a, b) => a + b.qty, 0)} Items · ₦{cartTotal.toLocaleString()}
                   </div>
                 )}
@@ -185,13 +191,13 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
                       </div>
 
                       <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between">
-                        <span className="font-mono font-bold text-sm text-amber-400">
+                        <span className="font-mono font-bold text-sm text-orange-400">
                           ₦{dish.price.toLocaleString()}
                         </span>
                         <button
                           type="button"
                           onClick={() => addToCart(dish)}
-                          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-lg transition-colors cursor-pointer"
+                          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-orange-500 hover:bg-orange-600 rounded-lg transition-colors cursor-pointer"
                         >
                           <Plus className="w-3.5 h-3.5" />
                           <span>Add to Order</span>
@@ -204,16 +210,16 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
 
               {/* Order Checkout Bar */}
               {cartItems.length > 0 && !orderPlaced && (
-                <div className="p-4 rounded-xl bg-slate-950 border border-amber-500/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="p-4 rounded-xl bg-slate-950 border border-orange-500/40 flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div className="text-xs text-slate-300">
                     <span className="font-bold text-white">{cartItems.length} dish types selected</span>
                     <span className="mx-2">·</span>
-                    <span>Total: <strong className="font-mono text-amber-400 text-sm">₦{cartTotal.toLocaleString()}</strong></span>
+                    <span>Total: <strong className="font-mono text-orange-400 text-sm">₦{cartTotal.toLocaleString()}</strong></span>
                   </div>
                   <button
                     type="button"
                     onClick={() => setOrderPlaced(true)}
-                    className="px-6 py-2.5 text-xs font-bold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-colors cursor-pointer"
+                    className="px-6 py-2.5 text-xs font-bold text-white bg-orange-500 hover:bg-orange-600 rounded-xl transition-colors cursor-pointer"
                   >
                     Confirm Express Pickup Order
                   </button>
@@ -278,7 +284,7 @@ export const DepartmentDetailModal: React.FC<DepartmentDetailModalProps> = ({
                   <div key={fp.id} className="p-4 rounded-xl bg-slate-950 border border-slate-800">
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-sm text-white">{fp.name}</span>
-                      <span className="font-mono font-bold text-amber-400 text-xs">
+                      <span className="font-mono font-bold text-orange-400 text-xs">
                         ₦{fp.pricePerUnit.toLocaleString()} / {fp.unit}
                       </span>
                     </div>

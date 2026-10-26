@@ -18,22 +18,29 @@ export const Footer: React.FC<FooterProps> = ({ onSelectDept, onNavigateSection 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12">
           {/* Brand Col */}
           <div className="lg:col-span-4 space-y-5">
-            <div className="flex items-center gap-3 text-white font-bold text-xl font-display">
-              <div className="w-8 h-8 rounded-lg bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400">
-                <span className="font-display font-extrabold text-sm">ME</span>
+            <div className="flex items-center gap-3">
+              <img
+                src="/assets/aistudio/3e61da62-81a9-4684-9a39-054c4145e902_1bfc0ae0.png"
+                alt="Master Energy Logo"
+                className="h-12 w-auto object-contain"
+              />
+              <div className="border-l border-white/10 pl-3">
+                <span className="block text-xs font-mono font-bold text-orange-500 uppercase tracking-wider">
+                  Naze. Imo State
+                </span>
+                <span className="text-[10px] text-slate-400 font-mono">Mega Forecourt Hub</span>
               </div>
-              <span className="tracking-wide">MASTER ENERGY LTD</span>
             </div>
             <p className="text-slate-400 text-xs leading-relaxed max-w-sm font-light">
               Eastern Nigeria’s flagship fueling station &amp; integrated lifestyle complex. Bringing certified calibrated energy, authentic dining, VIP nightlife, auto detailing, and garden hospitality to Naze, Imo State.
             </p>
             <div className="pt-2 text-slate-400 space-y-2 font-mono text-[11px]">
               <div className="flex items-center gap-2.5 text-slate-300">
-                <MapPin className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <MapPin className="w-3.5 h-3.5 text-orange-500 shrink-0" />
                 <span>KM 3 Aba-Owerri Expressway, Naze, Imo State</span>
               </div>
               <div className="flex items-center gap-2.5 text-slate-300">
-                <Phone className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <Phone className="w-3.5 h-3.5 text-orange-500 shrink-0" />
                 <span>+234 803 456 7890</span>
               </div>
             </div>
@@ -59,7 +66,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectDept, onNavigateSection 
                       onSelectDept(d.id);
                       document.getElementById('departments')?.scrollIntoView({ behavior: 'smooth' });
                     }}
-                    className="hover:text-amber-400 transition-colors text-left cursor-pointer"
+                    className="hover:text-orange-400 transition-colors text-left cursor-pointer"
                   >
                     {d.name}
                   </button>
@@ -78,7 +85,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectDept, onNavigateSection 
                 <button
                   type="button"
                   onClick={() => onNavigateSection('promenade')}
-                  className="hover:text-amber-400 transition-colors text-left cursor-pointer"
+                  className="hover:text-orange-400 transition-colors text-left cursor-pointer"
                 >
                   Zena Foodies (Pastries &amp; Waffles)
                 </button>
@@ -87,7 +94,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectDept, onNavigateSection 
                 <button
                   type="button"
                   onClick={() => onNavigateSection('promenade')}
-                  className="hover:text-amber-400 transition-colors text-left cursor-pointer"
+                  className="hover:text-orange-400 transition-colors text-left cursor-pointer"
                 >
                   Presh Arabian Premium Tea (Karak Chai &amp; Majlis)
                 </button>
@@ -96,7 +103,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectDept, onNavigateSection 
                 <button
                   type="button"
                   onClick={() => onNavigateSection('calculator')}
-                  className="hover:text-amber-400 transition-colors text-left cursor-pointer"
+                  className="hover:text-orange-400 transition-colors text-left cursor-pointer"
                 >
                   Live Fuel &amp; Gas Price Terminal
                 </button>
@@ -105,7 +112,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectDept, onNavigateSection 
                 <button
                   type="button"
                   onClick={() => onNavigateSection('location')}
-                  className="hover:text-amber-400 transition-colors text-left cursor-pointer"
+                  className="hover:text-orange-400 transition-colors text-left cursor-pointer"
                 >
                   Transit Times &amp; Directions
                 </button>
@@ -129,7 +136,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectDept, onNavigateSection 
               onClick={scrollToTop}
               className="flex items-center gap-2 px-4 py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-colors w-fit cursor-pointer"
             >
-              <ArrowUp className="w-3.5 h-3.5 text-amber-400" />
+              <ArrowUp className="w-3.5 h-3.5 text-orange-400" />
               <span>Top</span>
             </button>
           </div>

@@ -350,8 +350,8 @@ export const CampusCanvas: React.FC<CampusCanvasProps> = ({
     ledScreen.position.set(-8.5, 3.8, 10.76);
     scene.add(ledScreen);
 
-    // PMS price bar (Neon Amber)
-    const pmsBar = new THREE.Mesh(new THREE.PlaneGeometry(0.75, 0.4), new THREE.MeshBasicMaterial({ color: 0xf59e0b }));
+    // PMS price bar (Neon Orange)
+    const pmsBar = new THREE.Mesh(new THREE.PlaneGeometry(0.75, 0.4), new THREE.MeshBasicMaterial({ color: 0xf97316 }));
     pmsBar.position.set(-8.5, 4.8, 10.77);
     scene.add(pmsBar);
 
@@ -365,21 +365,21 @@ export const CampusCanvas: React.FC<CampusCanvasProps> = ({
     gasBar.position.set(-8.5, 3.2, 10.77);
     scene.add(gasBar);
 
-    // Totem amber neon halo light
-    const totemLight = new THREE.PointLight(0xf59e0b, 1.4, 8);
+    // Totem orange neon halo light
+    const totemLight = new THREE.PointLight(0xf97316, 1.4, 8);
     totemLight.position.set(-8.5, 4.5, 11.2);
     scene.add(totemLight);
 
     // ====================================================
-    // REALISTIC FORECOURT ROAD MARKINGS (Yellow bays & Zebra)
+    // REALISTIC FORECOURT ROAD MARKINGS (Orange bays & Zebra)
     // ====================================================
-    const yellowStripeMat = new THREE.MeshBasicMaterial({ color: 0xfbbf24 });
+    const orangeStripeMat = new THREE.MeshBasicMaterial({ color: 0xf97316 });
     const whiteStripeMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
 
-    // Yellow safety boundary lines around pump lanes
+    // Orange safety boundary lines around pump lanes
     const bayLineGeo = new THREE.PlaneGeometry(0.12, 7.5);
     [-5.2, -0.6, 0.6, 5.2].forEach(lx => {
-      const line = new THREE.Mesh(bayLineGeo, yellowStripeMat);
+      const line = new THREE.Mesh(bayLineGeo, orangeStripeMat);
       line.rotation.x = -Math.PI / 2;
       line.position.set(lx, 0.02, 4.5);
       scene.add(line);
@@ -738,7 +738,7 @@ export const CampusCanvas: React.FC<CampusCanvasProps> = ({
     }
     pGeo.setAttribute('position', new THREE.BufferAttribute(pCoords, 3));
     const pMat = new THREE.PointsMaterial({
-      color: 0xfde047,
+      color: 0xf97316,
       size: 0.12,
       transparent: true,
       opacity: 0.7
@@ -904,7 +904,7 @@ export const CampusCanvas: React.FC<CampusCanvasProps> = ({
           <div className="flex items-center gap-2.5 px-3.5 py-2 bg-[#090d16]/90 backdrop-blur-xl rounded-xl border border-white/10 text-xs font-mono">
             <span className="text-slate-400">DIGITAL TWIN</span>
             <span className="text-slate-600">·</span>
-            <span className="text-amber-400 font-bold uppercase tracking-wider">{cameraModeLabel}</span>
+            <span className="text-orange-500 font-bold uppercase tracking-wider">{cameraModeLabel}</span>
           </div>
 
           <div className="flex items-center gap-2.5">
@@ -914,7 +914,7 @@ export const CampusCanvas: React.FC<CampusCanvasProps> = ({
                 type="button"
                 onClick={() => setTimeOfDay('day')}
                 className={`p-2 rounded-lg text-xs transition-all cursor-pointer ${
-                  timeOfDay === 'day' ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/20' : 'text-slate-400 hover:text-white'
+                  timeOfDay === 'day' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 font-bold shadow-md shadow-orange-500/20' : 'text-slate-400 hover:text-white'
                 }`}
                 title="Bright Daylight"
               >
@@ -924,7 +924,7 @@ export const CampusCanvas: React.FC<CampusCanvasProps> = ({
                 type="button"
                 onClick={() => setTimeOfDay('sunset')}
                 className={`p-2 rounded-lg text-xs transition-all cursor-pointer ${
-                  timeOfDay === 'sunset' ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/20' : 'text-slate-400 hover:text-white'
+                  timeOfDay === 'sunset' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 font-bold shadow-md shadow-orange-500/20' : 'text-slate-400 hover:text-white'
                 }`}
                 title="Sunset / Golden Hour"
               >
@@ -934,7 +934,7 @@ export const CampusCanvas: React.FC<CampusCanvasProps> = ({
                 type="button"
                 onClick={() => setTimeOfDay('night')}
                 className={`p-2 rounded-lg text-xs transition-all cursor-pointer ${
-                  timeOfDay === 'night' ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/20' : 'text-slate-400 hover:text-white'
+                  timeOfDay === 'night' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 font-bold shadow-md shadow-orange-500/20' : 'text-slate-400 hover:text-white'
                 }`}
                 title="Midnight Illumination"
               >
@@ -948,8 +948,8 @@ export const CampusCanvas: React.FC<CampusCanvasProps> = ({
               onClick={() => setIsCinematicTour(prev => !prev)}
               className={`flex items-center gap-2 px-4 py-2 text-xs font-mono font-bold uppercase tracking-wider rounded-xl transition-all border cursor-pointer ${
                 isCinematicTour
-                  ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 border-amber-400 shadow-lg shadow-amber-500/25'
-                  : 'bg-[#090d16]/90 backdrop-blur-xl text-slate-300 border-white/10 hover:text-white hover:border-amber-400/40'
+                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 border-orange-500 shadow-lg shadow-orange-500/25'
+                  : 'bg-[#090d16]/90 backdrop-blur-xl text-slate-300 border-white/10 hover:text-white hover:border-orange-500/40'
               }`}
             >
               <Video className="w-3.5 h-3.5" />
@@ -965,7 +965,7 @@ export const CampusCanvas: React.FC<CampusCanvasProps> = ({
           </div>
           <div className="flex flex-wrap gap-2">
             {[
-              { id: 'oil-gas', label: 'I · Forecourt', color: 'hover:border-amber-400 hover:text-amber-400' },
+              { id: 'oil-gas', label: 'I · Forecourt', color: 'hover:border-orange-500 hover:text-orange-500' },
               { id: 'kitchen', label: 'II · Kitchen', color: 'hover:border-orange-400 hover:text-orange-400' },
               { id: 'lounge', label: 'III · VIP Lounge', color: 'hover:border-emerald-400 hover:text-emerald-400' },
               { id: 'carwash', label: 'IV · Car Wash', color: 'hover:border-cyan-400 hover:text-cyan-400' },
@@ -979,7 +979,7 @@ export const CampusCanvas: React.FC<CampusCanvasProps> = ({
                 onMouseLeave={() => setHoveredDept(null)}
                 className={`px-3 py-1.5 text-xs font-mono rounded-lg border transition-all whitespace-nowrap cursor-pointer ${
                   activeDepartment === sec.id
-                    ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 border-amber-400 font-bold shadow-md shadow-amber-500/20'
+                    ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 border-orange-500 font-bold shadow-md shadow-orange-500/20'
                     : 'bg-[#090d16]/90 backdrop-blur-md text-slate-300 border-white/10 ' + sec.color
                 }`}
               >
