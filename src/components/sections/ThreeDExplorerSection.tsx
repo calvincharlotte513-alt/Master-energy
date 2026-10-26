@@ -47,57 +47,67 @@ export const ThreeDExplorerSection: React.FC<ThreeDExplorerSectionProps> = ({
 
   const currentDept = DEPARTMENTS[activeDept] || DEPARTMENTS['oil-gas'];
 
-  // Hotspots for Forecourt Living 3D Twin
+  // Hotspots for Forecourt Living 3D Twin (Calibrated to Modern Architectural Station)
   const forecourtHotspots: Hotspot[] = [
     {
-      id: 'hs-attendant',
+      id: 'hs-canopy',
       deptId: 'oil-gas',
-      xPercent: 63,
-      yPercent: 68,
-      title: 'Trained Station Fuel Attendants',
-      tag: 'HUMAN WORKFORCE · CERTIFIED SAFETY',
-      description: 'Attendants in high-visibility Master Energy uniforms dispensing certified liters into customer SUVs and sedans without delays.',
-      stat: '16 Nozzles · Zero Under-dispensing'
+      xPercent: 32,
+      yPercent: 32,
+      title: 'Architectural Geometric LED Canopy',
+      tag: 'FLAGSHIP ROOF · 16 NOZZLES',
+      description: 'Ultra-modern high-clearance canopy with illuminated chevron fascia and signature diamond-grid recessed LED ceiling channels.',
+      stat: '16 High-Flow DPR Dispensers'
     },
     {
       id: 'hs-pump',
       deptId: 'oil-gas',
       xPercent: 42,
-      yPercent: 58,
-      title: 'Digital High-Speed Dispensers',
-      tag: 'FORECOURT EQUIPMENT',
+      yPercent: 74,
+      title: 'Digital High-Speed Dispensers & Attendants',
+      tag: 'FORECOURT EQUIPMENT · ZERO SHORT-CHANGE',
       description: 'DPR-calibrated digital volume meters with tamper-proof electronic seals showing real-time liters and amount.',
       stat: 'PMS ₦710/L · AGO ₦1,050/L'
     },
     {
       id: 'hs-totem',
       deptId: 'oil-gas',
-      xPercent: 22,
-      yPercent: 48,
+      xPercent: 3,
+      yPercent: 55,
       title: 'Roadside LED Totem Billboard',
       tag: 'PRICING TRANSPARENCY',
       description: 'High-visibility digital price LED beacon positioned along Aba-Owerri Expressway for incoming motorists.',
       stat: 'Live 24/7 Digital Rates'
     },
     {
+      id: 'hs-cafe',
+      deptId: 'kitchen',
+      xPercent: 62,
+      yPercent: 60,
+      title: 'Masters Café & Espresso Bar',
+      tag: 'GROUND FLOOR CULINARY',
+      description: 'Artisan coffee, meat pies, fresh snacks, cold juices, and quick breakfast for motorists on the go.',
+      stat: 'Open 6:00 AM – Midnight'
+    },
+    {
       id: 'hs-kitchen',
       deptId: 'kitchen',
-      xPercent: 18,
-      yPercent: 55,
-      title: 'Masters Kitchen Restaurant',
-      tag: 'GROUND FLOOR CULINARY',
+      xPercent: 72,
+      yPercent: 60,
+      title: 'Masters Bar & Restaurant',
+      tag: 'AUTHENTIC DINE-IN HALL',
       description: 'Air-conditioned dining hall serving hot authentic Ofe Owerri, party jollof rice, and freshly fried fish.',
       stat: 'Breakfast, Lunch & Dinner'
     },
     {
-      id: 'hs-lounge',
-      deptId: 'lounge',
-      xPercent: 24,
-      yPercent: 42,
-      title: 'Masters VIP Lounge & Terrace',
-      tag: 'UPSTAIRS EXECUTIVE CLUB',
-      description: 'Glass-wrapped luxury cocktail lounge with private booths, champagne service, and executive business pods.',
-      stat: 'VIP Bottle Service'
+      id: 'hs-store',
+      deptId: 'oil-gas',
+      xPercent: 84,
+      yPercent: 60,
+      title: '24/7 Mega Convenience Store',
+      tag: 'RETAIL SUPERMARKET',
+      description: 'Fully stocked forecourt supermarket with groceries, ice-cold beverages, automotive fluids, and travel accessories.',
+      stat: 'Open 24 Hours Daily'
     }
   ];
 

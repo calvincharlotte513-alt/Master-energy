@@ -4,7 +4,6 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { DepartmentId, PageId } from '../../types/hub';
 import {
-  Compass,
   Sun,
   Sunset,
   Moon,
@@ -13,7 +12,14 @@ import {
   Pause,
   ChevronDown,
   Sparkles,
-  Maximize2
+  Layers,
+  Image as ImageIcon,
+  Box,
+  MapPin,
+  Info,
+  CheckCircle2,
+  ChevronRight,
+  ExternalLink
 } from 'lucide-react';
 
 interface MainStation3DTwinProps {
@@ -32,65 +38,304 @@ interface HoverTooltipData {
   y: number;
 }
 
-// Procedural Canvas Texture for Station Overhead Canopy Fascia
-function createCanopySignTexture(title: string, subtitle: string) {
+interface PhotorealHotspot {
+  id: string;
+  deptId: DepartmentId;
+  xPercent: number;
+  yPercent: number;
+  title: string;
+  tag: string;
+  description: string;
+  stat: string;
+}
+
+// ---------------------------------------------------------------------
+// 1. PROCEDURAL CANVAS TEXTURE: ULTRA-MODERN CANOPY FASCIA (IMAGE 1)
+// ---------------------------------------------------------------------
+function createModernCanopyFasciaTexture() {
   const canvas = document.createElement('canvas');
-  canvas.width = 1024;
-  canvas.height = 128;
+  canvas.width = 2048;
+  canvas.height = 256;
   const ctx = canvas.getContext('2d');
   if (!ctx) return new THREE.Texture();
 
-  // Masters Navy Blue brand background
-  const grad = ctx.createLinearGradient(0, 0, 1024, 0);
-  grad.addColorStop(0, '#0a1226');
-  grad.addColorStop(0.2, '#1e3a8a');
-  grad.addColorStop(0.8, '#1e3a8a');
-  grad.addColorStop(1, '#0a1226');
+  // Dark obsidian/navy gradient backplate
+  const grad = ctx.createLinearGradient(0, 0, 2048, 0);
+  grad.addColorStop(0, '#060a14');
+  grad.addColorStop(0.15, '#0b1328');
+  grad.addColorStop(0.5, '#111d38');
+  grad.addColorStop(0.85, '#0b1328');
+  grad.addColorStop(1, '#060a14');
   ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, 1024, 128);
+  ctx.fillRect(0, 0, 2048, 256);
 
-  // Champagne Gold borders
-  ctx.fillStyle = '#dfca95';
-  ctx.fillRect(0, 0, 1024, 8);
-  ctx.fillRect(0, 120, 1024, 8);
+  // Subtle digital dot matrix pattern on the fascia (as seen in Image 1)
+  ctx.fillStyle = 'rgba(56, 189, 248, 0.08)';
+  for (let x = 20; x < 2028; x += 18) {
+    for (let y = 18; y < 238; y += 18) {
+      ctx.beginPath();
+      ctx.arc(x, y, 2.2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
 
-  // Energy Crimson Red accent pinstripes
-  ctx.fillStyle = '#dc2626';
-  ctx.fillRect(0, 8, 1024, 3);
-  ctx.fillRect(0, 117, 1024, 3);
+  // Running illuminated cyan/white LED border rails on top and bottom
+  ctx.fillStyle = '#38bdf8';
+  ctx.shadowColor = '#38bdf8';
+  ctx.shadowBlur = 12;
+  ctx.fillRect(0, 0, 2048, 12);
+  ctx.fillRect(0, 244, 2048, 12);
+  ctx.shadowBlur = 0;
 
-  // Left & right "ME" crest badges
-  [45, 930].forEach((x) => {
-    ctx.fillStyle = '#dc2626';
-    ctx.beginPath();
-    ctx.roundRect(x, 22, 50, 84, 8);
-    ctx.fill();
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '900 24px "Poppins", sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('ME', x + 25, 64);
-  });
-
-  // Main Title: "MASTER ENERGY"
+  // Thin inner pinstripe
   ctx.fillStyle = '#ffffff';
-  ctx.font = '900 50px "Poppins", sans-serif';
+  ctx.fillRect(0, 12, 2048, 3);
+  ctx.fillRect(0, 241, 2048, 3);
+
+  // Left Chevron Group (>>> pointing toward text)
+  const drawChevrons = (startX: number, direction: 'left' | 'right') => {
+    ctx.shadowColor = '#00e5ff';
+    ctx.shadowBlur = 18;
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 14;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    for (let i = 0; i < 4; i++) {
+      const offset = i * 28;
+      const x = direction === 'left' ? startX + offset : startX - offset;
+      const dx = direction === 'left' ? 24 : -24;
+
+      ctx.beginPath();
+      ctx.moveTo(x - dx, 45);
+      ctx.lineTo(x, 128);
+      ctx.lineTo(x - dx, 211);
+      ctx.stroke();
+    }
+    ctx.shadowBlur = 0;
+  };
+
+  drawChevrons(110, 'left');
+  drawChevrons(1938, 'right');
+
+  // "ME" Modern Emblem Badge on Left Center
+  const emblemX = 310;
+  const emblemY = 128;
+
+  // Glowing outer halo
+  ctx.shadowColor = '#ef4444';
+  ctx.shadowBlur = 22;
+  ctx.fillStyle = '#060a14';
+  ctx.beginPath();
+  ctx.ellipse(emblemX, emblemY, 78, 64, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Multi-color gradient ring (Navy, Gold, Crimson Red)
+  const ringGrad = ctx.createLinearGradient(emblemX - 78, emblemY - 64, emblemX + 78, emblemY + 64);
+  ringGrad.addColorStop(0, '#10b981');
+  ringGrad.addColorStop(0.35, '#f59e0b');
+  ringGrad.addColorStop(0.7, '#ef4444');
+  ringGrad.addColorStop(1, '#38bdf8');
+  ctx.strokeStyle = ringGrad;
+  ctx.lineWidth = 9;
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // Stylized "ME" inside emblem
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '900 52px "Poppins", sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText(title, 512, 54);
+  ctx.shadowColor = '#ffffff';
+  ctx.shadowBlur = 14;
+  ctx.fillText('ME', emblemX, emblemY + 2);
+  ctx.shadowBlur = 0;
 
-  // Subtitle
-  ctx.fillStyle = '#dfca95';
-  ctx.font = 'bold 15px "Inter", sans-serif';
-  ctx.letterSpacing = '3px';
-  ctx.fillText(subtitle, 512, 92);
+  // Main Illuminated Bold Title: "MASTER ENERGY LTD"
+  ctx.shadowColor = '#38bdf8';
+  ctx.shadowBlur = 24;
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '900 96px "Poppins", sans-serif';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('MASTER ENERGY LTD', 440, 128);
+  ctx.shadowBlur = 0;
 
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
   return texture;
 }
 
-// Procedural Canvas Texture for Highway Roadside Price Totem Billboard
+// ---------------------------------------------------------------------
+// 2. PROCEDURAL CANVAS TEXTURE: GEOMETRIC RECESSED LED CEILING (IMAGE 1)
+// ---------------------------------------------------------------------
+function createGeometricCeilingTexture() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1024;
+  canvas.height = 1024;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return new THREE.Texture();
+
+  // Modern architectural dark charcoal metallic soffit panels
+  ctx.fillStyle = '#141822';
+  ctx.fillRect(0, 0, 1024, 1024);
+
+  // Subtle architectural modular ceiling grid lines
+  ctx.strokeStyle = '#1e2433';
+  ctx.lineWidth = 2;
+  for (let x = 0; x <= 1024; x += 64) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, 1024);
+    ctx.stroke();
+  }
+  for (let y = 0; y <= 1024; y += 64) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(1024, y);
+    ctx.stroke();
+  }
+
+  // 4 Column Pillar Hub Centers
+  const columns = [
+    { x: 280, y: 320 },
+    { x: 744, y: 320 },
+    { x: 280, y: 704 },
+    { x: 744, y: 704 }
+  ];
+
+  // GEOMETRIC RECESSED LED TROUGHS (Radiating Diamond & X-Patterns as in Image 1)
+  ctx.shadowColor = '#ffffff';
+  ctx.shadowBlur = 18;
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 10;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'miter';
+
+  // 1. Outer perimeter rectangular recessed LED trough
+  ctx.strokeRect(60, 60, 904, 904);
+
+  // 2. Central diamond uniting all 4 columns
+  ctx.beginPath();
+  ctx.moveTo(512, 140);
+  ctx.lineTo(884, 512);
+  ctx.lineTo(512, 884);
+  ctx.lineTo(140, 512);
+  ctx.closePath();
+  ctx.stroke();
+
+  // 3. Inner diamond between columns
+  ctx.beginPath();
+  ctx.moveTo(512, 320);
+  ctx.lineTo(744, 512);
+  ctx.lineTo(512, 704);
+  ctx.lineTo(280, 512);
+  ctx.closePath();
+  ctx.stroke();
+
+  // 4. Cross braces (X-pattern radiating from column heads)
+  columns.forEach((col) => {
+    // Diagonals extending to corners
+    ctx.beginPath();
+    ctx.moveTo(col.x, col.y);
+    ctx.lineTo(col.x < 512 ? 60 : 964, col.y < 512 ? 60 : 964);
+    ctx.stroke();
+
+    // Diagonals towards center
+    ctx.beginPath();
+    ctx.moveTo(col.x, col.y);
+    ctx.lineTo(512, 512);
+    ctx.stroke();
+
+    // Horizontal & vertical feeder light channels
+    ctx.beginPath();
+    ctx.moveTo(col.x, 60);
+    ctx.lineTo(col.x, 964);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(60, col.y);
+    ctx.lineTo(964, col.y);
+    ctx.stroke();
+
+    // Illuminated Circular Downlight Ring at Column Top
+    ctx.beginPath();
+    ctx.arc(col.x, col.y, 42, 0, Math.PI * 2);
+    ctx.fillStyle = '#ffffff';
+    ctx.fill();
+    ctx.stroke();
+  });
+
+  // Central Starburst Ring
+  ctx.beginPath();
+  ctx.arc(512, 512, 28, 0, Math.PI * 2);
+  ctx.fillStyle = '#ffffff';
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.shadowBlur = 0;
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}
+
+// ---------------------------------------------------------------------
+// 3. PROCEDURAL CANVAS TEXTURE: MODERN 2-STORY COMMERCIAL STOREFRONTS
+// ---------------------------------------------------------------------
+function createStorefrontBannerTexture() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1536;
+  canvas.height = 160;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return new THREE.Texture();
+
+  // Warm architectural bronze/timber panel
+  const grad = ctx.createLinearGradient(0, 0, 0, 160);
+  grad.addColorStop(0, '#221c17');
+  grad.addColorStop(1, '#15110d');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 1536, 160);
+
+  // Store 1: "CAFÉ" (Left)
+  ctx.shadowColor = '#fed7aa';
+  ctx.shadowBlur = 15;
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '800 58px "Poppins", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('CAFÉ', 240, 80);
+
+  // Store 2: "BAR & RESTAURANT" (Center)
+  ctx.shadowColor = '#fef08a';
+  ctx.shadowBlur = 15;
+  ctx.fillText('BAR & RESTAURANT', 760, 80);
+
+  // Store 3: "CONVENIENCE STORE" (Right)
+  ctx.shadowColor = '#38bdf8';
+  ctx.shadowBlur = 15;
+  ctx.fillText('CONVENIENCE STORE', 1280, 80);
+  ctx.shadowBlur = 0;
+
+  // Thin warm gold separator lines
+  ctx.strokeStyle = '#b45309';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(8, 8, 1520, 144);
+  ctx.beginPath();
+  ctx.moveTo(480, 10);
+  ctx.lineTo(480, 150);
+  ctx.moveTo(1040, 10);
+  ctx.lineTo(1040, 150);
+  ctx.stroke();
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}
+
+// ---------------------------------------------------------------------
+// 4. PROCEDURAL CANVAS TEXTURE: ROADSIDE DIGITAL PRICE TOTEM
+// ---------------------------------------------------------------------
 function createPriceTotemTexture() {
   const canvas = document.createElement('canvas');
   canvas.width = 512;
@@ -99,10 +344,10 @@ function createPriceTotemTexture() {
   if (!ctx) return new THREE.Texture();
 
   // Dark obsidian backplate
-  ctx.fillStyle = '#060910';
+  ctx.fillStyle = '#060a14';
   ctx.fillRect(0, 0, 512, 1024);
 
-  // Outer champagne frame
+  // Outer gold frame
   ctx.strokeStyle = '#dfca95';
   ctx.lineWidth = 10;
   ctx.strokeRect(10, 10, 492, 1004);
@@ -114,7 +359,7 @@ function createPriceTotemTexture() {
   ctx.fillStyle = headerGrad;
   ctx.fillRect(20, 20, 472, 160);
 
-  ctx.fillStyle = '#090d16';
+  ctx.fillStyle = '#ffffff';
   ctx.font = '900 36px "Poppins", sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
@@ -124,7 +369,7 @@ function createPriceTotemTexture() {
   ctx.font = 'bold 18px "Inter", sans-serif';
   ctx.fillText('NAZE MEGA FORECOURT', 256, 118);
 
-  ctx.fillStyle = '#000000';
+  ctx.fillStyle = '#ffffff';
   ctx.font = 'bold 13px "JetBrains Mono", monospace';
   ctx.fillText('★ 24/7 DPR CERTIFIED ★', 256, 150);
 
@@ -133,7 +378,7 @@ function createPriceTotemTexture() {
     { name: 'PMS', desc: 'PETROL', price: '₦710', color: '#ef4444', bar: '#dc2626' },
     { name: 'AGO', desc: 'DIESEL', price: '₦1050', color: '#34d399', bar: '#059669' },
     { name: 'DPK', desc: 'KEROSENE', price: '₦1150', color: '#dfca95', bar: '#b49b5c' },
-    { name: 'LPG', desc: 'GAS / KG', price: '₦1400', color: '#fb923c', bar: '#ea580c' }
+    { name: 'LPG', desc: 'GAS / KG', price: '₦1400', color: '#38bdf8', bar: '#0284c7' }
   ];
 
   const startY = 205;
@@ -142,41 +387,34 @@ function createPriceTotemTexture() {
   fuelList.forEach((fuel, i) => {
     const y = startY + i * rowHeight;
 
-    // Fuel row card background
     ctx.fillStyle = '#0d1322';
     ctx.beginPath();
     ctx.roundRect(26, y, 460, 155, 12);
     ctx.fill();
 
-    // Color indicator left bar
     ctx.fillStyle = fuel.bar;
     ctx.fillRect(26, y, 14, 155);
 
-    // Border
     ctx.strokeStyle = '#1e293b';
     ctx.lineWidth = 2;
     ctx.strokeRect(26, y, 460, 155);
 
-    // Fuel title
     ctx.fillStyle = '#ffffff';
     ctx.font = '900 42px "Poppins", sans-serif';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     ctx.fillText(fuel.name, 56, y + 50);
 
-    // Fuel sub-label
     ctx.fillStyle = '#94a3b8';
     ctx.font = 'bold 16px "Inter", sans-serif';
     ctx.fillText(fuel.desc, 56, y + 102);
 
-    // Digital LED Price Screen Bezel
     ctx.fillStyle = '#010307';
     ctx.fillRect(215, y + 26, 255, 103);
     ctx.strokeStyle = fuel.bar;
     ctx.lineWidth = 3;
     ctx.strokeRect(215, y + 26, 255, 103);
 
-    // Digital LED Number
     ctx.shadowColor = fuel.color;
     ctx.shadowBlur = 10;
     ctx.fillStyle = fuel.color;
@@ -186,12 +424,11 @@ function createPriceTotemTexture() {
     ctx.shadowBlur = 0;
   });
 
-  // Bottom Guarantee
   ctx.fillStyle = '#dfca95';
   ctx.font = 'bold 16px "Inter", sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('10 LITERS IS 10 LITERS · ACCURATE METERS', 256, 940);
-  ctx.fillStyle = '#64748b';
+  ctx.fillStyle = '#94a3b8';
   ctx.font = '12px "Inter", sans-serif';
   ctx.fillText('KM 3 ABA-OWERRI ROAD, NAZE, IMO STATE', 256, 975);
 
@@ -200,6 +437,108 @@ function createPriceTotemTexture() {
   return texture;
 }
 
+// ---------------------------------------------------------------------
+// 5. HELPER TO CREATE MODERN 3D SUVS & SEDANS (MATCHING IMAGE 1)
+// ---------------------------------------------------------------------
+function createModernVehicle(bodyColor: number, isSuv: boolean = true) {
+  const group = new THREE.Group();
+
+  const length = isSuv ? 4.7 : 4.4;
+  const width = isSuv ? 2.1 : 1.95;
+  const height = isSuv ? 1.45 : 1.15;
+
+  // Car Body Base
+  const bodyGeo = new THREE.BoxGeometry(width, height * 0.55, length);
+  const bodyMat = new THREE.MeshStandardMaterial({
+    color: bodyColor,
+    metalness: 0.85,
+    roughness: 0.18
+  });
+  const bodyMesh = new THREE.Mesh(bodyGeo, bodyMat);
+  bodyMesh.position.y = 0.55;
+  bodyMesh.castShadow = true;
+  group.add(bodyMesh);
+
+  // Cabin / Greenhouse Roof with Tinted Glass
+  const cabinLength = length * 0.62;
+  const cabinWidth = width * 0.88;
+  const cabinHeight = height * 0.55;
+  const cabinGeo = new THREE.BoxGeometry(cabinWidth, cabinHeight, cabinLength);
+  const cabinMat = new THREE.MeshStandardMaterial({
+    color: 0x0a0e17,
+    roughness: 0.1,
+    metalness: 0.9,
+    transparent: true,
+    opacity: 0.85
+  });
+  const cabinMesh = new THREE.Mesh(cabinGeo, cabinMat);
+  cabinMesh.position.set(0, 0.55 + height * 0.5, -length * 0.05);
+  cabinMesh.castShadow = true;
+  group.add(cabinMesh);
+
+  // Roof Roof-Rails on SUV
+  if (isSuv) {
+    const railGeo = new THREE.BoxGeometry(0.08, 0.08, cabinLength * 0.9);
+    const railMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, metalness: 0.9, roughness: 0.2 });
+    const railL = new THREE.Mesh(railGeo, railMat);
+    railL.position.set(-cabinWidth * 0.46, 0.55 + height * 0.82, -length * 0.05);
+    group.add(railL);
+
+    const railR = new THREE.Mesh(railGeo, railMat);
+    railR.position.set(cabinWidth * 0.46, 0.55 + height * 0.82, -length * 0.05);
+    group.add(railR);
+  }
+
+  // 4 Alloy Wheels with Rubber Tires
+  const wheelGeo = new THREE.CylinderGeometry(0.38, 0.38, 0.28, 16);
+  const tireMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.9 });
+  wheelGeo.rotateZ(Math.PI / 2);
+
+  const wheelPositions = [
+    [-width * 0.52, 0.38, length * 0.32],
+    [width * 0.52, 0.38, length * 0.32],
+    [-width * 0.52, 0.38, -length * 0.32],
+    [width * 0.52, 0.38, -length * 0.32]
+  ];
+
+  wheelPositions.forEach(([wx, wy, wz]) => {
+    const wheel = new THREE.Mesh(wheelGeo, tireMat);
+    wheel.position.set(wx, wy, wz);
+    wheel.castShadow = true;
+    group.add(wheel);
+
+    // Silver Alloy Hubcap
+    const hub = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.22, 0.22, 0.3, 12),
+      new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.95, roughness: 0.15 })
+    );
+    hub.rotateZ(Math.PI / 2);
+    hub.position.set(wx, wy, wz);
+    group.add(hub);
+  });
+
+  // LED Headlights (Glowing Crisp White / Cyan)
+  const headlightMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  [-width * 0.36, width * 0.36].forEach((hx) => {
+    const hl = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.12, 0.05), headlightMat);
+    hl.position.set(hx, 0.62, length * 0.5 + 0.02);
+    group.add(hl);
+  });
+
+  // LED Taillights (Glowing Red)
+  const taillightMat = new THREE.MeshBasicMaterial({ color: 0xef4444 });
+  [-width * 0.36, width * 0.36].forEach((tx) => {
+    const tl = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.12, 0.05), taillightMat);
+    tl.position.set(tx, 0.62, -length * 0.5 - 0.02);
+    group.add(tl);
+  });
+
+  return group;
+}
+
+// ---------------------------------------------------------------------
+// MAIN COMPONENT
+// ---------------------------------------------------------------------
 export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
   activeDept,
   onSelectDept,
@@ -210,12 +549,15 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const [timeOfDay, setTimeOfDay] = useState<'sunset' | 'day' | 'night'>('day');
+  // Default to 'sunset' (Twilight Dusk) to exactly match Image 1!
+  const [timeOfDay, setTimeOfDay] = useState<'sunset' | 'day' | 'night'>('sunset');
+  const [displayMode, setDisplayMode] = useState<'3d-model' | 'photoreal'>('3d-model');
   const [autoRotate, setAutoRotate] = useState<boolean>(true);
   const [tooltipData, setTooltipData] = useState<HoverTooltipData | null>(null);
   const [activeSector, setActiveSector] = useState<string>('forecourt');
+  const [selectedPhotorealHotspot, setSelectedPhotorealHotspot] = useState<PhotorealHotspot | null>(null);
 
-  // Three.js internal references
+  // Three.js runtime refs
   const controlsRef = useRef<OrbitControls | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
@@ -223,11 +565,6 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
   const interactiveObjectsRef = useRef<THREE.Mesh[]>([]);
   const hoveredMeshRef = useRef<THREE.Mesh | null>(null);
 
-  // Particles references
-  const dustParticlesRef = useRef<THREE.Points | null>(null);
-  const dustVelocitiesRef = useRef<{ vx: number; vy: number; vz: number }[]>([]);
-
-  // Consolidated High-Performance Lighting references (eliminates 11+ duplicate light calculations)
   const lightsRef = useRef<{
     ambient: THREE.AmbientLight;
     dir: THREE.DirectionalLight;
@@ -235,133 +572,197 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
     forecourtLight: THREE.PointLight;
     totemLight: THREE.PointLight;
     buildingLight: THREE.PointLight;
+    soffitLights: THREE.PointLight[];
   } | null>(null);
 
-  // Camera animation interpolation
   const targetCamPosRef = useRef<THREE.Vector3 | null>(null);
   const targetLookAtRef = useRef<THREE.Vector3 | null>(null);
 
-  // Update Environment Lighting based on selected time of day
+  // Hotspots for the Photoreal Architectural Twin (Matching Image 1)
+  const photorealHotspots: PhotorealHotspot[] = [
+    {
+      id: 'hs-canopy',
+      deptId: 'oil-gas',
+      xPercent: 32,
+      yPercent: 32,
+      title: 'Architectural Geometric LED Canopy',
+      tag: 'FLAGSHIP ROOF · 16 NOZZLES',
+      description: 'Ultra-modern high-clearance canopy with illuminated chevron fascia and signature diamond-grid recessed LED ceiling channels.',
+      stat: '16 High-Flow DPR Dispensers'
+    },
+    {
+      id: 'hs-pumps',
+      deptId: 'oil-gas',
+      xPercent: 38,
+      yPercent: 74,
+      title: 'Digital High-Speed Dispensers & Fleet Attendants',
+      tag: 'CERTIFIED METERS · ZERO SHORT-CHANGE',
+      description: 'Trained station attendants dispensing certified PMS, AGO, and DPK with electronic tamper-proof digital meters.',
+      stat: 'PMS ₦710/L · AGO ₦1,050/L'
+    },
+    {
+      id: 'hs-cafe',
+      deptId: 'kitchen',
+      xPercent: 62,
+      yPercent: 60,
+      title: 'Masters Café & Espresso Bar',
+      tag: 'GROUND FLOOR CULINARY',
+      description: 'Artisan coffee, fresh meat pies, pastries, cold juices, and gourmet breakfast for transit travelers.',
+      stat: 'Open 6:00 AM – Midnight'
+    },
+    {
+      id: 'hs-restaurant',
+      deptId: 'kitchen',
+      xPercent: 72,
+      yPercent: 60,
+      title: 'Masters Bar & Restaurant',
+      tag: 'AUTHENTIC DINE-IN HALL',
+      description: 'Air-conditioned dining lounge serving hot authentic Ofe Owerri, party jollof rice, pepper soup, and chilled drinks.',
+      stat: 'Lunch & Dinner Full Service'
+    },
+    {
+      id: 'hs-store',
+      deptId: 'oil-gas',
+      xPercent: 84,
+      yPercent: 60,
+      title: '24/7 Mega Convenience Store & Mini-Mart',
+      tag: 'RETAIL SUPERMARKET',
+      description: 'Fully stocked forecourt supermarket with groceries, ice-cold beverages, automotive engine oils, and travel accessories.',
+      stat: 'Open 24 Hours Daily'
+    },
+    {
+      id: 'hs-totem',
+      deptId: 'oil-gas',
+      xPercent: 3,
+      yPercent: 55,
+      title: 'Roadside LED Price Totem Billboard',
+      tag: 'HIGHWAY BEACON · TRANSPARENCY',
+      description: 'High-visibility digital LED rate totem along Aba-Owerri Expressway for incoming highway motorists.',
+      stat: '24/7 Calibrated Live Rates'
+    }
+  ];
+
+  // Update lighting to match Image 1's Twilight Blue Hour
   const updateEnvironmentLighting = useCallback((time: 'sunset' | 'day' | 'night') => {
     if (!sceneRef.current || !lightsRef.current) return;
-    const {
-      ambient,
-      dir,
-      hemi,
-      forecourtLight,
-      totemLight,
-      buildingLight
-    } = lightsRef.current;
+    const { ambient, dir, hemi, forecourtLight, totemLight, buildingLight, soffitLights } = lightsRef.current;
 
     if (time === 'sunset') {
-      // Warm golden dusk corporate aesthetic
-      sceneRef.current.background = new THREE.Color(0xffedd5);
-      sceneRef.current.fog = new THREE.FogExp2(0xfed7aa, 0.012);
+      // TWILIGHT / DUSK BLUE HOUR (Exact Aesthetic of Image 1)
+      sceneRef.current.background = new THREE.Color(0x131d2e);
+      sceneRef.current.fog = new THREE.FogExp2(0x131d2e, 0.009);
 
-      ambient.color.setHex(0xffedd5);
-      ambient.intensity = 1.0;
+      ambient.color.setHex(0x1e2d4d);
+      ambient.intensity = 0.85;
 
       hemi.color.setHex(0xf59e0b);
-      hemi.groundColor.setHex(0x334155);
-      hemi.intensity = 0.8;
+      hemi.groundColor.setHex(0x0f172a);
+      hemi.intensity = 0.65;
 
       dir.color.setHex(0xf59e0b);
-      dir.intensity = 2.6;
-      dir.position.set(24, 16, 20);
+      dir.intensity = 2.2;
+      dir.position.set(28, 18, -15);
 
-      forecourtLight.intensity = 2.8;
-      forecourtLight.color.setHex(0xfffaed);
+      forecourtLight.intensity = 4.8;
+      forecourtLight.color.setHex(0xffffff);
 
-      totemLight.intensity = 2.5;
-      totemLight.color.setHex(0xf59e0b);
+      totemLight.intensity = 3.2;
+      totemLight.color.setHex(0x38bdf8);
 
-      buildingLight.intensity = 2.2;
-      buildingLight.color.setHex(0xf97316);
+      buildingLight.intensity = 3.8;
+      buildingLight.color.setHex(0xfed7aa);
+
+      soffitLights.forEach((sl) => {
+        sl.intensity = 3.2;
+        sl.color.setHex(0xffffff);
+      });
     } else if (time === 'day') {
-      // Crisp daylight in clean White & Yellow luxury aesthetic (Primary Theme)
+      // Crisp daylight
       sceneRef.current.background = new THREE.Color(0xf1f5f9);
-      sceneRef.current.fog = new THREE.FogExp2(0xf1f5f9, 0.011);
+      sceneRef.current.fog = new THREE.FogExp2(0xf1f5f9, 0.009);
 
       ambient.color.setHex(0xffffff);
-      ambient.intensity = 1.25;
+      ambient.intensity = 1.3;
 
       hemi.color.setHex(0xffffff);
       hemi.groundColor.setHex(0xe2e8f0);
-      hemi.intensity = 0.95;
+      hemi.intensity = 0.9;
 
       dir.color.setHex(0xfffbeb);
-      dir.intensity = 2.9;
+      dir.intensity = 3.2;
       dir.position.set(20, 32, 16);
 
-      forecourtLight.intensity = 1.8;
+      forecourtLight.intensity = 2.2;
       forecourtLight.color.setHex(0xffffff);
 
-      totemLight.intensity = 2.4;
-      totemLight.color.setHex(0xf59e0b);
+      totemLight.intensity = 2.2;
+      totemLight.color.setHex(0x38bdf8);
 
-      buildingLight.intensity = 1.8;
-      buildingLight.color.setHex(0xf59e0b);
+      buildingLight.intensity = 1.6;
+      buildingLight.color.setHex(0xfed7aa);
+
+      soffitLights.forEach((sl) => {
+        sl.intensity = 1.8;
+        sl.color.setHex(0xffffff);
+      });
     } else {
-      // Midnight illumination with vibrant illuminated branding
-      sceneRef.current.background = new THREE.Color(0x060913);
-      sceneRef.current.fog = new THREE.FogExp2(0x060913, 0.016);
+      // Midnight Illumination
+      sceneRef.current.background = new THREE.Color(0x050811);
+      sceneRef.current.fog = new THREE.FogExp2(0x050811, 0.015);
 
-      ambient.color.setHex(0x1e293b);
-      ambient.intensity = 0.55;
+      ambient.color.setHex(0x0f172a);
+      ambient.intensity = 0.45;
 
       hemi.color.setHex(0x38bdf8);
-      hemi.groundColor.setHex(0x0f172a);
-      hemi.intensity = 0.45;
+      hemi.groundColor.setHex(0x020617);
+      hemi.intensity = 0.35;
 
       dir.color.setHex(0x38bdf8);
-      dir.intensity = 0.8;
+      dir.intensity = 0.6;
       dir.position.set(12, 22, 12);
 
-      forecourtLight.intensity = 4.2;
+      forecourtLight.intensity = 6.2;
       forecourtLight.color.setHex(0xffffff);
 
-      totemLight.intensity = 3.8;
-      totemLight.color.setHex(0xf59e0b);
+      totemLight.intensity = 4.5;
+      totemLight.color.setHex(0x00e5ff);
 
-      buildingLight.intensity = 3.4;
-      buildingLight.color.setHex(0x38bdf8);
+      buildingLight.intensity = 4.8;
+      buildingLight.color.setHex(0xfbbf24);
+
+      soffitLights.forEach((sl) => {
+        sl.intensity = 4.2;
+        sl.color.setHex(0xffffff);
+      });
     }
   }, []);
 
-  // Smoothly glide camera to sector
+  // Smooth camera glide
   const focusCamera = (sectorId: string) => {
     setActiveSector(sectorId);
 
     const targetPos = new THREE.Vector3();
     const targetLook = new THREE.Vector3();
 
-    if (sectorId === 'overview') {
-      targetLook.set(0, 1.8, 0);
-      targetPos.set(24, 18, 28);
-    } else if (sectorId === 'forecourt' || sectorId === 'oil-gas') {
-      targetLook.set(0, 2.2, 5);
-      targetPos.set(5, 5.2, 15);
+    if (sectorId === 'forecourt' || sectorId === 'oil-gas') {
+      targetLook.set(0, 2.5, 4.5);
+      targetPos.set(4, 5.8, 19);
       onSelectDept('oil-gas');
-    } else if (sectorId === 'totem') {
-      targetLook.set(-11, 4.2, 11);
-      targetPos.set(-7, 5.2, 18);
+    } else if (sectorId === 'canopy') {
+      targetLook.set(0, 5.2, 5.0);
+      targetPos.set(0, 3.2, 15);
       onSelectDept('oil-gas');
-    } else if (sectorId === 'kitchen') {
-      targetLook.set(-6, 2.2, -2);
-      targetPos.set(-10, 4.2, 7);
+    } else if (sectorId === 'store' || sectorId === 'kitchen') {
+      targetLook.set(9.5, 3.2, -1.0);
+      targetPos.set(12, 5.5, 12);
       onSelectDept('kitchen');
-    } else if (sectorId === 'lounge') {
-      targetLook.set(-4, 5.8, -4);
-      targetPos.set(-4, 7.5, 6);
-      onSelectDept('lounge');
-    } else if (sectorId === 'carwash') {
-      targetLook.set(9.5, 2.0, -1);
-      targetPos.set(13.5, 4.2, 5);
-      onSelectDept('carwash');
-    } else if (sectorId === 'garden') {
-      targetLook.set(6.5, 1.6, 7.5);
-      targetPos.set(9.5, 4.2, 14);
-      onSelectDept('garden');
+    } else if (sectorId === 'totem') {
+      targetLook.set(-13, 4.5, 11);
+      targetPos.set(-9, 5.5, 19);
+      onSelectDept('oil-gas');
+    } else if (sectorId === 'overview') {
+      targetLook.set(2, 2.2, 2);
+      targetPos.set(26, 18, 30);
     }
 
     targetCamPosRef.current = targetPos;
@@ -371,29 +772,29 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
   useEffect(() => {
     const container = containerRef.current;
     const canvas = canvasRef.current;
-    if (!container || !canvas) return;
+    if (!container || !canvas || displayMode !== '3d-model') return;
 
-    // 1. SCENE - Daylight White & Yellow Aesthetic
+    // 1. SCENE
     const scene = new THREE.Scene();
     sceneRef.current = scene;
-    scene.background = new THREE.Color(0xf1f5f9);
-    scene.fog = new THREE.FogExp2(0xf1f5f9, 0.011);
+    scene.background = new THREE.Color(0x131d2e);
+    scene.fog = new THREE.FogExp2(0x131d2e, 0.009);
 
     // 2. CAMERA
     const width = container.clientWidth;
     const height = container.clientHeight;
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 200);
-    camera.position.set(20, 15, 24);
+    const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 260);
+    camera.position.set(22, 15, 27);
     cameraRef.current = camera;
 
-    // 3. RENDERER WITH ACES FILMIC TONE MAPPING & PMREM
+    // 3. RENDERER
     const renderer = new THREE.WebGLRenderer({
       canvas,
       antialias: true,
       powerPreference: 'high-performance'
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.15;
@@ -401,76 +802,73 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     rendererRef.current = renderer;
 
-    // Procedural Studio Environment Reflection for PBR Metals & Glass
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
     scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
     pmremGenerator.dispose();
 
-    // 4. ORBITCONTROLS (Allows natural mouse wheel and gesture page scrolling)
+    // 4. ORBITCONTROLS
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.maxPolarAngle = Math.PI / 2.06; // Prevent underground clipping
+    controls.maxPolarAngle = Math.PI / 2.04;
     controls.minDistance = 6;
-    controls.maxDistance = 65;
-    controls.target.set(0, 1.8, 0);
+    controls.maxDistance = 75;
+    controls.target.set(1.5, 2.6, 3.5);
     controls.autoRotate = autoRotate;
-    controls.autoRotateSpeed = 0.8;
-    controls.enableZoom = false; // Critical: allows mouse wheel & trackpad to scroll down to other content
+    controls.autoRotateSpeed = 0.6;
+    controls.enableZoom = false;
     controls.enablePan = false;
     controlsRef.current = controls;
 
-    // 5. LIGHTING SETUP (Consolidated for fast 60fps forward rendering in Daylight)
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.25);
+    // 5. LIGHTING SETUP
+    const ambientLight = new THREE.AmbientLight(0x1e2d4d, 0.85);
     scene.add(ambientLight);
 
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xe2e8f0, 0.95);
+    const hemiLight = new THREE.HemisphereLight(0xf59e0b, 0x0f172a, 0.65);
     scene.add(hemiLight);
 
-    const dirLight = new THREE.DirectionalLight(0xfffbeb, 2.9);
-    dirLight.position.set(20, 32, 16);
+    const dirLight = new THREE.DirectionalLight(0xf59e0b, 2.2);
+    dirLight.position.set(28, 18, -15);
     dirLight.castShadow = true;
-    dirLight.shadow.mapSize.width = 512;
-    dirLight.shadow.mapSize.height = 512;
+    dirLight.shadow.mapSize.width = 1024;
+    dirLight.shadow.mapSize.height = 1024;
     dirLight.shadow.camera.near = 0.5;
-    dirLight.shadow.camera.far = 70;
-    dirLight.shadow.camera.left = -22;
-    dirLight.shadow.camera.right = 22;
-    dirLight.shadow.camera.top = 22;
-    dirLight.shadow.camera.bottom = -22;
+    dirLight.shadow.camera.far = 80;
+    dirLight.shadow.camera.left = -25;
+    dirLight.shadow.camera.right = 25;
+    dirLight.shadow.camera.top = 25;
+    dirLight.shadow.camera.bottom = -25;
     dirLight.shadow.bias = -0.001;
     scene.add(dirLight);
 
-    // Recessed Canopy Underside Glowing Rings (Emissive bright fixtures)
-    [
-      [-3.8, 4.4, 3.2],
-      [-3.8, 4.4, 6.8],
-      [3.8, 4.4, 3.2],
-      [3.8, 4.4, 6.8],
-      [0, 4.4, 3.2],
-      [0, 4.4, 6.8]
-    ].forEach(([x, y, z]) => {
-      const ringGeo = new THREE.CylinderGeometry(0.32, 0.32, 0.05, 12);
-      const ringMat = new THREE.MeshBasicMaterial({ color: 0xfffaed });
-      const ring = new THREE.Mesh(ringGeo, ringMat);
-      ring.position.set(x, 4.12, z);
-      scene.add(ring);
-    });
-
-    // Central Forecourt Warm Point Light (Bathes all pumps and vehicles evenly)
-    const forecourtLight = new THREE.PointLight(0xfffaed, 3.6, 22, 1.4);
-    forecourtLight.position.set(0, 4.2, 5.0);
+    // Central Forecourt Downlight
+    const forecourtLight = new THREE.PointLight(0xffffff, 4.8, 26, 1.4);
+    forecourtLight.position.set(0, 5.2, 5.0);
     scene.add(forecourtLight);
 
-    // Roadside Totem Point Light (Glows over highway entrance)
-    const totemLight = new THREE.PointLight(0xf59e0b, 2.8, 14, 1.5);
-    totemLight.position.set(-11, 4.5, 11);
+    // Totem Light
+    const totemLight = new THREE.PointLight(0x38bdf8, 3.2, 16, 1.5);
+    totemLight.position.set(-13, 5.2, 11);
     scene.add(totemLight);
 
-    // Facility Building Warm Accent Light (Illuminates Kitchen, Lounge & Car Wash)
-    const buildingLight = new THREE.PointLight(0xf97316, 2.6, 18, 1.4);
-    buildingLight.position.set(-4, 3.5, 0.5);
+    // Building Warm Interior Storefront Light
+    const buildingLight = new THREE.PointLight(0xfed7aa, 3.8, 22, 1.3);
+    buildingLight.position.set(9.5, 3.8, 2.0);
     scene.add(buildingLight);
+
+    // Under-Canopy Soffit Lights (Placed at 4 column heads)
+    const soffitLights: THREE.PointLight[] = [];
+    [
+      [-5.2, 4.8, 2.2],
+      [5.2, 4.8, 2.2],
+      [-5.2, 4.8, 7.8],
+      [5.2, 4.8, 7.8]
+    ].forEach(([sx, sy, sz]) => {
+      const sLight = new THREE.PointLight(0xffffff, 3.2, 14, 1.5);
+      sLight.position.set(sx, sy, sz);
+      scene.add(sLight);
+      soffitLights.push(sLight);
+    });
 
     lightsRef.current = {
       ambient: ambientLight,
@@ -478,732 +876,382 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
       hemi: hemiLight,
       forecourtLight,
       totemLight,
-      buildingLight
+      buildingLight,
+      soffitLights
     };
 
-    // 6. 3D ARCHITECTURAL GEOMETRY: REAL PHYSICAL NIGERIAN MEGA HUB
+    // 6. BUILD HIGH-FIDELITY 3D ARCHITECTURAL ASSETS (MATCHING IMAGE 1)
     const interactiveObjects: THREE.Mesh[] = [];
 
-    // Tarmac Ground Plane with Realistic Clean Asphalt Finish
-    const groundGeo = new THREE.PlaneGeometry(80, 80);
+    // Tarmac Ground Plane
+    const groundGeo = new THREE.PlaneGeometry(90, 90);
     const groundMat = new THREE.MeshStandardMaterial({
-      color: 0x334155,
-      roughness: 0.76,
-      metalness: 0.12
+      color: 0x141822,
+      roughness: 0.72,
+      metalness: 0.22
     });
     const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.rotation.x = -Math.PI / 2;
     ground.receiveShadow = true;
     scene.add(ground);
 
-    // Concrete Highway Entry Curb & Apron
-    const curbGeo = new THREE.BoxGeometry(34, 0.22, 1.4);
-    const curbMat = new THREE.MeshStandardMaterial({
-      color: 0x94a3b8,
-      roughness: 0.65,
-      metalness: 0.2
-    });
+    // Concrete Highway Apron & Entry Curb
+    const curbGeo = new THREE.BoxGeometry(42, 0.22, 1.6);
+    const curbMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.65, metalness: 0.2 });
     const curb = new THREE.Mesh(curbGeo, curbMat);
-    curb.position.set(0, 0.11, 12);
+    curb.position.set(0, 0.11, 14.5);
     curb.receiveShadow = true;
     scene.add(curb);
 
-    // Road Markings: Orange pump bay divider lanes & White pedestrian crossing
-    const orangeLaneMat = new THREE.MeshBasicMaterial({ color: 0xef4444 });
-    const whiteCrossingMat = new THREE.MeshBasicMaterial({ color: 0xf8fafc });
-
-    [-6.2, -1.0, 1.0, 6.2].forEach(lx => {
-      const line = new THREE.Mesh(new THREE.PlaneGeometry(0.14, 9.5), orangeLaneMat);
+    // Crisp Painted Road Markings: Directional Arrows & Pump Bays
+    const whiteMarkingMat = new THREE.MeshBasicMaterial({ color: 0xf8fafc });
+    [-7.8, -2.6, 2.6, 7.8].forEach((lx) => {
+      const line = new THREE.Mesh(new THREE.PlaneGeometry(0.18, 12), whiteMarkingMat);
       line.rotation.x = -Math.PI / 2;
       line.position.set(lx, 0.02, 5.0);
       scene.add(line);
     });
 
-    // Zebra safety pedestrian crossing from building to pumps
-    for (let z = 0; z < 7; z++) {
-      const stripe = new THREE.Mesh(new THREE.PlaneGeometry(2.0, 0.38), whiteCrossingMat);
+    // Zebra pedestrian crossing leading to convenience store & café
+    for (let z = 0; z < 8; z++) {
+      const stripe = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 0.42), whiteMarkingMat);
       stripe.rotation.x = -Math.PI / 2;
-      stripe.position.set(-2.5, 0.02, 0.0 + z * 0.62);
+      stripe.position.set(5.5, 0.02, -0.5 + z * 0.72);
       scene.add(stripe);
     }
 
-    // A. OVERHEAD FUELING CANOPY STRUCTURE (Double-Tier Modern Architectural Design in White & Orange)
-    const canopyRoofGeo = new THREE.BoxGeometry(16.5, 0.85, 12.5);
+    // A. ULTRA-MODERN CANOPY (MATCHING IMAGE 1)
+    const canopyWidth = 22.5;
+    const canopyDepth = 15.0;
+    const canopyHeight = 0.65;
+
+    // Main Canopy Box Body
+    const canopyRoofGeo = new THREE.BoxGeometry(canopyWidth, canopyHeight, canopyDepth);
     const canopyRoofMat = new THREE.MeshStandardMaterial({
-      color: 0xf8fafc,
-      roughness: 0.25,
-      metalness: 0.5
+      color: 0x0a0f1d,
+      roughness: 0.22,
+      metalness: 0.75
     });
     const canopy = new THREE.Mesh(canopyRoofGeo, canopyRoofMat);
-    canopy.position.set(0, 4.6, 5);
+    canopy.position.set(0, 5.4, 5.0);
     canopy.castShadow = true;
     canopy.receiveShadow = true;
     canopy.userData = {
-      name: 'Master Energy Forecourt Canopy',
-      desc: 'Double-tier high-clearance canopy with 16 high-speed digital dispenser nozzles',
-      tag: '16 NOZZLES · DPR CALIBRATED',
+      name: 'Master Energy Architectural Canopy',
+      desc: 'High-clearance modern canopy with illuminated chevrons and geometric recessed diamond ceiling lights',
+      tag: '16 NOZZLES · DPR CERTIFIED',
       dept: 'oil-gas'
     };
     scene.add(canopy);
     interactiveObjects.push(canopy);
 
-    // Glowing Neon Brand Fascia Trim (Master Energy Deep Logo Orange)
-    const fasciaGeo = new THREE.BoxGeometry(16.7, 0.45, 12.7);
-    const fasciaMat = new THREE.MeshStandardMaterial({
-      color: 0x1e3a8a,
-      emissive: 0x172554,
-      emissiveIntensity: 0.88,
-      roughness: 0.2,
-      metalness: 0.5
+    // Glowing Neon Perimeter Border Ribbon (Running along the outer edge)
+    const rimGeo = new THREE.BoxGeometry(canopyWidth + 0.15, 0.12, canopyDepth + 0.15);
+    const rimMat = new THREE.MeshStandardMaterial({
+      color: 0x38bdf8,
+      emissive: 0x00e5ff,
+      emissiveIntensity: 0.95
     });
-    const canopyFascia = new THREE.Mesh(fasciaGeo, fasciaMat);
-    canopyFascia.position.set(0, 4.6, 5);
-    scene.add(canopyFascia);
+    const rimTop = new THREE.Mesh(rimGeo, rimMat);
+    rimTop.position.set(0, 5.4 + canopyHeight / 2, 5.0);
+    scene.add(rimTop);
 
-    // PROMINENT "MASTER ENERGY" BRAND SIGNAGE ON CANOPY FASCIA (Front & Rear)
-    const canopySignTex = createCanopySignTexture('MASTER ENERGY', 'NAZE MEGA HUB · IMO STATE');
-    const canopySignGeo = new THREE.PlaneGeometry(16.2, 0.72);
-    const canopySignMat = new THREE.MeshBasicMaterial({
-      map: canopySignTex,
+    const rimBottom = new THREE.Mesh(rimGeo, rimMat);
+    rimBottom.position.set(0, 5.4 - canopyHeight / 2, 5.0);
+    scene.add(rimBottom);
+
+    // Fascia Billboard Texture (Front & Sides)
+    const fasciaTex = createModernCanopyFasciaTexture();
+    const fasciaGeoFront = new THREE.PlaneGeometry(canopyWidth, canopyHeight - 0.04);
+    const fasciaMat = new THREE.MeshBasicMaterial({ map: fasciaTex, toneMapped: false });
+
+    // Front Face (Facing highway entrance)
+    const fasciaFront = new THREE.Mesh(fasciaGeoFront, fasciaMat);
+    fasciaFront.position.set(0, 5.4, 5.0 + canopyDepth / 2 + 0.02);
+    scene.add(fasciaFront);
+
+    // Rear Face
+    const fasciaRear = new THREE.Mesh(fasciaGeoFront, fasciaMat);
+    fasciaRear.position.set(0, 5.4, 5.0 - canopyDepth / 2 - 0.02);
+    fasciaRear.rotation.y = Math.PI;
+    scene.add(fasciaRear);
+
+    // Left Side Face
+    const fasciaGeoSide = new THREE.PlaneGeometry(canopyDepth, canopyHeight - 0.04);
+    const fasciaLeft = new THREE.Mesh(fasciaGeoSide, fasciaMat);
+    fasciaLeft.position.set(-canopyWidth / 2 - 0.02, 5.4, 5.0);
+    fasciaLeft.rotation.y = -Math.PI / 2;
+    scene.add(fasciaLeft);
+
+    // Right Side Face
+    const fasciaRight = new THREE.Mesh(fasciaGeoSide, fasciaMat);
+    fasciaRight.position.set(canopyWidth / 2 + 0.02, 5.4, 5.0);
+    fasciaRight.rotation.y = Math.PI / 2;
+    scene.add(fasciaRight);
+
+    // CANOPY SOFFIT CEILING WITH GEOMETRIC DIAMOND RECESSED LED CHANNELS
+    const ceilingTex = createGeometricCeilingTexture();
+    const ceilingGeo = new THREE.PlaneGeometry(canopyWidth - 0.1, canopyDepth - 0.1);
+    const ceilingMat = new THREE.MeshBasicMaterial({
+      map: ceilingTex,
       toneMapped: false
     });
+    const ceiling = new THREE.Mesh(ceilingGeo, ceilingMat);
+    ceiling.position.set(0, 5.4 - canopyHeight / 2 - 0.01, 5.0);
+    ceiling.rotation.x = Math.PI / 2;
+    scene.add(ceiling);
 
-    // Front Face (Facing highway entrance & drivers)
-    const canopySignFront = new THREE.Mesh(canopySignGeo, canopySignMat);
-    canopySignFront.position.set(0, 4.65, 11.38);
-    scene.add(canopySignFront);
-
-    // Rear Face (Facing restaurant & lounge exit)
-    const canopySignRear = new THREE.Mesh(canopySignGeo, canopySignMat);
-    canopySignRear.position.set(0, 4.65, -1.38);
-    canopySignRear.rotation.y = Math.PI;
-    scene.add(canopySignRear);
-
-    // ROOFTOP ENTRANCE ARCH SIGNBOARD (Prominently displays MASTER ENERGY above roof)
-    const roofArchGeo = new THREE.BoxGeometry(11.0, 1.4, 0.3);
-    const roofArchMat = new THREE.MeshStandardMaterial({
-      color: 0x1e3a8a,
-      roughness: 0.2,
-      metalness: 0.6
+    // 4 Modern Cylindrical Canopy Columns with Flared Illuminated Capitals
+    const columnGeo = new THREE.CylinderGeometry(0.34, 0.34, 5.0, 24);
+    const columnMat = new THREE.MeshStandardMaterial({
+      color: 0x94a3b8,
+      metalness: 0.88,
+      roughness: 0.2
     });
-    const roofArch = new THREE.Mesh(roofArchGeo, roofArchMat);
-    roofArch.position.set(0, 5.75, 10.8);
-    scene.add(roofArch);
-
-    const roofSignTex = createCanopySignTexture('MASTER ENERGY', 'FLAGSHIP FUELING & LIFESTYLE COMPLEX');
-    const roofSignFace = new THREE.Mesh(
-      new THREE.PlaneGeometry(10.8, 1.25),
-      new THREE.MeshBasicMaterial({ map: roofSignTex, toneMapped: false })
-    );
-    roofSignFace.position.set(0, 5.75, 10.96);
-    scene.add(roofSignFace);
-
-    // Master Energy Illuminated Under-Canopy Logo Crest
-    const logoBlock = new THREE.Mesh(
-      new THREE.BoxGeometry(3.5, 0.3, 0.1),
-      new THREE.MeshStandardMaterial({
-        color: 0xffffff,
-        emissive: 0xffedd5,
-        emissiveIntensity: 0.95
-      })
-    );
-    logoBlock.position.set(0, 4.6, 11.36);
-    scene.add(logoBlock);
-
-    // 4 Heavy-Duty Brushed Steel & Concrete Canopy Support Columns
-    const pillarGeo = new THREE.CylinderGeometry(0.36, 0.36, 4.6, 18);
-    const pillarMat = new THREE.MeshStandardMaterial({
-      color: 0xcbd5e1,
-      metalness: 0.85,
-      roughness: 0.22
-    });
-    const orangeBollardMat = new THREE.MeshStandardMaterial({
-      color: 0xdc2626,
-      roughness: 0.4
+    const capitalMat = new THREE.MeshStandardMaterial({
+      color: 0x38bdf8,
+      emissive: 0x0284c7,
+      emissiveIntensity: 0.75
     });
 
     [
-      [-4.8, 2.3, 2.5],
-      [4.8, 2.3, 2.5],
-      [-4.8, 2.3, 7.5],
-      [4.8, 2.3, 7.5]
-    ].forEach(([x, y, z]) => {
-      const pillar = new THREE.Mesh(pillarGeo, pillarMat);
-      pillar.position.set(x, y, z);
-      pillar.castShadow = true;
-      scene.add(pillar);
+      [-5.2, 2.5, 2.2],
+      [5.2, 2.5, 2.2],
+      [-5.2, 2.5, 7.8],
+      [5.2, 2.5, 7.8]
+    ].forEach(([cx, cy, cz]) => {
+      const col = new THREE.Mesh(columnGeo, columnMat);
+      col.position.set(cx, cy, cz);
+      col.castShadow = true;
+      scene.add(col);
 
-      // Orange collision safety collar at pillar base
-      const collar = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.65, 16), orangeBollardMat);
-      collar.position.set(x, 0.32, z);
-      scene.add(collar);
+      // Flared capital connecting column head to geometric ceiling
+      const cap = new THREE.Mesh(new THREE.ConeGeometry(0.85, 0.45, 16), capitalMat);
+      cap.position.set(cx, 5.0, cz);
+      scene.add(cap);
+
+      // Crimson safety base bollard collar
+      const bollard = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.48, 0.48, 0.7, 16),
+        new THREE.MeshStandardMaterial({ color: 0xdc2626, roughness: 0.4 })
+      );
+      bollard.position.set(cx, 0.35, cz);
+      scene.add(bollard);
     });
 
-    // B. PUMP ISLANDS & 4 DUAL-SIDED DIGITAL DISPENSERS WITH HOSES & NOZZLES
-    const islandGeo = new THREE.BoxGeometry(2.0, 0.26, 8.2);
-    const islandMat = new THREE.MeshStandardMaterial({
-      color: 0x94a3b8,
-      roughness: 0.55,
-      metalness: 0.3
-    });
+    // B. PUMP ISLANDS & MODERN DIGITAL DISPENSERS
+    const islandGeo = new THREE.BoxGeometry(2.2, 0.28, 9.6);
+    const islandMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.55, metalness: 0.3 });
 
     const islandL = new THREE.Mesh(islandGeo, islandMat);
-    islandL.position.set(-3.2, 0.13, 5);
+    islandL.position.set(-5.2, 0.14, 5.0);
     scene.add(islandL);
 
     const islandR = new THREE.Mesh(islandGeo, islandMat);
-    islandR.position.set(3.2, 0.13, 5);
+    islandR.position.set(5.2, 0.14, 5.0);
     scene.add(islandR);
 
-    // Orange protection bollards at the ends of each pump island
-    [
-      [-3.2, 0.5, 1.2],
-      [-3.2, 0.5, 8.8],
-      [3.2, 0.5, 1.2],
-      [3.2, 0.5, 8.8]
-    ].forEach(([bx, by, bz]) => {
-      const bMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.9, 12), orangeBollardMat);
-      bMesh.position.set(bx, by, bz);
-      scene.add(bMesh);
-    });
-
-    // 4 Digital Fuel Dispensers with Hose Bevels
+    // 4 Digital Dispensers with LED screens and hoses
     const dispensersData = [
-      {
-        pos: [-3.2, 1.15, 3.2],
-        name: 'PMS High-Flow Dispenser (Nozzles 01-04)',
-        desc: 'Certified DPR digital volume meters · Tamper-proof electronic calibration',
-        tag: 'PMS: ₦710 / Liter',
-        dept: 'oil-gas'
-      },
-      {
-        pos: [-3.2, 1.15, 6.8],
-        name: 'PMS Fast Commercial Pump (Nozzles 05-08)',
-        desc: 'High-speed flow for commercial transit buses, SUVs and cars',
-        tag: 'PMS: ₦710 / Liter',
-        dept: 'oil-gas'
-      },
-      {
-        pos: [3.2, 1.15, 3.2],
-        name: 'AGO Commercial Heavy Diesel Pump (Nozzles 09-12)',
-        desc: 'High-flow commercial diesel nozzles for trucks, heavy generators & fleet buses',
-        tag: 'AGO: ₦1,050 / Liter',
-        dept: 'oil-gas'
-      },
-      {
-        pos: [3.2, 1.15, 6.8],
-        name: 'DPK Household Kerosene & Cylinder LPG (Nozzles 13-16)',
-        desc: 'Domestic household kerosene and precision weight LPG gas refilling',
-        tag: 'DPK: ₦890 / Liter · LPG: ₦1,250 / Kg',
-        dept: 'oil-gas'
-      }
+      { pos: [-5.2, 1.25, 2.8], name: 'PMS Dispenser Bay 1-4', tag: 'PMS: ₦710/L' },
+      { pos: [-5.2, 1.25, 7.2], name: 'PMS Fast Dispenser Bay 5-8', tag: 'PMS: ₦710/L' },
+      { pos: [5.2, 1.25, 2.8], name: 'AGO Commercial Heavy Diesel Bay 9-12', tag: 'AGO: ₦1,050/L' },
+      { pos: [5.2, 1.25, 7.2], name: 'DPK Kerosene & LPG Gas Bay 13-16', tag: 'DPK: ₦1,150/L' }
     ];
 
-    const dispenserBodyGeo = new THREE.BoxGeometry(0.95, 2.05, 0.95);
-    const hoseMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.9 });
-    const nozzleMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.9, roughness: 0.2 });
-
-    dispensersData.forEach(item => {
-      const pMat = new THREE.MeshStandardMaterial({
-        color: 0x1e293b,
-        metalness: 0.75,
-        roughness: 0.22,
-        emissive: 0x0f172a,
-        emissiveIntensity: 0.25
-      });
-      const dispenser = new THREE.Mesh(dispenserBodyGeo, pMat);
-      dispenser.position.set(item.pos[0], item.pos[1], item.pos[2]);
-      dispenser.castShadow = true;
-      dispenser.userData = {
-        name: item.name,
-        desc: item.desc,
-        tag: item.tag,
-        dept: item.dept,
-        defaultEmissive: 0x0f172a
-      };
-      scene.add(dispenser);
-      interactiveObjects.push(dispenser);
-
-      // Backlit Digital LCD Volume Display
-      const lcdScreen = new THREE.Mesh(
-        new THREE.PlaneGeometry(0.48, 0.32),
-        new THREE.MeshBasicMaterial({ color: 0x10b981 })
-      );
-      const isLeft = item.pos[0] < 0;
-      lcdScreen.position.set(item.pos[0] + (isLeft ? 0.49 : -0.49), item.pos[1] + 0.38, item.pos[2]);
-      lcdScreen.rotation.y = isLeft ? Math.PI / 2 : -Math.PI / 2;
-      scene.add(lcdScreen);
-
-      // Hanging flexible black rubber fuel hoses
-      const hoseCurve = new THREE.CubicBezierCurve3(
-        new THREE.Vector3(item.pos[0] + (isLeft ? 0.4 : -0.4), item.pos[1] + 0.75, item.pos[2] - 0.25),
-        new THREE.Vector3(item.pos[0] + (isLeft ? 0.75 : -0.75), item.pos[1] + 0.1, item.pos[2] - 0.3),
-        new THREE.Vector3(item.pos[0] + (isLeft ? 0.75 : -0.75), item.pos[1] + 0.05, item.pos[2] + 0.1),
-        new THREE.Vector3(item.pos[0] + (isLeft ? 0.48 : -0.48), item.pos[1] + 0.4, item.pos[2] + 0.2)
-      );
-      const hoseGeo = new THREE.TubeGeometry(hoseCurve, 14, 0.035, 8, false);
-      const hoseMesh = new THREE.Mesh(hoseGeo, hoseMat);
-      scene.add(hoseMesh);
-
-      // Fuel nozzle handle docked in holster
-      const nozzle = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.24, 0.12), nozzleMat);
-      nozzle.position.set(item.pos[0] + (isLeft ? 0.49 : -0.49), item.pos[1] + 0.42, item.pos[2] + 0.22);
-      scene.add(nozzle);
+    const dispenserBodyGeo = new THREE.BoxGeometry(0.92, 2.1, 0.92);
+    const dispenserMat = new THREE.MeshStandardMaterial({
+      color: 0x1e293b,
+      metalness: 0.8,
+      roughness: 0.22,
+      emissive: 0x0f172a,
+      emissiveIntensity: 0.2
     });
 
-    // C. ROADSIDE DIGITAL PRICING LED TOTEM BILLBOARD (Highway Entry)
-    const totemPylonGeo = new THREE.BoxGeometry(1.9, 8.5, 0.75);
+    dispensersData.forEach((d) => {
+      const pMesh = new THREE.Mesh(dispenserBodyGeo, dispenserMat);
+      pMesh.position.set(d.pos[0], d.pos[1], d.pos[2]);
+      pMesh.castShadow = true;
+      pMesh.userData = {
+        name: d.name,
+        desc: 'Certified DPR digital volume meter with electronic tamper-proof security seals.',
+        tag: d.tag,
+        dept: 'oil-gas'
+      };
+      scene.add(pMesh);
+      interactiveObjects.push(pMesh);
+
+      // Backlit Digital LED Volume Screen
+      const screen = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.52, 0.35),
+        new THREE.MeshBasicMaterial({ color: 0x10b981 })
+      );
+      screen.position.set(d.pos[0] + 0.47, d.pos[1] + 0.38, d.pos[2]);
+      screen.rotation.y = Math.PI / 2;
+      scene.add(screen);
+    });
+
+    // C. 2-STORY COMMERCIAL LIFESTYLE COMPLEX (RIGHT & REAR, MATCHING IMAGE 1)
+    const bldgWidth = 20.5;
+    const bldgHeight = 7.6;
+    const bldgDepth = 15.5;
+    const bldgX = 14.5;
+    const bldgZ = -1.5;
+
+    // Building Structure
+    const bldgBody = new THREE.Mesh(
+      new THREE.BoxGeometry(bldgWidth, bldgHeight, bldgDepth),
+      new THREE.MeshStandardMaterial({
+        color: 0x171d2b,
+        roughness: 0.35,
+        metalness: 0.55
+      })
+    );
+    bldgBody.position.set(bldgX, bldgHeight / 2, bldgZ);
+    bldgBody.castShadow = true;
+    bldgBody.receiveShadow = true;
+    bldgBody.userData = {
+      name: 'Masters Commercial Lifestyle Complex',
+      desc: 'Two-story architectural center featuring Café, Restaurant, and 24/7 Supermarket.',
+      tag: 'CAFÉ · RESTAURANT · STORE',
+      dept: 'kitchen'
+    };
+    scene.add(bldgBody);
+    interactiveObjects.push(bldgBody);
+
+    // Warm Architectural Timber/Bronze Louver Framing
+    const frameGeo = new THREE.BoxGeometry(bldgWidth + 0.2, 0.35, bldgDepth + 0.2);
+    const woodMat = new THREE.MeshStandardMaterial({
+      color: 0x78350f,
+      roughness: 0.45,
+      metalness: 0.35
+    });
+
+    const f1 = new THREE.Mesh(frameGeo, woodMat);
+    f1.position.set(bldgX, 0.18, bldgZ);
+    scene.add(f1);
+
+    const f2 = new THREE.Mesh(frameGeo, woodMat);
+    f2.position.set(bldgX, 3.8, bldgZ);
+    scene.add(f2);
+
+    const f3 = new THREE.Mesh(frameGeo, woodMat);
+    f3.position.set(bldgX, bldgHeight, bldgZ);
+    scene.add(f3);
+
+    // Ground-Floor Floor-to-Ceiling Glass Curtain Wall with Warm Interior Glow
+    const glassMat = new THREE.MeshStandardMaterial({
+      color: 0xfef08a,
+      emissive: 0xfbbf24,
+      emissiveIntensity: 0.35,
+      roughness: 0.08,
+      metalness: 0.95,
+      transparent: true,
+      opacity: 0.68
+    });
+    const groundGlass = new THREE.Mesh(new THREE.PlaneGeometry(bldgWidth - 0.4, 3.4), glassMat);
+    groundGlass.position.set(bldgX, 1.9, bldgZ + bldgDepth / 2 + 0.02);
+    scene.add(groundGlass);
+
+    // Storefront Fascia Banner: "CAFÉ", "BAR & RESTAURANT", "CONVENIENCE STORE"
+    const storeTex = createStorefrontBannerTexture();
+    const storeBanner = new THREE.Mesh(
+      new THREE.PlaneGeometry(bldgWidth - 0.4, 1.15),
+      new THREE.MeshBasicMaterial({ map: storeTex, toneMapped: false })
+    );
+    storeBanner.position.set(bldgX, 3.8 - 0.6, bldgZ + bldgDepth / 2 + 0.04);
+    scene.add(storeBanner);
+
+    // Upper-Floor Executive Glass Curtain Wall
+    const upperGlassMat = new THREE.MeshStandardMaterial({
+      color: 0x38bdf8,
+      emissive: 0x0284c7,
+      emissiveIntensity: 0.25,
+      roughness: 0.08,
+      metalness: 0.95,
+      transparent: true,
+      opacity: 0.62
+    });
+    const upperGlass = new THREE.Mesh(new THREE.PlaneGeometry(bldgWidth - 0.4, 3.4), upperGlassMat);
+    upperGlass.position.set(bldgX, 5.7, bldgZ + bldgDepth / 2 + 0.02);
+    scene.add(upperGlass);
+
+    // D. MODERN VEHICLES (DIRECTLY REPLICATING IMAGE 1)
+    // Vehicle 1: Pearl White Luxury SUV (Land Cruiser / Prado parked at Bay 1)
+    const suvWhite = createModernVehicle(0xf8fafc, true);
+    suvWhite.position.set(0, 0, 4.5);
+    suvWhite.rotation.y = -Math.PI / 18;
+    scene.add(suvWhite);
+
+    // Vehicle 2: Dark Metallic Charcoal Luxury SUV at Pump Bay 2
+    const suvDark = createModernVehicle(0x1e293b, true);
+    suvDark.position.set(-5.2, 0, 5.2);
+    scene.add(suvDark);
+
+    // Vehicle 3: Silver Sedan entering forecourt lane
+    const sedanSilver = createModernVehicle(0x94a3b8, false);
+    sedanSilver.position.set(-8.5, 0, 11.5);
+    sedanSilver.rotation.y = -Math.PI / 12;
+    scene.add(sedanSilver);
+
+    // E. ROADSIDE DIGITAL PRICE TOTEM BILLBOARD (Highway Entry)
+    const totemPylonGeo = new THREE.BoxGeometry(2.1, 9.2, 0.85);
     const totemPylonMat = new THREE.MeshStandardMaterial({
       color: 0x070a12,
       metalness: 0.85,
-      roughness: 0.18,
-      emissive: 0x000000
+      roughness: 0.18
     });
     const totemPylon = new THREE.Mesh(totemPylonGeo, totemPylonMat);
-    totemPylon.position.set(-11, 4.25, 11);
+    totemPylon.position.set(-13, 4.6, 11);
     totemPylon.castShadow = true;
     totemPylon.userData = {
       name: 'Master Energy Roadside Price Totem Billboard',
-      desc: 'Real-time DPR calibrated fuel rates: PMS ₦710 · AGO ₦1,050 · DPK ₦1,150 · LPG ₦1,400',
+      desc: 'Real-time DPR calibrated rates: PMS ₦710 · AGO ₦1,050 · DPK ₦1,150 · LPG ₦1,400',
       tag: 'PMS ₦710 · AGO ₦1,050 · DPK ₦1,150 · LPG ₦1,400',
-      dept: 'oil-gas',
-      defaultEmissive: 0x000000
+      dept: 'oil-gas'
     };
     scene.add(totemPylon);
     interactiveObjects.push(totemPylon);
 
-    // Master Energy illuminated top emblem crown
-    const totemCrown = new THREE.Mesh(
-      new THREE.BoxGeometry(2.1, 0.85, 0.85),
-      new THREE.MeshStandardMaterial({
-        color: 0x1e3a8a,
-        emissive: 0x172554,
-        emissiveIntensity: 0.95
-      })
-    );
-    totemCrown.position.set(-11, 8.45, 11);
-    scene.add(totemCrown);
-
-    // Dynamic Digital LED Price Texture (Front & Back)
+    // Dynamic Price Screen Texture
     const totemTex = createPriceTotemTexture();
-    const totemBoardGeo = new THREE.PlaneGeometry(1.72, 6.4);
-    const totemBoardMat = new THREE.MeshBasicMaterial({
-      map: totemTex,
-      toneMapped: false
-    });
+    const totemBoardGeo = new THREE.PlaneGeometry(1.88, 7.2);
+    const totemBoardMat = new THREE.MeshBasicMaterial({ map: totemTex, toneMapped: false });
 
-    // Front Face (Facing highway entrance)
     const totemFront = new THREE.Mesh(totemBoardGeo, totemBoardMat);
-    totemFront.position.set(-11, 4.4, 11.39);
+    totemFront.position.set(-13, 4.8, 11.44);
     scene.add(totemFront);
 
-    // Back Face (Facing vehicles leaving the complex)
     const totemBack = new THREE.Mesh(totemBoardGeo, totemBoardMat);
-    totemBack.position.set(-11, 4.4, 10.61);
+    totemBack.position.set(-13, 4.8, 10.56);
     totemBack.rotation.y = Math.PI;
     scene.add(totemBack);
 
-    // D. 2-STORY COMMERCIAL COMPLEX: MASTERS KITCHEN & MASTERS VIP LOUNGE
-    const complexBody = new THREE.Mesh(
-      new THREE.BoxGeometry(18, 5.6, 9.5),
-      new THREE.MeshStandardMaterial({
-        color: 0x0f172a,
-        roughness: 0.35,
-        metalness: 0.45
-      })
-    );
-    complexBody.position.set(-3.5, 2.8, -5);
-    complexBody.castShadow = true;
-    complexBody.receiveShadow = true;
-    complexBody.userData = {
-      name: 'Masters Commercial Complex (Kitchen & VIP Lounge)',
-      desc: 'Ground floor authentic restaurant and upper floor executive cocktail terrace',
-      tag: 'GROUND FLOOR RESTAURANT · ROOFTOP VIP LOUNGE',
-      dept: 'kitchen'
-    };
-    scene.add(complexBody);
-    interactiveObjects.push(complexBody);
+    // F. PERIMETER TROPICAL PALM TREES & GREEN BUFFER (Background of Image 1)
+    const palmTrunkGeo = new THREE.CylinderGeometry(0.18, 0.28, 6.2, 10);
+    const palmTrunkMat = new THREE.MeshStandardMaterial({ color: 0x451a03, roughness: 0.85 });
+    const palmFrondGeo = new THREE.ConeGeometry(2.4, 1.8, 8);
+    const palmFrondMat = new THREE.MeshStandardMaterial({ color: 0x14532d, roughness: 0.7 });
 
-    // Masters Kitchen Panoramic Floor-to-Ceiling Glass Frontage
-    const kitchenGlass = new THREE.Mesh(
-      new THREE.PlaneGeometry(17.4, 4.8),
-      new THREE.MeshStandardMaterial({
-        color: 0xf59e0b,
-        metalness: 0.92,
-        roughness: 0.08,
-        transparent: true,
-        opacity: 0.58
-      })
-    );
-    kitchenGlass.position.set(-3.5, 2.7, -0.2);
-    scene.add(kitchenGlass);
+    [-18, -14, -10, -6, 2, 6, 26, 30].forEach((px) => {
+      const palm = new THREE.Group();
+      const trunk = new THREE.Mesh(palmTrunkGeo, palmTrunkMat);
+      trunk.position.y = 3.1;
+      palm.add(trunk);
 
-    // Masters Kitchen Illuminated Front Fascia Sign
-    const kitchenSign = new THREE.Mesh(
-      new THREE.BoxGeometry(5.2, 0.4, 0.15),
-      new THREE.MeshStandardMaterial({
-        color: 0xdc2626,
-        emissive: 0xb91c1c,
-        emissiveIntensity: 0.9
-      })
-    );
-    kitchenSign.position.set(-7, 4.9, -0.15);
-    scene.add(kitchenSign);
+      const fronds = new THREE.Mesh(palmFrondGeo, palmFrondMat);
+      fronds.position.y = 6.2;
+      palm.add(fronds);
 
-    // Upstairs VIP Lounge Extended Glass Cube
-    const loungeCube = new THREE.Mesh(
-      new THREE.BoxGeometry(8.2, 3.2, 6.2),
-      new THREE.MeshStandardMaterial({
-        color: 0x070b14,
-        roughness: 0.18,
-        metalness: 0.85
-      })
-    );
-    loungeCube.position.set(-4.5, 6.0, -4.0);
-    loungeCube.castShadow = true;
-    loungeCube.userData = {
-      name: 'Masters VIP Lounge & Executive Terrace',
-      desc: 'Glass-wrapped luxury cocktail lounge with private pods and panoramic highway view',
-      tag: 'EXECUTIVE RETREAT · VIP BOTTLE SERVICE',
-      dept: 'lounge'
-    };
-    scene.add(loungeCube);
-    interactiveObjects.push(loungeCube);
-
-    // Emerald Glowing VIP Window Wall
-    const vipGlass = new THREE.Mesh(
-      new THREE.PlaneGeometry(7.8, 2.6),
-      new THREE.MeshStandardMaterial({
-        color: 0x10b981,
-        emissive: 0x059669,
-        emissiveIntensity: 0.55,
-        transparent: true,
-        opacity: 0.65
-      })
-    );
-    vipGlass.position.set(-4.5, 6.0, -0.88);
-    scene.add(vipGlass);
-
-    // Terrace Metal Safety Railing
-    const railingGeo = new THREE.BoxGeometry(7.8, 0.85, 0.05);
-    const railingMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.9, roughness: 0.2 });
-    const railing = new THREE.Mesh(railingGeo, railingMat);
-    railing.position.set(-4.5, 5.0, -0.4);
-    scene.add(railing);
-
-    // E. MASTERS AUTOMATED CAR WASH BAY
-    const washBldg = new THREE.Mesh(
-      new THREE.BoxGeometry(6.6, 4.2, 9.5),
-      new THREE.MeshStandardMaterial({
-        color: 0x1e293b,
-        metalness: 0.65,
-        roughness: 0.3
-      })
-    );
-    washBldg.position.set(9.5, 2.1, -1);
-    washBldg.castShadow = true;
-    washBldg.userData = {
-      name: 'Masters Automated Car Wash',
-      desc: 'High-pressure foam wash, chassis underbody blast and interior valet detailing',
-      tag: 'FAST FOAM WASH & VACUUM',
-      dept: 'carwash'
-    };
-    scene.add(washBldg);
-    interactiveObjects.push(washBldg);
-
-    // Glowing Blue Neon Entrance Arch
-    const washArch = new THREE.Mesh(
-      new THREE.BoxGeometry(5.8, 0.35, 0.35),
-      new THREE.MeshStandardMaterial({
-        color: 0x38bdf8,
-        emissive: 0x0284c7,
-        emissiveIntensity: 0.95
-      })
-    );
-    washArch.position.set(9.5, 3.8, 3.8);
-    scene.add(washArch);
-
-    // F. MASTERS BAR & PALM GARDEN OASIS
-    const gardenLawn = new THREE.Mesh(
-      new THREE.CylinderGeometry(6.8, 7.0, 0.22, 32),
-      new THREE.MeshStandardMaterial({
-        color: 0x166534,
-        roughness: 0.92
-      })
-    );
-    gardenLawn.position.set(6.8, 0.11, 7.5);
-    gardenLawn.receiveShadow = true;
-    gardenLawn.userData = {
-      name: 'Masters Bar & Palm Garden',
-      desc: 'Open-air cabana seating, live charcoal suya & asun grill, cold drinks, big screens',
-      tag: 'CHARCOAL SUYA · CHILLED DRINKS · MATCHDAYS',
-      dept: 'garden'
-    };
-    scene.add(gardenLawn);
-    interactiveObjects.push(gardenLawn);
-
-    // Wooden Pergola / Cabana
-    const pergola = new THREE.Mesh(
-      new THREE.BoxGeometry(3.8, 0.25, 3.8),
-      new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.75 })
-    );
-    pergola.position.set(6.5, 2.5, 7.2);
-    scene.add(pergola);
-
-    // Pergola wooden support posts
-    [
-      [4.8, 1.25, 5.5],
-      [8.2, 1.25, 5.5],
-      [4.8, 1.25, 8.9],
-      [8.2, 1.25, 8.9]
-    ].forEach(([px, py, pz]) => {
-      const post = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.1, 0.1, 2.5, 8),
-        new THREE.MeshStandardMaterial({ color: 0x5c2b0c, roughness: 0.8 })
-      );
-      post.position.set(px, py, pz);
-      scene.add(post);
+      palm.position.set(px, 0, -11.5);
+      scene.add(palm);
     });
-
-    // Live Charcoal Suya Barbecue Grill with Glowing Red Embers
-    const grillBody = new THREE.Mesh(
-      new THREE.BoxGeometry(1.2, 0.8, 0.6),
-      new THREE.MeshStandardMaterial({ color: 0x18181b, metalness: 0.8, roughness: 0.4 })
-    );
-    grillBody.position.set(6.8, 0.4, 8.5);
-    scene.add(grillBody);
-
-    const glowingCoals = new THREE.Mesh(
-      new THREE.BoxGeometry(1.1, 0.05, 0.5),
-      new THREE.MeshBasicMaterial({ color: 0xef4444 })
-    );
-    glowingCoals.position.set(6.8, 0.82, 8.5);
-    scene.add(glowingCoals);
-
-    // Palm Trees with illuminated crowns
-    const createPalm = (px: number, pz: number, s = 1) => {
-      const trunk = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.16 * s, 0.26 * s, 3.6 * s, 8),
-        new THREE.MeshStandardMaterial({ color: 0x5c3d2e, roughness: 0.9 })
-      );
-      trunk.position.set(px, (3.6 * s) / 2, pz);
-      trunk.castShadow = true;
-      scene.add(trunk);
-
-      const crownMat = new THREE.MeshStandardMaterial({ color: 0x15803d, roughness: 0.55 });
-      for (let f = 0; f < 6; f++) {
-        const frond = new THREE.Mesh(new THREE.ConeGeometry(0.95 * s, 1.6 * s, 5), crownMat);
-        frond.position.set(px, 3.5 * s, pz);
-        frond.rotation.z = Math.PI / 3;
-        frond.rotation.y = (f * Math.PI) / 3;
-        scene.add(frond);
-      }
-    };
-    createPalm(8.5, 9.8, 1.15);
-    createPalm(4.2, 9.2, 0.95);
-    createPalm(-9.8, 8.5, 1.05);
-
-    // G. 3D COMPOSITE VEHICLES (Multi-part realistic procedural cars)
-    const createCompositeVehicle = (colorHex: number, isSUV = false) => {
-      const g = new THREE.Group();
-      const length = isSUV ? 3.6 : 3.1;
-      const height = isSUV ? 0.78 : 0.62;
-      const width = isSUV ? 1.65 : 1.48;
-
-      // 1. Lower Chassis
-      const bodyMat = new THREE.MeshStandardMaterial({
-        color: colorHex,
-        metalness: 0.88,
-        roughness: 0.18
-      });
-      const body = new THREE.Mesh(new THREE.BoxGeometry(width, height, length), bodyMat);
-      body.position.y = height / 2 + 0.22;
-      body.castShadow = true;
-      g.add(body);
-
-      // 2. Cabin Glass Greenhouse
-      const cabinMat = new THREE.MeshStandardMaterial({
-        color: 0x090e17,
-        roughness: 0.08,
-        metalness: 0.9,
-        transparent: true,
-        opacity: 0.85
-      });
-      const cabin = new THREE.Mesh(
-        new THREE.BoxGeometry(width * 0.86, height * 0.82, length * 0.56),
-        cabinMat
-      );
-      cabin.position.set(0, height + 0.38, -0.1);
-      g.add(cabin);
-
-      // 3. Headlights (Glowing Xenon LED)
-      const headlightMat = new THREE.MeshBasicMaterial({ color: 0xfffaed });
-      const hlL = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.12, 0.05), headlightMat);
-      hlL.position.set(-width * 0.35, height * 0.7, length / 2 + 0.01);
-      const hlR = hlL.clone();
-      hlR.position.x = width * 0.35;
-      g.add(hlL, hlR);
-
-      // 4. Taillights (Red LED bar)
-      const taillightMat = new THREE.MeshBasicMaterial({ color: 0xef4444 });
-      const tl = new THREE.Mesh(new THREE.BoxGeometry(width * 0.85, 0.1, 0.05), taillightMat);
-      tl.position.set(0, height * 0.7, -length / 2 - 0.01);
-      g.add(tl);
-
-      // 5. Wheels & Tires
-      const tireMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.85 });
-      const rimMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.95, roughness: 0.15 });
-      const wheelGeo = new THREE.CylinderGeometry(0.34, 0.34, 0.22, 14);
-      const rimGeo = new THREE.CylinderGeometry(0.22, 0.22, 0.24, 14);
-
-      [
-        [-width / 2, 0.34, -length * 0.32],
-        [width / 2, 0.34, -length * 0.32],
-        [-width / 2, 0.34, length * 0.32],
-        [width / 2, 0.34, length * 0.32]
-      ].forEach(([x, y, z]) => {
-        const tire = new THREE.Mesh(wheelGeo, tireMat);
-        tire.rotation.z = Math.PI / 2;
-        tire.position.set(x, y, z);
-        tire.castShadow = true;
-
-        const rim = new THREE.Mesh(rimGeo, rimMat);
-        rim.rotation.z = Math.PI / 2;
-        rim.position.set(x, y, z);
-
-        g.add(tire, rim);
-      });
-
-      return g;
-    };
-
-    // Silver Metallic Lexus SUV at Bay 1
-    const suv = createCompositeVehicle(0x94a3b8, true);
-    suv.position.set(-5.0, 0, 5.0);
-    scene.add(suv);
-
-    // Deep Navy Executive Sedan at Bay 2
-    const sedan = createCompositeVehicle(0x1e3a8a, false);
-    sedan.position.set(1.2, 0, 4.8);
-    scene.add(sedan);
-
-    // White Hilux Pickup at Bay 3
-    const hilux = createCompositeVehicle(0xf1f5f9, true);
-    hilux.position.set(5.2, 0, 5.2);
-    scene.add(hilux);
-
-    // Clean sedan getting foam wash inside Car Wash
-    const washCar = createCompositeVehicle(0x38bdf8, false);
-    washCar.position.set(9.5, 0, -1.0);
-    scene.add(washCar);
-
-    // H. STATION ATTENDANTS IN HIGH-VISIBILITY MASTER ENERGY UNIFORMS
-    const createAttendantFigure = (x: number, z: number, ry: number) => {
-      const g = new THREE.Group();
-      const hiVisOrange = new THREE.MeshStandardMaterial({
-        color: 0xf97316,
-        roughness: 0.6
-      });
-      const navyPants = new THREE.MeshStandardMaterial({
-        color: 0x0f172a,
-        roughness: 0.7
-      });
-      const skinMat = new THREE.MeshStandardMaterial({
-        color: 0x5a3825,
-        roughness: 0.8
-      });
-      const capMat = new THREE.MeshStandardMaterial({
-        color: 0xf59e0b,
-        roughness: 0.5
-      });
-
-      // Legs
-      const legGeo = new THREE.CylinderGeometry(0.08, 0.07, 0.8, 8);
-      const lL = new THREE.Mesh(legGeo, navyPants);
-      lL.position.set(-0.1, 0.4, 0);
-      const lR = new THREE.Mesh(legGeo, navyPants);
-      lR.position.set(0.1, 0.4, 0);
-      g.add(lL, lR);
-
-      // Torso with reflective hi-vis vest
-      const torso = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.7, 0.24), hiVisOrange);
-      torso.position.set(0, 1.15, 0);
-      g.add(torso);
-
-      // Reflective silver vest band
-      const vestBand = new THREE.Mesh(
-        new THREE.BoxGeometry(0.42, 0.12, 0.26),
-        new THREE.MeshBasicMaterial({ color: 0xf8fafc })
-      );
-      vestBand.position.set(0, 1.15, 0);
-      g.add(vestBand);
-
-      // Head & Safety Cap
-      const head = new THREE.Mesh(new THREE.SphereGeometry(0.14, 10, 10), skinMat);
-      head.position.set(0, 1.62, 0);
-      g.add(head);
-
-      const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.16, 0.08, 10), capMat);
-      cap.position.set(0, 1.74, 0);
-      g.add(cap);
-
-      // Handheld POS payment terminal
-      const posTerminal = new THREE.Mesh(
-        new THREE.BoxGeometry(0.08, 0.15, 0.04),
-        new THREE.MeshStandardMaterial({ color: 0x111827 })
-      );
-      posTerminal.position.set(0.24, 1.0, 0.12);
-      g.add(posTerminal);
-
-      g.position.set(x, 0, z);
-      g.rotation.y = ry;
-      scene.add(g);
-      return g;
-    };
-
-    createAttendantFigure(-3.9, 5.0, -Math.PI / 2);
-    createAttendantFigure(2.4, 4.6, Math.PI / 3);
-    createAttendantFigure(4.3, 5.2, -Math.PI / 4);
 
     interactiveObjectsRef.current = interactiveObjects;
 
-    // 7. ATMOSPHERIC PARTICLES (Optimized GPU-friendly single system of 110 motes)
-    const dustCount = 110;
-    const dustGeo = new THREE.BufferGeometry();
-    const dustCoords = new Float32Array(dustCount * 3);
-    const dustVels: { vx: number; vy: number; vz: number }[] = [];
-
-    for (let i = 0; i < dustCount; i++) {
-      const i3 = i * 3;
-      dustCoords[i3] = (Math.random() - 0.5) * 44;
-      dustCoords[i3 + 1] = Math.random() * 8.5 + 0.3;
-      dustCoords[i3 + 2] = (Math.random() - 0.5) * 44;
-
-      dustVels.push({
-        vx: (Math.random() - 0.5) * 0.005,
-        vy: Math.random() * 0.008 + 0.002,
-        vz: (Math.random() - 0.5) * 0.005
-      });
-    }
-    dustGeo.setAttribute('position', new THREE.BufferAttribute(dustCoords, 3));
-    const dustMat = new THREE.PointsMaterial({
-      color: 0xf97316,
-      size: 0.16,
-      transparent: true,
-      opacity: 0.7,
-      blending: THREE.AdditiveBlending
-    });
-    const dustSystem = new THREE.Points(dustGeo, dustMat);
-    scene.add(dustSystem);
-    dustParticlesRef.current = dustSystem;
-    dustVelocitiesRef.current = dustVels;
-
-    // Apply initial environment
-    updateEnvironmentLighting(timeOfDay);
-
-    // 8. RAYCASTER & INTERACTION (Throttled per frame for smooth 60fps)
+    // 7. INTERACTION / RAYCASTING
     const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2(-1000, -1000);
+    const mouse = new THREE.Vector2();
     let mouseMoved = false;
     let clientX = 0;
     let clientY = 0;
@@ -1217,38 +1265,27 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
       mouseMoved = true;
     };
 
-    const onPointerClick = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(interactiveObjectsRef.current);
-      if (intersects.length > 0) {
-        const hit = intersects[0].object;
-        if (hit.userData?.dept) {
-          onSelectDept(hit.userData.dept as DepartmentId);
-          onNavigatePage(hit.userData.dept as PageId);
-        }
+    const onPointerClick = () => {
+      if (hoveredMeshRef.current?.userData?.dept) {
+        onSelectDept(hoveredMeshRef.current.userData.dept);
       }
     };
 
-    canvas.addEventListener('mousemove', onPointerMove, { passive: true });
+    canvas.addEventListener('mousemove', onPointerMove);
     canvas.addEventListener('click', onPointerClick);
 
-    // Resize listener with mobile viewport clamping
     const onResize = () => {
       if (!container || !renderer || !camera) return;
-      const w = Math.min(container.clientWidth, window.innerWidth);
+      const w = container.clientWidth;
       const h = container.clientHeight;
-      if (w === 0 || h === 0) return;
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
     };
+
     window.addEventListener('resize', onResize);
 
-    // 9. ANIMATION LOOP WITH INTERSECTION OBSERVER (Pauses when scrolled away)
+    // 8. RENDER LOOP
     let animationFrameId: number;
     let isVisible = true;
     let lastRaycastTime = 0;
@@ -1257,7 +1294,6 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
       if (!isVisible) return;
       animationFrameId = requestAnimationFrame(animate);
 
-      // Smooth camera interpolation
       if (targetCamPosRef.current && targetLookAtRef.current) {
         camera.position.lerp(targetCamPosRef.current, 0.05);
         controls.target.lerp(targetLookAtRef.current, 0.05);
@@ -1270,24 +1306,6 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
 
       controls.update();
 
-      // Atmospheric golden dust subtle orbital drift and vertical float
-      if (dustParticlesRef.current) {
-        dustParticlesRef.current.rotation.y += 0.0006;
-        const posAttr = dustParticlesRef.current.geometry.attributes.position;
-        const posArr = posAttr.array as Float32Array;
-        const vels = dustVelocitiesRef.current;
-
-        for (let i = 0; i < dustCount; i++) {
-          const yIdx = i * 3 + 1;
-          posArr[yIdx] += vels[i].vy;
-          if (posArr[yIdx] > 8.5) {
-            posArr[yIdx] = 0.3;
-          }
-        }
-        posAttr.needsUpdate = true;
-      }
-
-      // Throttled raycast (maximum once every 45ms, only when pointer moved)
       const now = performance.now();
       if (mouseMoved && now - lastRaycastTime > 45) {
         lastRaycastTime = now;
@@ -1299,17 +1317,7 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
         if (intersects.length > 0) {
           const hit = intersects[0].object as THREE.Mesh;
           if (hoveredMeshRef.current !== hit) {
-            if (hoveredMeshRef.current && (hoveredMeshRef.current.material as THREE.MeshStandardMaterial).emissive) {
-              const m = hoveredMeshRef.current.material as THREE.MeshStandardMaterial;
-              m.emissive.setHex(hoveredMeshRef.current.userData.defaultEmissive || 0x000000);
-              m.emissiveIntensity = 0.25;
-            }
             hoveredMeshRef.current = hit;
-            if ((hit.material as THREE.MeshStandardMaterial).emissive) {
-              const m = hit.material as THREE.MeshStandardMaterial;
-              m.emissive.setHex(0xdc2626);
-              m.emissiveIntensity = 0.95;
-            }
           }
 
           if (hit.userData?.name) {
@@ -1322,14 +1330,7 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
             });
           }
         } else {
-          if (hoveredMeshRef.current) {
-            if ((hoveredMeshRef.current.material as THREE.MeshStandardMaterial).emissive) {
-              const m = hoveredMeshRef.current.material as THREE.MeshStandardMaterial;
-              m.emissive.setHex(hoveredMeshRef.current.userData.defaultEmissive || 0x000000);
-              m.emissiveIntensity = 0.25;
-            }
-            hoveredMeshRef.current = null;
-          }
+          hoveredMeshRef.current = null;
           setTooltipData(null);
         }
       }
@@ -1337,7 +1338,6 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
       renderer.render(scene, camera);
     };
 
-    // IntersectionObserver to pause rendering when scrolled out of view
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
@@ -1355,8 +1355,6 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
     );
 
     observer.observe(container);
-
-    // Initial launch
     animate();
 
     return () => {
@@ -1371,14 +1369,9 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
       groundMat.dispose();
       canopyRoofGeo.dispose();
       canopyRoofMat.dispose();
-      fasciaGeo.dispose();
-      fasciaMat.dispose();
-      dustGeo.dispose();
-      dustMat.dispose();
     };
-  }, [updateEnvironmentLighting, onSelectDept, onNavigatePage]);
+  }, [updateEnvironmentLighting, onSelectDept, displayMode]);
 
-  // Sync controls autoRotate
   useEffect(() => {
     if (controlsRef.current) {
       controlsRef.current.autoRotate = autoRotate;
@@ -1388,83 +1381,213 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
   return (
     <div
       ref={containerRef}
-      className="relative w-full max-w-full overflow-hidden h-[70vh] sm:h-[76vh] min-h-[460px] max-h-[720px] bg-slate-100 select-none"
+      className="relative w-full max-w-full overflow-hidden h-[74vh] sm:h-[80vh] min-h-[500px] max-h-[760px] bg-[#090d16] select-none transition-all duration-300"
     >
-      {/* FULL SCREEN 3D WEBGL CANVAS - ZERO BOXING, NATURAL SCROLL ENABLED */}
-      <canvas
-        ref={canvasRef}
-        style={{ touchAction: 'pan-y' }}
-        className="w-full h-full cursor-grab active:cursor-grabbing block"
-      />
+      {/* ========================================================= */}
+      {/* MODE 1: 3D INTERACTIVE WEBGL MODEL (MODERNIZED TO IMAGE 1) */}
+      {/* ========================================================= */}
+      {displayMode === '3d-model' ? (
+        <canvas
+          ref={canvasRef}
+          style={{ touchAction: 'pan-y' }}
+          className="w-full h-full cursor-grab active:cursor-grabbing block"
+        />
+      ) : (
+        /* ========================================================= */
+        /* MODE 2: PHOTOREAL ARCHITECTURAL TWIN (DIRECT IMAGE 1)     */
+        /* ========================================================= */
+        <div className="relative w-full h-full overflow-hidden bg-slate-950 flex items-center justify-center">
+          <img
+            src="/images/modern_master_energy_reference.png"
+            alt="Master Energy Ltd Modern Mega Station Architecture"
+            className="w-full h-full object-cover object-center select-none filter contrast-[1.03]"
+          />
 
-      {/* TOP MINIMAL STATUS BAR */}
-      <div className="absolute top-4 left-4 sm:top-5 sm:left-6 right-4 sm:right-6 z-20 pointer-events-none flex items-center justify-between gap-3 max-w-[calc(100vw-2rem)]">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/25 pointer-events-none" />
+
+          {/* Interactive Pulsing Hotspot Pins */}
+          {photorealHotspots.map((hs, index) => {
+            const isSelected = selectedPhotorealHotspot?.id === hs.id;
+            return (
+              <button
+                key={hs.id}
+                type="button"
+                style={{ left: `${hs.xPercent}%`, top: `${hs.yPercent}%` }}
+                onClick={() => {
+                  setSelectedPhotorealHotspot(hs);
+                  onSelectDept(hs.deptId);
+                }}
+                className="absolute -translate-x-1/2 -translate-y-1/2 group/pin z-20 cursor-pointer focus:outline-none"
+                aria-label={hs.title}
+              >
+                <span className="relative flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center">
+                  <span
+                    className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                      isSelected ? 'bg-cyan-400' : 'bg-red-500'
+                    }`}
+                  />
+                  <span
+                    className={`relative inline-flex items-center justify-center rounded-full h-7 w-7 sm:h-8 sm:w-8 border-2 border-white shadow-xl text-white font-mono font-extrabold text-xs transition-transform group-hover/pin:scale-110 ${
+                      isSelected ? 'bg-cyan-500 scale-110 shadow-cyan-500/50' : 'bg-red-600 shadow-red-600/50'
+                    }`}
+                  >
+                    {index + 1}
+                  </span>
+                </span>
+
+                {/* Floating Micro Tooltip */}
+                <div className="opacity-0 group-hover/pin:opacity-100 transition-opacity absolute bottom-full left-1/2 -translate-x-1/2 mb-2 pointer-events-none whitespace-nowrap bg-slate-950/95 backdrop-blur-md text-white text-[11px] font-mono font-bold px-3 py-1.5 rounded-lg border border-cyan-400/50 shadow-2xl">
+                  {hs.title}
+                </div>
+              </button>
+            );
+          })}
+
+          {/* Detail Dossier Modal (When Pin Clicked) */}
+          {selectedPhotorealHotspot && (
+            <div className="absolute bottom-6 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-30 bg-[#0a1226]/95 backdrop-blur-xl border border-cyan-500/40 rounded-2xl p-5 shadow-2xl text-left animate-in slide-in-from-bottom-2 duration-200 text-white">
+              <div className="flex items-center justify-between gap-2 pb-2 border-b border-blue-900/40">
+                <div className="flex items-center gap-1.5 font-mono text-[11px] font-bold text-cyan-400 uppercase tracking-wider">
+                  <Info className="w-3.5 h-3.5 shrink-0 text-cyan-400" />
+                  <span>{selectedPhotorealHotspot.tag}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSelectedPhotorealHotspot(null)}
+                  className="text-slate-400 hover:text-white text-xs font-mono cursor-pointer px-1.5 py-0.5 rounded bg-slate-800"
+                >
+                  ✕ Close
+                </button>
+              </div>
+
+              <h4 className="text-base sm:text-lg font-bold text-white font-poppins mt-2">
+                {selectedPhotorealHotspot.title}
+              </h4>
+              <p className="text-xs sm:text-sm text-slate-300 font-opensans leading-relaxed mt-1">
+                {selectedPhotorealHotspot.description}
+              </p>
+
+              <div className="mt-3 pt-3 border-t border-blue-900/40 flex items-center justify-between gap-3">
+                <div className="font-mono text-xs text-emerald-400 font-bold flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>{selectedPhotorealHotspot.stat}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => onOpenDeptDetail(selectedPhotorealHotspot.deptId)}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-inter font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-xs"
+                >
+                  <span>Explore</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* TOP STATUS BAR & MODE SWITCHERS */}
+      <div className="absolute top-4 left-4 sm:top-5 sm:left-6 right-4 sm:right-6 z-20 pointer-events-none flex flex-wrap items-center justify-between gap-3 max-w-[calc(100vw-2rem)]">
         {/* Status Badge */}
-        <div className="flex items-center gap-2 bg-white/95 dark:bg-[#0a1226]/95 backdrop-blur-md border border-slate-200 dark:border-slate-800 px-3 sm:px-3.5 py-1.5 rounded-full shadow-md">
-          <span className="w-2 h-2 rounded-full bg-emerald-500" />
-          <span className="text-[10px] sm:text-[11px] font-roboto font-bold tracking-wider text-slate-900 dark:text-white uppercase">
-            3D DIGITAL TWIN · MASTER ENERGY FORECOURT
+        <div className="flex items-center gap-2 bg-[#090d16]/90 backdrop-blur-md border border-white/10 px-3.5 py-1.5 rounded-full shadow-md">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-[10px] sm:text-[11px] font-roboto font-bold tracking-wider text-white uppercase">
+            FLAGSHIP 3D DIGITAL TWIN · NAZE MEGA FORECOURT
           </span>
         </div>
 
-        {/* Minimalist Top-Right Quick Controls (Lighting & Auto Orbit) */}
-        <div className="pointer-events-auto flex items-center gap-1.5 p-1 bg-white/95 dark:bg-[#0a1226]/95 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-full shadow-md">
-          {/* Cycle Lighting Button */}
-          <button
-            type="button"
-            onClick={() => {
-              const nextTime = timeOfDay === 'sunset' ? 'day' : timeOfDay === 'day' ? 'night' : 'sunset';
-              setTimeOfDay(nextTime);
-              updateEnvironmentLighting(nextTime);
-            }}
-            className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-roboto font-bold text-slate-800 dark:text-slate-200 hover:text-black dark:hover:text-white rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer capitalize"
-            title="Switch Day / Dusk / Night Lighting"
-          >
-            {timeOfDay === 'sunset' && <Sunset className="w-3.5 h-3.5 text-red-500" />}
-            {timeOfDay === 'day' && <Sun className="w-3.5 h-3.5 text-amber-500" />}
-            {timeOfDay === 'night' && <Moon className="w-3.5 h-3.5 text-slate-700" />}
-            <span className="hidden sm:inline">{timeOfDay}</span>
-          </button>
+        {/* View Mode Toggle: 3D Orbit vs Photoreal Architectural Twin */}
+        <div className="pointer-events-auto flex items-center gap-2">
+          <div className="flex items-center gap-1 p-1 bg-[#090d16]/90 backdrop-blur-md border border-white/15 rounded-full shadow-lg">
+            <button
+              type="button"
+              onClick={() => setDisplayMode('3d-model')}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-inter font-bold transition-all cursor-pointer ${
+                displayMode === '3d-model'
+                  ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
+                  : 'text-slate-300 hover:text-white'
+              }`}
+            >
+              <Box className="w-3.5 h-3.5" />
+              <span>3D Orbit Model</span>
+            </button>
 
-          {/* Auto Rotate Toggle */}
-          <button
-            type="button"
-            onClick={() => setAutoRotate(prev => !prev)}
-            className={`p-1.5 rounded-full text-xs transition-all cursor-pointer ${
-              autoRotate ? 'text-white bg-red-600 font-bold shadow-xs' : 'text-slate-600 dark:text-slate-300 hover:text-black dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-            title={autoRotate ? 'Pause Orbit' : 'Resume Auto Orbit'}
-          >
-            {autoRotate ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-          </button>
+            <button
+              type="button"
+              onClick={() => setDisplayMode('photoreal')}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-inter font-bold transition-all cursor-pointer ${
+                displayMode === 'photoreal'
+                  ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
+                  : 'text-slate-300 hover:text-white'
+              }`}
+            >
+              <ImageIcon className="w-3.5 h-3.5" />
+              <span>Photoreal Twin</span>
+            </button>
+          </div>
+
+          {/* Lighting Controls (Available in 3D Orbit mode) */}
+          {displayMode === '3d-model' && (
+            <div className="flex items-center gap-1 p-1 bg-[#090d16]/90 backdrop-blur-md border border-white/15 rounded-full shadow-lg">
+              <button
+                type="button"
+                onClick={() => {
+                  const nextTime = timeOfDay === 'sunset' ? 'day' : timeOfDay === 'day' ? 'night' : 'sunset';
+                  setTimeOfDay(nextTime);
+                  updateEnvironmentLighting(nextTime);
+                }}
+                className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-roboto font-bold text-slate-200 hover:text-white rounded-full transition-all cursor-pointer capitalize"
+                title="Cycle Twilight Dusk / Day / Night"
+              >
+                {timeOfDay === 'sunset' && <Sunset className="w-3.5 h-3.5 text-amber-400" />}
+                {timeOfDay === 'day' && <Sun className="w-3.5 h-3.5 text-yellow-400" />}
+                {timeOfDay === 'night' && <Moon className="w-3.5 h-3.5 text-cyan-400" />}
+                <span className="hidden sm:inline">{timeOfDay}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setAutoRotate((prev) => !prev)}
+                className={`p-1.5 rounded-full text-xs transition-all cursor-pointer ${
+                  autoRotate ? 'text-white bg-red-600 shadow-xs' : 'text-slate-400 hover:text-white'
+                }`}
+                title={autoRotate ? 'Pause Orbit' : 'Resume Auto Orbit'}
+              >
+                {autoRotate ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* MINIMAL BOTTOM FLOATING DOCK (Clean, Uncluttered, White & Orange) */}
-      <div className="absolute bottom-5 left-0 right-0 z-30 pointer-events-none flex flex-col items-center gap-2 px-3 w-full max-w-full">
-        {/* Minimal View Selector */}
-        <div className="pointer-events-auto flex items-center gap-1 p-1 bg-white/95 dark:bg-[#0a1226]/95 backdrop-blur-xl border border-slate-200 dark:border-slate-800 rounded-full shadow-xl max-w-[calc(100vw-2rem)] overflow-x-auto no-scrollbar">
-          {[
-            { id: 'forecourt', label: 'Fuel Forecourt' },
-            { id: 'overview', label: 'Full Campus' },
-            { id: 'totem', label: 'Price Totem' }
-          ].map(sec => (
-            <button
-              key={sec.id}
-              type="button"
-              onClick={() => focusCamera(sec.id)}
-              className={`px-3 py-1 text-xs font-inter font-semibold rounded-full transition-all cursor-pointer whitespace-nowrap ${
-                activeSector === sec.id
-                  ? 'bg-[#1e3a8a] text-white font-bold shadow-xs border border-blue-600'
-                  : 'text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-              }`}
-            >
-              {sec.label}
-            </button>
-          ))}
-        </div>
+      {/* BOTTOM FLOATING SECTOR DOCK */}
+      <div className="absolute bottom-5 left-0 right-0 z-30 pointer-events-none flex flex-col items-center gap-2.5 px-3 w-full max-w-full">
+        {displayMode === '3d-model' && (
+          <div className="pointer-events-auto flex items-center gap-1 p-1 bg-[#090d16]/90 backdrop-blur-xl border border-white/15 rounded-full shadow-xl max-w-[calc(100vw-2rem)] overflow-x-auto no-scrollbar">
+            {[
+              { id: 'forecourt', label: 'Fuel Forecourt' },
+              { id: 'canopy', label: 'Geometric Canopy' },
+              { id: 'store', label: 'Café & Store' },
+              { id: 'totem', label: 'Price Totem' },
+              { id: 'overview', label: 'Campus Overview' }
+            ].map((sec) => (
+              <button
+                key={sec.id}
+                type="button"
+                onClick={() => focusCamera(sec.id)}
+                className={`px-3 py-1 text-xs font-inter font-semibold rounded-full transition-all cursor-pointer whitespace-nowrap ${
+                  activeSector === sec.id
+                    ? 'bg-[#1e3a8a] text-white font-bold shadow-xs border border-blue-500'
+                    : 'text-slate-300 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                {sec.label}
+              </button>
+            ))}
+          </div>
+        )}
 
-        {/* PROMINENT SCROLL DOWN BUTTON - Mobile Contained */}
+        {/* Scroll Down Button */}
         <button
           type="button"
           onClick={() => {
@@ -1475,29 +1598,29 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
               el?.scrollIntoView({ behavior: 'smooth' });
             }
           }}
-          className="pointer-events-auto flex items-center justify-center gap-2 px-4 sm:px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full text-xs font-inter font-bold transition-all shadow-md shadow-red-600/25 hover:scale-105 cursor-pointer active:scale-95 border border-red-500 max-w-[calc(100vw-2rem)]"
+          className="pointer-events-auto flex items-center justify-center gap-2 px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full text-xs font-inter font-bold transition-all shadow-lg shadow-red-600/30 hover:scale-105 cursor-pointer active:scale-95 border border-red-500 max-w-[calc(100vw-2rem)]"
         >
-          <span className="truncate">Scroll down for station details &amp; prices</span>
-          <ChevronDown className="w-4 h-4 animate-bounce text-slate-950 shrink-0" />
+          <span className="truncate">Scroll down for station details &amp; live prices</span>
+          <ChevronDown className="w-4 h-4 animate-bounce text-white shrink-0" />
         </button>
       </div>
 
-      {/* RAYCASTER HOVER TOOLTIP POPUP */}
-      {tooltipData && (
+      {/* RAYCASTER HOVER TOOLTIP (3D Mode) */}
+      {displayMode === '3d-model' && tooltipData && (
         <div
           style={{
             left: `${tooltipData.x}px`,
             top: `${tooltipData.y}px`
           }}
-          className="absolute z-50 pointer-events-none -translate-x-1/2 -translate-y-full mb-3 bg-white/95 backdrop-blur-xl border border-red-500/40 rounded-2xl px-4 py-3 shadow-2xl transition-all duration-150 text-left min-w-[240px] max-w-xs text-slate-900 dark:text-white bg-white/95 dark:bg-[#0a1226]/95"
+          className="absolute z-50 pointer-events-none -translate-x-1/2 -translate-y-full mb-3 bg-[#0a1226]/95 backdrop-blur-xl border border-cyan-400/50 rounded-2xl px-4 py-3 shadow-2xl transition-all duration-150 text-left min-w-[240px] max-w-xs text-white"
         >
-          <div className="flex items-center gap-1.5 font-roboto text-[10px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider mb-1">
-            <Sparkles className="w-3 h-3 text-red-600 dark:text-red-400" />
+          <div className="flex items-center gap-1.5 font-roboto text-[10px] font-bold text-cyan-400 uppercase tracking-wider mb-1">
+            <Sparkles className="w-3 h-3 text-cyan-400" />
             <span>INTERACTIVE ASSET · CLICK TO OPEN</span>
           </div>
-          <div className="text-sm font-bold text-slate-950 font-poppins">{tooltipData.title}</div>
-          <div className="text-xs text-slate-600 font-opensans leading-snug mt-1">{tooltipData.desc}</div>
-          <div className="mt-2 pt-2 border-t border-slate-200 text-[11px] font-roboto font-extrabold text-red-600 dark:text-red-400">
+          <div className="text-sm font-bold text-white font-poppins">{tooltipData.title}</div>
+          <div className="text-xs text-slate-300 font-opensans leading-snug mt-1">{tooltipData.desc}</div>
+          <div className="mt-2 pt-2 border-t border-blue-900/50 text-[11px] font-roboto font-extrabold text-cyan-300">
             {tooltipData.tag}
           </div>
         </div>
