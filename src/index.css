@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@layer base {
+  html, body {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    position: relative;
+    background-color: #ffffff;
+    color: #0f172a;
+    font-family: 'Open Sans', 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  #root {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  h1, h2, h3, .font-display {
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: -0.02em;
+  }
+  .font-poppins {
+    font-family: 'Poppins', sans-serif;
+  }
+  .font-inter {
+    font-family: 'Inter', sans-serif;
+  }
+  .font-roboto {
+    font-family: 'Roboto', sans-serif;
+  }
+  .font-opensans {
+    font-family: 'Open Sans', sans-serif;
+  }
+  .font-mono {
+    font-family: 'JetBrains Mono', 'Roboto', monospace;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  img, svg, video, canvas, audio, iframe, embed, object {
+    max-width: 100%;
+  }
+}
+
+/* Luxury gold/yellow text gradient with high-contrast edge */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #b45309 0%, #d97706 40%, #eab308 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.border-gold-subtle {
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.bg-gold-glow {
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.18) 0%, transparent 70%);
+}
+
+/* Architectural grid backdrop for crisp white aesthetic */
+.bg-grid-lux {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+}
+
+/* Custom smooth light scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #f59e0b;
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

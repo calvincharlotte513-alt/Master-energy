@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Master Energy Ltd — 3D Nigerian Fueling Station Digital Twin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:wght@400;500;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+    }
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #05070c;
+      font-family: 'Open Sans', 'Inter', system-ui, -apple-system, sans-serif;
+      color: #e2e8f0;
+      user-select: none;
+    }
+    #webgl-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      display: block;
+      cursor: grab;
+    }
+    #webgl-canvas:active {
+      cursor: grabbing;
+    }
+
+    /* UI Overlay */
+    .ui-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px;
+    }
+    .pointer-auto {
+      pointer-events: auto;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(9, 13, 22, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 10px 18px;
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .brand-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #04060a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+    }
+    .brand-title {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: 0.05em;
+      color: #ffffff;
+    }
+    .brand-sub {
+      font-family: 'Roboto', monospace;
+      font-size: 10px;
+      color: #f59e0b;
+      letter-spacing: 0.1em;
+    }
+
+    /* Minimalist Navigation Menu */
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(9, 13, 22, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 6px;
+      border-radius: 14px;
+    }
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .nav-btn.active {
+      background: #f59e0b;
+      color: #04060a;
+      font-weight: 700;
+    }
+
+    /* Dynamic Digital Fuel Meters Strip */
+    .meter-cluster {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .meter-card {
+      background: rgba(9, 13, 22, 0.88);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 10px 14px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .meter-label {
+      font-family: 'Roboto', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+    }
+    .meter-val {
+      font-family: 'Roboto', monospace;
+      font-size: 14px;
+      font-weight: 800;
+      color: #fbbf24;
+    }
+    .meter-val.green {
+      color: #10b981;
+    }
+
+    /* Bottom Control Bar */
+    .bottom-bar {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .cad-specs {
+      background: rgba(9, 13, 22, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .cad-highlight {
+      color: #f59e0b;
+      font-weight: 700;
+    }
+
+    .view-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(9, 13, 22, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 6px;
+      border-radius: 14px;
+    }
+    .ctrl-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #e2e8f0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .ctrl-btn:hover {
+      background: #f59e0b;
+      color: #04060a;
+      border-color: #f59e0b;
+    }
+
+    /* Raycaster Interactive Tooltip */
+    #hover-tooltip {
+      position: absolute;
+      z-index: 50;
+      pointer-events: none;
+      display: none;
+      background: rgba(10, 15, 26, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid #f59e0b;
+      border-radius: 12px;
+      padding: 10px 14px;
+      box-shadow: 0 12px 35px rgba(245, 158, 11, 0.25), 0 0 20px rgba(0, 0, 0, 0.8);
+      transform: translate(-50%, -120%);
+      transition: opacity 0.15s ease;
+      white-space: nowrap;
+    }
+    .tooltip-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tooltip-desc {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 11px;
+      color: #cbd5e1;
+      margin-top: 2px;
+    }
+    .tooltip-tag {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 700;
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .ui-overlay { padding: 14px; }
+      .nav-menu { display: none; }
+      .cad-specs { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Three.js Canvas Container -->
+  <canvas id="webgl-canvas"></canvas>
+
+  <!-- Raycaster Interactive HTML Tooltip -->
+  <div id="hover-tooltip">
+    <div class="tooltip-title" id="tt-title">Fuel Dispenser Pump</div>
+    <div class="tooltip-desc" id="tt-desc">Calibrated positive displacement flow meter</div>
+    <div class="tooltip-tag" id="tt-tag">ACTIVE · 100% ACCURACY</div>
+  </div>
+
+  <!-- HTML/CSS UI Overlay (Nigerian Context) -->
+  <div class="ui-overlay">
+    <!-- Top Navigation & Brand Strip -->
+    <div class="top-bar pointer-auto">
+      <div class="brand-lockup">
+        <div class="brand-logo">ME</div>
+        <div>
+          <div class="brand-title">MASTER ENERGY</div>
+          <div class="brand-sub">NAZE MEGA HUB · IMO STATE</div>
+        </div>
+      </div>
+
+      <!-- Minimalist Navigation Menu -->
+      <nav class="nav-menu">
+        <button class="nav-btn" onclick="focusCamera('overview')">Overview</button>
+        <button class="nav-btn" onclick="focusCamera('forecourt')">Fuel Forecourt</button>
+        <button class="nav-btn" onclick="focusCamera('totem')">Pricing Totem</button>
+        <button class="nav-btn" onclick="focusCamera('kitchen')">Masters Kitchen</button>
+        <button class="nav-btn" onclick="focusCamera('lounge')">VIP Lounge</button>
+        <a href="/" class="nav-btn active">Return to Main Website</a>
+      </nav>
+
+      <!-- Real-Time Metrics Strip (Nigerian Fuel Prices) -->
+      <div class="meter-cluster">
+        <div class="meter-card">
+          <span class="meter-label">PMS (Petrol)</span>
+          <span class="meter-val">₦1,050/L</span>
+        </div>
+        <div class="meter-card">
+          <span class="meter-label">AGO (Diesel)</span>
+          <span class="meter-val">₦1,180/L</span>
+        </div>
+        <div class="meter-card">
+          <span class="meter-label">LPG (Gas)</span>
+          <span class="meter-val">₦1,250/Kg</span>
+        </div>
+        <div class="meter-card">
+          <span class="meter-label">Station Status</span>
+          <span class="meter-val green">Active 24/7</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Bar: CAD Coordinates & Camera Controls -->
+    <div class="bottom-bar pointer-auto">
+      <div class="cad-specs">
+        <span>LAT: <span class="cad-highlight">05°27'48"N</span></span>
+        <span>LONG: <span class="cad-highlight">07°03'12"E</span></span>
+        <span>ELEVATION: <span class="cad-highlight">18.4M</span></span>
+        <span>CORRIDOR: <span class="cad-highlight">ABA-OWERRI ROAD</span></span>
+      </div>
+
+      <div class="view-controls">
+        <button class="ctrl-btn" onclick="resetCamera()">Reset Orbit</button>
+        <button class="ctrl-btn" onclick="toggleAtmosphere()">Toggle Dusk/Night</button>
+        <button class="ctrl-btn" onclick="toggleAutoRotate()">Auto Orbit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Three.js and OrbitControls via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <script>
+    // ----------------------------------------------------
+    // 1. SCENE SETUP & RENDERER (Optimized 60fps)
+    // ----------------------------------------------------
+    const canvas = document.getElementById('webgl-canvas');
+    const tooltip = document.getElementById('hover-tooltip');
+    const ttTitle = document.getElementById('tt-title');
+    const ttDesc = document.getElementById('tt-desc');
+    const ttTag = document.getElementById('tt-tag');
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0c0814); // Warm dusk sunset sky
+    scene.fog = new THREE.FogExp2(0x0c0814, 0.016);
+
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 500);
+    camera.position.set(22, 16, 26);
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      powerPreference: 'high-performance'
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    // OrbitControls
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.maxPolarAngle = Math.PI / 2.05;
+    controls.minDistance = 8;
+    controls.maxDistance = 65;
+    controls.target.set(0, 1.5, 0);
+
+    // ----------------------------------------------------
+    // 2. THEME & LIGHTING (Warm Dusk / Sunset with Glowing Neon)
+    // ----------------------------------------------------
+    // Ambient light with warm dusk tint
+    const ambientLight = new THREE.AmbientLight(0xffeedd, 0.7);
+    scene.add(ambientLight);
+
+    // Sunset Key Directional Light
+    const sunLight = new THREE.DirectionalLight(0xff7722, 1.6);
+    sunLight.position.set(30, 18, -25);
+    sunLight.castShadow = true;
+    sunLight.shadow.mapSize.width = 1024;
+    sunLight.shadow.mapSize.height = 1024;
+    sunLight.shadow.camera.near = 0.5;
+    sunLight.shadow.camera.far = 120;
+    sunLight.shadow.camera.left = -30;
+    sunLight.shadow.camera.right = 30;
+    sunLight.shadow.camera.top = 30;
+    sunLight.shadow.camera.bottom = -30;
+    scene.add(sunLight);
+
+    // Canopy Warm Underlight Points
+    const canopyPoint1 = new THREE.PointLight(0xfff5e6, 2.0, 18);
+    canopyPoint1.position.set(0, 4.2, 3);
+    scene.add(canopyPoint1);
+
+    const canopyPoint2 = new THREE.PointLight(0xfff5e6, 2.0, 18);
+    canopyPoint2.position.set(0, 4.2, 7);
+    scene.add(canopyPoint2);
+
+    // Vibrant Yellow/Orange Neon Glow along canopy rim
+    const neonGlow = new THREE.PointLight(0xf59e0b, 2.5, 16);
+    neonGlow.position.set(0, 5.2, 5);
+    scene.add(neonGlow);
+
+    // Emerald Green Accent Light (Nigerian energy motif)
+    const greenNeon = new THREE.PointLight(0x10b981, 2.0, 14);
+    greenNeon.position.set(-6, 3, -4);
+    scene.add(greenNeon);
+
+    // ----------------------------------------------------
+    // 3. 3D GEOMETRY CONSTRUCTION (Primitive Geometry Architecture)
+    // ----------------------------------------------------
+    const interactiveObjects = [];
+
+    // Ground Forecourt & Expressway
+    const groundGeo = new THREE.PlaneGeometry(80, 80);
+    const groundMat = new THREE.MeshStandardMaterial({
+      color: 0x111622,
+      roughness: 0.8,
+      metalness: 0.2
+    });
+    const ground = new THREE.Mesh(groundGeo, groundMat);
+    ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    // Road lanes
+    const laneGeo = new THREE.PlaneGeometry(0.35, 3.5);
+    const laneMat = new THREE.MeshBasicMaterial({ color: 0xf1f5f9 });
+    for (let i = -5; i <= 5; i += 2) {
+      const line = new THREE.Mesh(laneGeo, laneMat);
+      line.rotation.x = -Math.PI / 2;
+      line.position.set(i * 2.4, 0.02, 14);
+      scene.add(line);
+    }
+
+    // Concrete curb
+    const curbGeo = new THREE.BoxGeometry(26, 0.25, 1.2);
+    const curbMat = new THREE.MeshStandardMaterial({ color: 0x64748b, roughness: 0.7 });
+    const curb = new THREE.Mesh(curbGeo, curbMat);
+    curb.position.set(0, 0.12, 10);
+    curb.receiveShadow = true;
+    scene.add(curb);
+
+    // A. LARGE OVERHEAD CANOPY STRUCTURE
+    const canopyRoofGeo = new THREE.BoxGeometry(16, 0.9, 12);
+    const canopyRoofMat = new THREE.MeshStandardMaterial({
+      color: 0x090d16,
+      roughness: 0.25,
+      metalness: 0.8
+    });
+    const canopy = new THREE.Mesh(canopyRoofGeo, canopyRoofMat);
+    canopy.position.set(0, 4.8, 5);
+    canopy.castShadow = true;
+    scene.add(canopy);
+
+    // Glowing Canopy Fascia (Deep Orange / Golden Neon)
+    const fasciaGeo = new THREE.BoxGeometry(16.2, 0.4, 12.2);
+    const fasciaMat = new THREE.MeshStandardMaterial({
+      color: 0xf59e0b,
+      emissive: 0xd97706,
+      emissiveIntensity: 1.2,
+      roughness: 0.1
+    });
+    const fascia = new THREE.Mesh(fasciaGeo, fasciaMat);
+    fascia.position.set(0, 4.8, 5);
+    scene.add(fascia);
+
+    // Canopy Pillars
+    const pillarGeo = new THREE.CylinderGeometry(0.35, 0.35, 4.8, 16);
+    const pillarMat = new THREE.MeshStandardMaterial({
+      color: 0xe2e8f0,
+      metalness: 0.7,
+      roughness: 0.2
+    });
+    [
+      [-5.5, 2.4, 2],
+      [5.5, 2.4, 2],
+      [-5.5, 2.4, 8],
+      [5.5, 2.4, 8]
+    ].forEach(([x, y, z]) => {
+      const p = new THREE.Mesh(pillarGeo, pillarMat);
+      p.position.set(x, y, z);
+      p.castShadow = true;
+      scene.add(p);
+    });
+
+    // B. FUEL DISPENSER BLOCKS (Interactive)
+    const pumpIslandGeo = new THREE.BoxGeometry(1.8, 0.3, 8);
+    const pumpIslandMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.5 });
+    
+    const island1 = new THREE.Mesh(pumpIslandGeo, pumpIslandMat);
+    island1.position.set(-3, 0.15, 5);
+    scene.add(island1);
+
+    const island2 = new THREE.Mesh(pumpIslandGeo, pumpIslandMat);
+    island2.position.set(3, 0.15, 5);
+    scene.add(island2);
+
+    const pumpGeo = new THREE.BoxGeometry(0.9, 1.9, 0.9);
+    const pumpPositions = [
+      { pos: [-3, 1.1, 3], name: "PMS Pump Nozzle 01 - 04", desc: "Premium Motor Spirit · Calibrated Meter", tag: "RATE: ₦1,050/L" },
+      { pos: [-3, 1.1, 7], name: "PMS Pump Nozzle 05 - 08", desc: "High-Flow Gasoline Dispenser", tag: "RATE: ₦1,050/L" },
+      { pos: [3, 1.1, 3], name: "AGO Diesel Fast Pump", desc: "Commercial High-Flow Diesel Nozzle", tag: "RATE: ₦1,180/L" },
+      { pos: [3, 1.1, 7], name: "Dual DPK & LPG Skid", desc: "Kerosene & Cooking Gas Digital Fill", tag: "RATE: ₦980/L - ₦1,250/Kg" }
+    ];
+
+    pumpPositions.forEach((item, idx) => {
+      const pMat = new THREE.MeshStandardMaterial({
+        color: 0x1e293b,
+        metalness: 0.6,
+        roughness: 0.2,
+        emissive: 0x0f172a,
+        emissiveIntensity: 0.2
+      });
+      const pumpMesh = new THREE.Mesh(pumpGeo, pMat);
+      pumpMesh.position.set(item.pos[0], item.pos[1], item.pos[2]);
+      pumpMesh.castShadow = true;
+      pumpMesh.userData = {
+        name: item.name,
+        desc: item.desc,
+        tag: item.tag,
+        defaultEmissive: 0x0f172a
+      };
+      scene.add(pumpMesh);
+      interactiveObjects.push(pumpMesh);
+
+      // Lit Green Digital Screen
+      const scr = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.45, 0.28),
+        new THREE.MeshBasicMaterial({ color: 0x10b981 })
+      );
+      scr.position.set(item.pos[0] + (item.pos[0] < 0 ? 0.46 : -0.46), item.pos[1] + 0.35, item.pos[2]);
+      scr.rotation.y = item.pos[0] < 0 ? Math.PI / 2 : -Math.PI / 2;
+      scene.add(scr);
+    });
+
+    // C. VISIBLE DIGITAL PRICING LED TOTEM BILLBOARD (By the Road)
+    const totemPylonGeo = new THREE.BoxGeometry(1.4, 7.5, 0.6);
+    const totemPylonMat = new THREE.MeshStandardMaterial({
+      color: 0x090d16,
+      metalness: 0.7,
+      roughness: 0.3
+    });
+    const totemPylon = new THREE.Mesh(totemPylonGeo, totemPylonMat);
+    totemPylon.position.set(-11, 3.75, 12);
+    totemPylon.castShadow = true;
+    totemPylon.userData = {
+      name: "Digital Pricing LED Totem Billboard",
+      desc: "Live DPR-Calibrated Forecourt Rates (Naze Junction)",
+      tag: "PMS ₦1050 · AGO ₦1180 · LPG ₦1250",
+      defaultEmissive: 0x000000
+    };
+    scene.add(totemPylon);
+    interactiveObjects.push(totemPylon);
+
+    // Glowing LED Price Panels on Totem
+    const ledScreenGeo = new THREE.PlaneGeometry(1.1, 4.2);
+    const ledScreenMat = new THREE.MeshBasicMaterial({ color: 0x050505 });
+    const ledScreen = new THREE.Mesh(ledScreenGeo, ledScreenMat);
+    ledScreen.position.set(-11, 4.2, 12.31);
+    scene.add(ledScreen);
+
+    // Glowing Price Digits (Neon Amber & Green stripes)
+    const pmsBar = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.5), new THREE.MeshBasicMaterial({ color: 0xf59e0b }));
+    pmsBar.position.set(-11, 5.2, 12.32);
+    scene.add(pmsBar);
+
+    const agoBar = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.5), new THREE.MeshBasicMaterial({ color: 0x10b981 }));
+    agoBar.position.set(-11, 4.3, 12.32);
+    scene.add(agoBar);
+
+    const lpgBar = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.5), new THREE.MeshBasicMaterial({ color: 0x38bdf8 }));
+    lpgBar.position.set(-11, 3.4, 12.32);
+    scene.add(lpgBar);
+
+    // Totem Light
+    const totemLight = new THREE.PointLight(0xf59e0b, 1.8, 10);
+    totemLight.position.set(-11, 5.5, 13);
+    scene.add(totemLight);
+
+    // D. MAIN COMMERCIAL BUILDING (Kitchen, VIP Lounge)
+    const bldgGeo = new THREE.BoxGeometry(18, 5.5, 9);
+    const bldgMat = new THREE.MeshStandardMaterial({
+      color: 0x111827,
+      roughness: 0.35,
+      metalness: 0.5
+    });
+    const bldg = new THREE.Mesh(bldgGeo, bldgMat);
+    bldg.position.set(-2, 2.75, -5);
+    bldg.castShadow = true;
+    bldg.receiveShadow = true;
+    scene.add(bldg);
+
+    // Glass Curtain Wall with Golden Sunset Reflection
+    const glassGeo = new THREE.PlaneGeometry(17.6, 4.8);
+    const glassMat = new THREE.MeshStandardMaterial({
+      color: 0xf59e0b,
+      roughness: 0.1,
+      metalness: 0.9,
+      transparent: true,
+      opacity: 0.55
+    });
+    const frontGlass = new THREE.Mesh(glassGeo, glassMat);
+    frontGlass.position.set(-2, 2.75, -0.48);
+    scene.add(frontGlass);
+
+    // Upper VIP Lounge Cube
+    const loungeCubeGeo = new THREE.BoxGeometry(8, 3.2, 6);
+    const loungeCubeMat = new THREE.MeshStandardMaterial({
+      color: 0x090d16,
+      roughness: 0.2,
+      metalness: 0.8
+    });
+    const loungeCube = new THREE.Mesh(loungeCubeGeo, loungeCubeMat);
+    loungeCube.position.set(-4, 6, -4);
+    loungeCube.userData = {
+      name: "Masters Lounge VIP Pavilion",
+      desc: "Upstairs Executive Nightlife & Private Suites",
+      tag: "OPENS 4:00 PM NIGHTLY",
+      defaultEmissive: 0x000000
+    };
+    scene.add(loungeCube);
+    interactiveObjects.push(loungeCube);
+
+    // VIP Lounge Emerald Backlight
+    const vipWindow = new THREE.Mesh(new THREE.PlaneGeometry(7.6, 2.4), new THREE.MeshBasicMaterial({ color: 0x10b981 }));
+    vipWindow.position.set(-4, 6, -0.98);
+    scene.add(vipWindow);
+
+    // ----------------------------------------------------
+    // 4. ADVANCED EFFECTS: HEAT HAZE & DUSK PARTICLES SHADER/SYSTEM
+    // ----------------------------------------------------
+    const particleCount = 280;
+    const particleGeo = new THREE.BufferGeometry();
+    const particlePositions = new Float32Array(particleCount * 3);
+    const particleVelocities = [];
+
+    for (let i = 0; i < particleCount * 3; i += 3) {
+      particlePositions[i] = (Math.random() - 0.5) * 45;
+      particlePositions[i + 1] = Math.random() * 9 + 0.2;
+      particlePositions[i + 2] = (Math.random() - 0.5) * 45;
+      particleVelocities.push({
+        vx: (Math.random() - 0.5) * 0.015,
+        vy: Math.random() * 0.01 + 0.005,
+        vz: (Math.random() - 0.5) * 0.015
+      });
+    }
+
+    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+
+    const particleMat = new THREE.PointsMaterial({
+      color: 0xf59e0b,
+      size: 0.16,
+      transparent: true,
+      opacity: 0.65,
+      blending: THREE.AdditiveBlending
+    });
+
+    const particles = new THREE.Points(particleGeo, particleMat);
+    scene.add(particles);
+
+    // ----------------------------------------------------
+    // 5. RAYCASTER & INTERACTIVE HOVER TOOLTIP
+    // ----------------------------------------------------
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    let hoveredObject = null;
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+      // Update tooltip position
+      tooltip.style.left = e.clientX + 'px';
+      tooltip.style.top = e.clientY + 'px';
+    });
+
+    // ----------------------------------------------------
+    // 6. CAMERA CONTROL HELPERS & TIME PRESETS
+    // ----------------------------------------------------
+    let isNight = false;
+    let autoRotate = false;
+
+    function resetCamera() {
+      camera.position.set(22, 16, 26);
+      controls.target.set(0, 1.5, 0);
+    }
+
+    function toggleAtmosphere() {
+      isNight = !isNight;
+      if (isNight) {
+        scene.background.setHex(0x04060a);
+        scene.fog.color.setHex(0x04060a);
+        ambientLight.intensity = 0.3;
+        sunLight.intensity = 0.2;
+        neonGlow.intensity = 3.5;
+        canopyPoint1.intensity = 3.0;
+        canopyPoint2.intensity = 3.0;
+      } else {
+        scene.background.setHex(0x0c0814);
+        scene.fog.color.setHex(0x0c0814);
+        ambientLight.intensity = 0.7;
+        sunLight.intensity = 1.6;
+        neonGlow.intensity = 2.5;
+        canopyPoint1.intensity = 2.0;
+        canopyPoint2.intensity = 2.0;
+      }
+    }
+
+    function toggleAutoRotate() {
+      autoRotate = !autoRotate;
+      controls.autoRotate = autoRotate;
+      controls.autoRotateSpeed = 1.2;
+    }
+
+    function focusCamera(target) {
+      if (target === 'overview') {
+        controls.target.set(0, 1.5, 0);
+        camera.position.set(22, 16, 26);
+      } else if (target === 'forecourt') {
+        controls.target.set(0, 2, 5);
+        camera.position.set(4, 5, 14);
+      } else if (target === 'totem') {
+        controls.target.set(-11, 4, 12);
+        camera.position.set(-6, 5, 18);
+      } else if (target === 'kitchen') {
+        controls.target.set(-6, 2, -2);
+        camera.position.set(-10, 4, 6);
+      } else if (target === 'lounge') {
+        controls.target.set(-4, 5.5, -4);
+        camera.position.set(-4, 7, 5);
+      }
+    }
+
+    // ----------------------------------------------------
+    // 7. ANIMATION LOOP (60FPS PERFORMANCE)
+    // ----------------------------------------------------
+    const clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const delta = clock.getDelta();
+      const elapsed = clock.getElapsedTime();
+
+      // Controls update
+      controls.update();
+
+      // Float heat haze dust particles
+      const posArray = particleGeo.attributes.position.array;
+      for (let i = 0; i < particleCount; i++) {
+        const i3 = i * 3;
+        posArray[i3] += particleVelocities[i].vx + Math.sin(elapsed + i) * 0.003;
+        posArray[i3 + 1] += particleVelocities[i].vy;
+        posArray[i3 + 2] += particleVelocities[i].vz;
+
+        if (posArray[i3 + 1] > 9) {
+          posArray[i3 + 1] = 0.2;
+        }
+      }
+      particleGeo.attributes.position.needsUpdate = true;
+
+      // Raycaster hover detection
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(interactiveObjects);
+
+      if (intersects.length > 0) {
+        const hit = intersects[0].object;
+        if (hoveredObject !== hit) {
+          if (hoveredObject && hoveredObject.material && hoveredObject.material.emissive) {
+            hoveredObject.material.emissive.setHex(hoveredObject.userData.defaultEmissive || 0x000000);
+            hoveredObject.material.emissiveIntensity = 0.2;
+          }
+          hoveredObject = hit;
+          if (hit.material && hit.material.emissive) {
+            hit.material.emissive.setHex(0xf59e0b);
+            hit.material.emissiveIntensity = 0.9;
+          }
+
+          // Show Tooltip
+          if (hit.userData && hit.userData.name) {
+            ttTitle.innerText = hit.userData.name;
+            ttDesc.innerText = hit.userData.desc;
+            ttTag.innerText = hit.userData.tag;
+            tooltip.style.display = 'block';
+          }
+        }
+      } else {
+        if (hoveredObject) {
+          if (hoveredObject.material && hoveredObject.material.emissive) {
+            hoveredObject.material.emissive.setHex(hoveredObject.userData.defaultEmissive || 0x000000);
+            hoveredObject.material.emissiveIntensity = 0.2;
+          }
+          hoveredObject = null;
+          tooltip.style.display = 'none';
+        }
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // Resize Handler
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>

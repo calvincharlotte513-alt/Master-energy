@@ -1,0 +1,6 @@
+{
+  "name": "Master Energy Ltd - Naze Mega Hub & Lifestyle Complex",
+  "description": "Premier integrated fueling station, culinary destination, VIP lounge, automated car wash, and garden terrace in Naze, Imo State.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
