@@ -216,22 +216,30 @@ export const ThreeDExplorerSection: React.FC<ThreeDExplorerSectionProps> = ({
 
           {/* Interactive Image Viewport with Hotspots */}
           <div className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl bg-slate-900 aspect-[16/9] max-h-[640px] group">
-            <img
-              src={
-                activeLivingScene === 'forecourt'
-                  ? '/images/modern_master_energy_reference.png'
-                  : '/images/garden_lounge_living_1792960273668.jpg'
-              }
-              onError={(e) => {
-                const current = e.currentTarget.getAttribute('src');
-                if (current?.startsWith('/images/')) {
-                  e.currentTarget.src = current.replace('/images/', '/assets/images/');
-                }
-              }}
-              alt="Master Energy Modern Station Architecture"
-              referrerPolicy="no-referrer"
-              className="w-full h-full object-cover select-none transition-all duration-500 filter contrast-[1.03]"
-            />
+            {activeLivingScene === 'forecourt' ? (
+              <video
+                src="https://res.cloudinary.com/frl7thhq/video/upload/v1793102146/b_Use_a_black_chef.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="auto"
+                className="w-full h-full object-cover select-none"
+              />
+            ) : (
+              <img
+                src="/images/garden_lounge_living_1792960273668.jpg"
+                onError={(e) => {
+                  const current = e.currentTarget.getAttribute('src');
+                  if (current?.startsWith('/images/')) {
+                    e.currentTarget.src = current.replace('/images/', '/assets/images/');
+                  }
+                }}
+                alt="Master Energy Garden & Lounge"
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover select-none transition-all duration-500 filter contrast-[1.03]"
+              />
+            )}
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none" />
 
