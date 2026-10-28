@@ -190,7 +190,7 @@ export const MainStation3DTwin: React.FC<MainStation3DTwinProps> = ({
       <div className="relative w-full h-full overflow-hidden flex items-center justify-center bg-black">
         <video
           ref={videoRef}
-          src="https://res.cloudinary.com/frl7thhq/video/upload/v1793102146/b_Use_a_black_chef.mp4"
+          src="https://res.cloudinary.com/frl7thhq/video/upload/v1793193825/lv_0_20261028141854.mp4"
           autoPlay
           loop
           muted

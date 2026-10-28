@@ -218,7 +218,7 @@ export const ThreeDExplorerSection: React.FC<ThreeDExplorerSectionProps> = ({
           <div className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl bg-slate-900 aspect-[16/9] max-h-[640px] group">
             {activeLivingScene === 'forecourt' ? (
               <video
-                src="https://res.cloudinary.com/frl7thhq/video/upload/v1793102146/b_Use_a_black_chef.mp4"
+                src="https://res.cloudinary.com/frl7thhq/video/upload/v1793193825/lv_0_20261028141854.mp4"
                 autoPlay
                 loop
                 muted
